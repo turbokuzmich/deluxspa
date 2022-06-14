@@ -31,23 +31,38 @@ export default function Submenu() {
                   {title}:
                 </Typography>
                 {categories.map(({ id, title }) => (
-                  <Link key={id} href={`/catalog/${id}`} passHref>
-                    <A underline="none" variant="h6" submenuItem>
-                      {title}
-                    </A>
-                  </Link>
+                  <SubmenuLink key={id} id={id} title={title} />
                 ))}
               </>
             ) : (
-              <Link href={`/catalog/${id}`} passHref>
-                <A underline="none" variant="h6" submenuItem>
-                  {title}
-                </A>
-              </Link>
+              <SubmenuLink id={id} title={title} />
             )}
           </Box>
         ))}
       </Container>
     </Box>
+  );
+}
+
+function SubmenuLink({ id, title }) {
+  return (
+    <Link href={`/catalog/${id}`} passHref>
+      <A
+        underline="none"
+        variant="h6"
+        sx={{
+          pl: 1,
+          pt: 2,
+          pr: 1,
+          pb: 2,
+          "&:hover": {
+            color: "text.primary",
+            backgroundColor: "background.paper",
+          },
+        }}
+      >
+        {title}
+      </A>
+    </Link>
   );
 }

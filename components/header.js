@@ -38,9 +38,43 @@ export default function Header(props) {
           {mainMenu.map(({ title, link }) => {
             const isSelected = pathname !== "/" && pathname === link;
 
+            const styles = {
+              position: "relative",
+              "&::before, &::after": {
+                content: '""',
+                position: "absolute",
+                bottom: 0,
+                height: "2px",
+                backgroundColor: "text.primary",
+                transition: "left .2s ease-out, right .2s ease-out",
+                left: "50%",
+                right: "50%",
+              },
+              "&:hover": {
+                color: "text.primary",
+              },
+              "&:hover::before": {
+                left: 0,
+              },
+              "&:hover::after": {
+                right: 0,
+              },
+              ...(isSelected
+                ? {
+                    color: "text.primary",
+                    "&::before": {
+                      left: 0,
+                    },
+                    "&::after": {
+                      right: 0,
+                    },
+                  }
+                : {}),
+            };
+
             return (
               <Link key={link} href={link} passHref>
-                <A variant="h6" selected={isSelected}>
+                <A variant="h6" underline="none" sx={styles}>
                   {title}
                 </A>
               </Link>

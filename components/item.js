@@ -9,9 +9,10 @@ export default function Item() {
   return (
     <Link href="/catalog/whatever" passHref>
       <A
-        catalogItem
+        underline="none"
         sx={{
           p: 4,
+          color: "custom.link",
           width: 362,
           flexShrink: 0,
           position: "relative",
@@ -31,6 +32,9 @@ export default function Item() {
           "& .title::after": {
             left: "50%",
             right: "50%",
+          },
+          "&:hover": {
+            color: "text.primary",
           },
           "&:hover .title::before": {
             left: 0,
