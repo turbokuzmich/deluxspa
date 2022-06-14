@@ -4,10 +4,13 @@ import Logo from "../components/logo";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import { mainMenu } from "../constants";
+import { useRouter } from "next/router";
 
-export default function Header() {
+export default function Header(props) {
+  const { pathname } = useRouter();
+
   return (
-    <Box>
+    <Box sx={{ backgroundColor: "common.white" }}>
       <Container
         sx={{
           display: "flex",
@@ -32,11 +35,17 @@ export default function Header() {
             gap: 2,
           }}
         >
-          {mainMenu.map(({ title, link }) => (
-            <Link key={link} href={link} passHref>
-              <A variant="h6">{title}</A>
-            </Link>
-          ))}
+          {mainMenu.map(({ title, link }) => {
+            const isSelected = pathname !== "/" && pathname === link;
+
+            return (
+              <Link key={link} href={link} passHref>
+                <A variant="h6" selected={isSelected}>
+                  {title}
+                </A>
+              </Link>
+            );
+          })}
         </Box>
       </Container>
     </Box>
