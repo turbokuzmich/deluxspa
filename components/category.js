@@ -20,20 +20,6 @@ export default function Category() {
         <Box
           sx={{
             width: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            flexGrow: 0,
-            backgroundImage: "url(/images/face.png)",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-          }}
-        />
-        <Box
-          sx={{
-            width: "50%",
             flexShrink: 0,
             flexGrow: 0,
             paddingTop: 6,
@@ -57,6 +43,20 @@ export default function Category() {
             сияющим.
           </Typography>
         </Box>
+        <Box
+          sx={{
+            width: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            flexGrow: 0,
+            backgroundImage: "url(/images/face.png)",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+          }}
+        />
       </Container>
     </Box>
   );

@@ -11,7 +11,7 @@ export default function Submenu() {
       <Container
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           gap: 2,
         }}
       >
