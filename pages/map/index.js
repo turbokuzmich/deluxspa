@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Script from "next/script";
 import Header from "../../components/header";
+import { map as retailers } from "../../constants";
+import { useTheme } from "@mui/material/styles";
 
 export default function DeluxSpaMap() {
+  const theme = useTheme();
+
   const mapsContainerRef = useRef();
   const map = useRef();
 
@@ -15,8 +19,34 @@ export default function DeluxSpaMap() {
 
     map.current = new maps.Map(mapsContainerRef.current, {
       center: [55.76, 37.64],
-      zoom: 7,
+      zoom: 11,
+      controls: ["routeButtonControl"],
     });
+
+    const clusterer = new maps.Clusterer({
+      groupByCoordinates: false,
+      clusterDisableClickZoom: true,
+      clusterHideIconOnBalloonOpen: false,
+      geoObjectHideIconOnBalloonOpen: false,
+    });
+
+    const retailersPlacemarks = retailers.map(
+      (retailer) =>
+        new maps.Placemark(
+          [retailer.coordinates[1], retailer.coordinates[0]],
+          {
+            balloonContentHeader: retailer.title,
+            balloonContentBody: renderRetailerBalloonBody(retailer),
+          },
+          {
+            preset: "islands#circleIcon",
+            iconColor: theme.palette.custom.attention,
+          }
+        )
+    );
+
+    clusterer.add(retailersPlacemarks);
+    map.current.geoObjects.add(clusterer);
   }, []);
 
   const onApiLoaded = useCallback(() => {
@@ -43,7 +73,7 @@ export default function DeluxSpaMap() {
         onLoad={onApiLoaded}
       />
       <Header />
-      <Container>
+      <Container sx={{ pt: 8 }}>
         <Box
           ref={mapsContainerRef}
           sx={{
@@ -53,4 +83,24 @@ export default function DeluxSpaMap() {
       </Container>
     </>
   );
+}
+
+function renderRetailerBalloonBody({
+  fullAddress,
+  workingTimeText,
+  urls,
+  phones,
+}) {
+  const urlsString = urls
+    .map((url) => `<a href="${url}" target="_blank">${url}</a>`)
+    .join("<br />");
+
+  const phonesString = phones
+    .map(
+      ({ number, extraNumber }) =>
+        number + (extraNumber ? `, доб. ${extraNumber}` : "")
+    )
+    .join("<br />");
+
+  return `<strong>${fullAddress}</strong><br />Время работы: ${workingTimeText}<br /><br />${phonesString}<br /><br />${urlsString}`;
 }

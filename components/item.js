@@ -1,13 +1,16 @@
+import { useMemo } from "react";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import Image from "./image";
+import { catalogItems } from "../constants";
 
-export default function Item() {
+export default function Item({ id }) {
+  const item = useMemo(() => catalogItems.find((item) => item.id === id), []);
+
   return (
-    <Link href="/catalog/whatever" passHref>
+    <Link href={`/catalog/item/${item.id}`} passHref>
       <A
         underline="none"
         sx={{
@@ -87,12 +90,9 @@ export default function Item() {
             position: "relative",
           }}
         >
-          Мятный бриз
+          {item.title}
         </Typography>
-        <Typography variant="subtitle2">
-          Маска мультиактивная 5 в 1 для регенерации ослабленных волос и
-          проблемной кожи головы coconut oil multi-mask
-        </Typography>
+        <Typography variant="subtitle2">{item.brief}</Typography>
         <Box
           sx={{
             mt: 2,

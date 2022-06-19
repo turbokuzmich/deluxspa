@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Image from "./image";
 
-export default function Category() {
+export default function Category({ title }) {
   return (
     <Box
       sx={{
@@ -26,8 +26,12 @@ export default function Category() {
             paddingBottom: 6,
           }}
         >
-          <Typography variant="h4" paragraph>
-            Масла для ухода за телом
+          <Typography
+            variant="h4"
+            sx={{ textTransform: "uppercase" }}
+            paragraph
+          >
+            {title}
           </Typography>
           <Typography paragraph>
             Косметические средства для ухода за лицом представлены в двух линиях

@@ -25,6 +25,13 @@ const theme = responsiveFontSizes(
       fontFamily: '"Evolventa", sans-serif',
     },
     components: {
+      MuiPopover: {
+        styleOverrides: {
+          paper: ({ theme }) => ({
+            backgroundColor: theme.palette.background.default,
+          }),
+        },
+      },
       MuiLink: {
         styleOverrides: {
           root: ({ theme }) => ({
@@ -33,6 +40,9 @@ const theme = responsiveFontSizes(
               .alpha(0.4)
               .rgb()
               .string(),
+            "&:hover": {
+              color: theme.palette.text.primary,
+            },
           }),
           underlineHover: ({ theme }) => ({
             textDecorationColor: theme.palette.custom.link,

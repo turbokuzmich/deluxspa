@@ -1,23 +1,18 @@
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+import { useMemo } from "react";
 import Header from "../../components/header";
-import Typography from "@mui/material/Typography";
-import A from "@mui/material/Link";
-import Link from "next/link";
-import Image from "../../components/image";
-import Category from "../../components/category";
 import Items from "../../components/items";
 import Submenu from "../../components/submenu";
+import { catalogItems } from "../../constants";
+import property from "lodash/property";
 
 export default function CatalogRoot() {
+  const allIds = useMemo(() => catalogItems.map(property("id")), []);
+
   return (
     <>
       <Header />
       <Submenu />
-      <Category />
-      <Items />
-      <Category />
-      <Items />
+      <Items items={allIds} />
     </>
   );
 }

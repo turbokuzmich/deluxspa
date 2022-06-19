@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Item from "./item";
 
-export default function Items() {
+export default function Items({ items }) {
   return (
     <Box sx={{ mb: 4 }}>
       <Container
@@ -12,8 +12,8 @@ export default function Items() {
           gap: 4,
         }}
       >
-        {[1, 2, 3, 4, 5].map((id) => (
-          <Item key={id} />
+        {items.map((id) => (
+          <Item key={id} id={id} />
         ))}
       </Container>
     </Box>
