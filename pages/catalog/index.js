@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import Header from "../../components/header";
+import Layout from "../../components/layout";
 import Items from "../../components/items";
 import Submenu from "../../components/submenu";
 import { catalogItems } from "../../constants";
@@ -9,10 +9,11 @@ export default function CatalogRoot() {
   const allIds = useMemo(() => catalogItems.map(property("id")), []);
 
   return (
-    <>
-      <Header />
-      <Submenu />
-      <Items items={allIds} />
-    </>
+    <Layout>
+      <>
+        <Submenu />
+        <Items items={allIds} />
+      </>
+    </Layout>
   );
 }

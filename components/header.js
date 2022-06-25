@@ -10,7 +10,7 @@ export default function Header(props) {
   const { pathname } = useRouter();
 
   return (
-    <Box sx={{ backgroundColor: "common.white" }}>
+    <Box sx={{ backgroundColor: "common.white", flexShrink: 0, flexGrow: 0 }}>
       <Container
         sx={{
           display: "flex",

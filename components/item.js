@@ -5,6 +5,7 @@ import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import Image from "./image";
 import { catalogItems } from "../constants";
+import Price from "./price";
 
 export default function Item({ id }) {
   const item = useMemo(() => catalogItems.find((item) => item.id === id), []);
@@ -106,7 +107,7 @@ export default function Item({ id }) {
             color="text.primary"
             sx={{ fontWeight: "bold" }}
           >
-            455 ₽
+            <Price sum={item.price} />
           </Typography>
           <Typography variant="subtitle2">200 мл.</Typography>
         </Box>

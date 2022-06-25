@@ -15,6 +15,7 @@ const theme = responsiveFontSizes(
       background: {
         default: "#f1e3c9",
         paper: "#e3c68e",
+        footer: "#2b2a28",
       },
       custom: {
         link: "#695530",
@@ -33,6 +34,19 @@ const theme = responsiveFontSizes(
         },
       },
       MuiLink: {
+        variants: [
+          {
+            props: { "data-variant": "footer" },
+            style: ({ theme }) => ({
+              color: theme.palette.common.white,
+              textDecorationColor: theme.palette.common.white,
+              "&:hover": {
+                color: theme.palette.common.white,
+                textDecoration: "none",
+              },
+            }),
+          },
+        ],
         styleOverrides: {
           root: ({ theme }) => ({
             color: theme.palette.custom.link,

@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Script from "next/script";
-import Header from "../../components/header";
+import Layout from "../../components/layout";
 import { map as retailers } from "../../constants";
 import { useTheme } from "@mui/material/styles";
 
@@ -72,15 +72,16 @@ export default function DeluxSpaMap() {
         strategy="afterInteractive"
         onLoad={onApiLoaded}
       />
-      <Header />
-      <Container sx={{ pt: 8 }}>
-        <Box
-          ref={mapsContainerRef}
-          sx={{
-            height: 600,
-          }}
-        ></Box>
-      </Container>
+      <Layout>
+        <Container sx={{ pt: 8 }}>
+          <Box
+            ref={mapsContainerRef}
+            sx={{
+              height: 600,
+            }}
+          ></Box>
+        </Container>
+      </Layout>
     </>
   );
 }

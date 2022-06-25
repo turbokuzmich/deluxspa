@@ -42,11 +42,17 @@ export const compositionItems = {
   aroma_composition: { title: "аромакомпозиция" },
 };
 
+export const consumptionTitles = {
+  common: "общий массаж всего тела",
+  back: "массаж спины",
+};
+
 export const catalogItems = [
   {
     id: "oil_bio",
     title: "Биологическое",
     brief: "Масло для массажа и ухода за телом",
+    price: 1090,
     composition: ["maize_oil", "wheat_oil", "vitamin_e"],
     consumption: {
       common: "20–30 мл",
@@ -63,6 +69,7 @@ export const catalogItems = [
     id: "oil_mint_breeze",
     title: "Мятный бриз",
     brief: "Масло для массажа и ухода за телом",
+    price: 1090,
     composition: ["maize_oil", "wheat_oil", "mint_oil"],
     consumption: {
       common: "20–30 мл",
@@ -78,6 +85,7 @@ export const catalogItems = [
     id: "oil_lemongrass",
     title: "Лемограсс",
     brief: "Масло для массажа и ухода за телом",
+    price: 1090,
     composition: ["maize_oil", "wheat_oil", "vitamin_e", "lemongrass_oil"],
     consumption: {
       common: "20–30 мл",
@@ -94,6 +102,7 @@ export const catalogItems = [
     id: "oil_extra_slim",
     title: "Экстра слим",
     brief: "Масло для массажа и ухода за телом",
+    price: 2290,
     composition: [
       "almond_oil",
       "maize_oil",
@@ -117,6 +126,7 @@ export const catalogItems = [
   {
     id: "oil_bubble_gum",
     title: "Баббл гам",
+    price: 1890,
     brief: "Масло для массажа и ухода за телом",
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
     consumption: {
@@ -134,6 +144,7 @@ export const catalogItems = [
     id: "oil_lemon_cake",
     title: "Лимонный кекс",
     brief: "Масло для массажа и ухода за телом",
+    price: 1890,
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
     consumption: {
       common: "20–25 мл",
@@ -149,6 +160,7 @@ export const catalogItems = [
     id: "oil_lime_cinnamon",
     title: "Лайм и корица",
     brief: "Масло для массажа и ухода за телом",
+    price: 2190,
     composition: [],
     description: [
       "Сочный и пряный аромат Лайма, и пикантной Корицы, настоящий коктейль из цитрусов и специй Азии. В меру сладкий, свежий и пикантный аромат, понравится всем без исключения. Цитрусовая Свежесть – свежее удовольствие!",
@@ -160,6 +172,7 @@ export const catalogItems = [
     id: "oil_lemon_pepper",
     title: "Лимон и черный перец",
     brief: "Масло для массажа и ухода за телом",
+    price: 2290,
     composition: [
       "almond_oil",
       "maize_oil",
