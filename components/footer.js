@@ -32,7 +32,7 @@ export default function Footer() {
             Продукция из&nbsp;лучших компонентов по&nbsp;привлекательной
             стоимости.
           </Typography>
-          <Typography>DeluxSPA&nbsp;&mdash; лучшее от&nbsp;природы.</Typography>
+          <Typography>Delux SPA&nbsp;&mdash; лучшее от&nbsp;природы.</Typography>
         </Box>
         <Box
           sx={{

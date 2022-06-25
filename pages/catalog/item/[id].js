@@ -40,7 +40,10 @@ export default function Item() {
                   flexGrow: 0,
                 }}
               >
-                <Image src="/images/item.jpg" sx={{ maxWidth: "100%" }} />
+                <Image
+                  src={item.image ? item.image : "/images/item.jpg"}
+                  sx={{ maxWidth: "100%" }}
+                />
               </Box>
               <Box
                 sx={{

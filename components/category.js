@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Image from "./image";
 
-export default function Category({ title }) {
+export default function Category({ title, description }) {
   return (
     <Box
       sx={{
@@ -33,19 +33,15 @@ export default function Category({ title }) {
           >
             {title}
           </Typography>
-          <Typography paragraph>
-            Косметические средства для ухода за лицом представлены в двух линиях
-            — ARAVIA Professional и ARAVIA Laboratories. Это высокотехнологичный
-            инновационный уход и профессиональная забота о коже. Максимальная
-            результативность продуктов, предназначенных для лица, шеи и зоны
-            декольте, достигается за счет комплексного подхода, проверенных
-            рецептур и высоких стандартов качества.
-          </Typography>
-          <Typography>
-            Широкий выбор средств по проблеме, высокая безопасность и
-            сочетаемость компонентов сделают кожу молодой и здоровой, а лицо
-            сияющим.
-          </Typography>
+          {description
+            ? description.map((line, index) => (
+                <Typography
+                  key={index}
+                  paragraph={index < description.length - 1}
+                  dangerouslySetInnerHTML={{ __html: line }}
+                />
+              ))
+            : null}
         </Box>
         <Box
           sx={{
