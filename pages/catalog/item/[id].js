@@ -97,7 +97,7 @@ function Consumption({ item: { consumption } }) {
 }
 
 function Composition({ item: { composition } }) {
-  if (!composition) {
+  if (!composition || !Array.isArray(composition) || composition.length === 0) {
     return null;
   }
 

@@ -20,6 +20,9 @@ const theme = responsiveFontSizes(
       custom: {
         link: "#695530",
         attention: "#76581d",
+        pane2: "#FFC690",
+        pane3: "#FFC59B",
+        pane4: "#FFC2B1",
       },
     },
     typography: {

@@ -206,6 +206,7 @@ export const catalogTree = [
       {
         id: "body_massage_oil",
         title: "Для тела",
+        paneTitle: "Массажные масла для тела",
         description: [
           "Лучшее, что создано природой, вы&nbsp;сможете найти в&nbsp;потрясающей натуральной линейке массажных уходовых масел для тела от&nbsp;DeluxSPA.",
           "Привезённые с&nbsp;всех уголков Европы, Азии и&nbsp;Полинезии, натуральные косметические и&nbsp;эфирные масла собраны в&nbsp;уникальные питательные ароматерапевтические коктейли для ухода за&nbsp;телом и&nbsp;проведения процедур массажа.",
@@ -227,6 +228,10 @@ export const catalogTree = [
       {
         id: "face_massage_oil",
         title: "Для лица",
+        paneTitle: "Массажные масла для лица",
+        description: [
+          "Превосходное скольжение, отличная впитываемость и&nbsp;отсутствие плёнки на&nbsp;поверхности кожи при использовании ультра-лёгких питательных масел для лица. Профессиональные продукты Delux SPA подойдут, как для проведения процедур массажа, так и&nbsp;ухода за&nbsp;кожей лица. Уникальные рецептуры для красоты и&nbsp;молодости.",
+        ],
         type: "category",
         items: [
           "oil_bio",
@@ -242,6 +247,10 @@ export const catalogTree = [
       {
         id: "hair_massage_oil",
         title: "Для волос",
+        paneTitle: "Массажные масла для волос",
+        description: [
+          "Для здорового внешнего вида волосы нуждаются в&nbsp;постоянном питании и&nbsp;уходе. Для решения данных задач появилась серия средств на&nbsp;основе масел жожоба и&nbsp;ультралёгких растительных и&nbsp;эфирных масел для курсового, переодического и&nbsp;ежедневного применения. Потрясающий вид и&nbsp;отличное состояние ваших волос уже после первых применений масел для волос от&nbsp;Delux SPA.",
+        ],
         type: "category",
         items: [
           "oil_bio",
@@ -298,6 +307,7 @@ export const catalogTree = [
       {
         id: "aromatherapy_for_home",
         title: "Для дома",
+        paneTitle: "Ароматерапия для дома",
         type: "category",
         items: [
           "oil_bio",
@@ -312,6 +322,15 @@ export const catalogTree = [
       },
     ],
   },
+];
+
+export const categoriesDispayedOnPane = [
+  ["massage_oil", "body_massage_oil"],
+  ["massage_oil", "face_massage_oil"],
+  ["massage_oil", "hair_massage_oil"],
+  ["aromatherapy", "aromatherapy_for_home"],
+  "scrub",
+  ["aromatherapy", "essential_oil"],
 ];
 
 export const map = [

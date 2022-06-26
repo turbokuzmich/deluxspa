@@ -62,6 +62,7 @@ export default function MainCarousel() {
   return canShowCarousel ? (
     <Box
       sx={(theme) => ({
+        mb: 4,
         "& .carousel-arrow": {
           backgroundColor: Color(theme.palette.grey["900"])
             .alpha(0.5)
@@ -99,10 +100,9 @@ export default function MainCarousel() {
         emulateTouch
       >
         {videoData.map(({ link }, index) => (
-          <Link href={link} passHref>
+          <Link key={index} href={link} passHref>
             <A>
               <Player
-                key={index}
                 playing={index === slideIndex}
                 url={`/video/${index + 1}.mp4`}
                 width="100vmax"
