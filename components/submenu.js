@@ -9,11 +9,11 @@ import Link from "next/link";
 import { catalogTree } from "../constants";
 import get from "lodash/get";
 
-export default function Submenu() {
+export default function Submenu({ selected }) {
   const router = useRouter();
 
-  const [linkRef, setLinkRef] = useState(null);
-  const [category, setCategory] = useState(null);
+  const [selectedCategoryRef, setSelectedCategoryRef] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const onClick = useCallback(
     (event) => {
@@ -29,15 +29,16 @@ export default function Submenu() {
       event.preventDefault();
       event.stopPropagation();
 
-      setLinkRef(element);
-      setCategory(category);
+      setSelectedCategoryRef(element);
+      setSelectedCategory(category);
     },
-    [setLinkRef, setCategory]
+    [setSelectedCategoryRef, setSelectedCategory]
   );
 
-  const onClose = useCallback(() => {
-    setLinkRef(null);
-  }, [setLinkRef, setCategory]);
+  const onClose = useCallback(
+    () => setSelectedCategoryRef(null),
+    [setSelectedCategoryRef, setSelectedCategory]
+  );
 
   const onCategory = useCallback(
     (event) => {
@@ -61,38 +62,65 @@ export default function Submenu() {
           justifyContent: "center",
         }}
       >
-        {catalogTree.map(({ id, title }) => (
-          <Link key={id} href={`/catalog/category/${id}`} passHref>
-            <A
-              underline="none"
-              variant="h6"
-              onClick={onClick}
-              data-id={id}
-              sx={{
-                color:
-                  linkRef && get(category, "id") === id
-                    ? "text.primary"
-                    : "custom.link",
-                pt: 3,
-                pb: 3,
-              }}
-            >
-              {title}
-            </A>
-          </Link>
-        ))}
+        {catalogTree.map(({ id, title }) => {
+          const isContextMenuOpen =
+            (selectedCategoryRef && get(selectedCategory, "id") === id) ||
+            selected === id;
+
+          return (
+            <Link key={id} href={`/catalog/category/${id}`} passHref>
+              <A
+                underline="none"
+                variant="h6"
+                onClick={onClick}
+                data-id={id}
+                sx={{
+                  position: "relative",
+                  color: isContextMenuOpen ? "text.primary" : "custom.link",
+                  pt: 3,
+                  pb: 3,
+                  "&::before, &::after": {
+                    content: '""',
+                    position: "absolute",
+                    bottom: 0,
+                    height: "2px",
+                    backgroundColor: "text.primary",
+                    transition: "left .2s ease-out, right .2s ease-out",
+                    bottom: 27,
+                    left: "50%",
+                    right: "50%",
+                  },
+                  "&::before": {
+                    left: isContextMenuOpen ? 0 : "50%",
+                  },
+                  "&:hover::before": {
+                    left: 0,
+                  },
+                  "&::after": {
+                    right: isContextMenuOpen ? 0 : "50%",
+                  },
+                  "&:hover::after": {
+                    right: 0,
+                  },
+                }}
+              >
+                {title}
+              </A>
+            </Link>
+          );
+        })}
         <Menu
-          open={linkRef !== null}
-          anchorEl={linkRef}
+          open={selectedCategoryRef !== null}
+          anchorEl={selectedCategoryRef}
           onClose={onClose}
           sx={{
             "& .MuiMenu-list": {
-              width: 200,
+              minWidth: 300,
             },
           }}
         >
-          {category
-            ? category.categories.map((category) => (
+          {selectedCategory
+            ? selectedCategory.categories.map((category) => (
                 <MenuItem
                   key={category.id}
                   data-id={category.id}

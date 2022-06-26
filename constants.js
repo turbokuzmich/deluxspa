@@ -205,8 +205,8 @@ export const catalogTree = [
     categories: [
       {
         id: "body_massage_oil",
-        title: "Для тела",
-        paneTitle: "Массажные масла для тела",
+        title: "Массажные масла для тела",
+        parent: "massage_oil",
         description: [
           "Лучшее, что создано природой, вы&nbsp;сможете найти в&nbsp;потрясающей натуральной линейке массажных уходовых масел для тела от&nbsp;DeluxSPA.",
           "Привезённые с&nbsp;всех уголков Европы, Азии и&nbsp;Полинезии, натуральные косметические и&nbsp;эфирные масла собраны в&nbsp;уникальные питательные ароматерапевтические коктейли для ухода за&nbsp;телом и&nbsp;проведения процедур массажа.",
@@ -227,8 +227,8 @@ export const catalogTree = [
       },
       {
         id: "face_massage_oil",
-        title: "Для лица",
-        paneTitle: "Массажные масла для лица",
+        title: "Массажные масла для лица",
+        parent: "massage_oil",
         description: [
           "Превосходное скольжение, отличная впитываемость и&nbsp;отсутствие плёнки на&nbsp;поверхности кожи при использовании ультра-лёгких питательных масел для лица. Профессиональные продукты Delux SPA подойдут, как для проведения процедур массажа, так и&nbsp;ухода за&nbsp;кожей лица. Уникальные рецептуры для красоты и&nbsp;молодости.",
         ],
@@ -246,8 +246,8 @@ export const catalogTree = [
       },
       {
         id: "hair_massage_oil",
-        title: "Для волос",
-        paneTitle: "Массажные масла для волос",
+        title: "Массажные масла для волос",
+        parent: "massage_oil",
         description: [
           "Для здорового внешнего вида волосы нуждаются в&nbsp;постоянном питании и&nbsp;уходе. Для решения данных задач появилась серия средств на&nbsp;основе масел жожоба и&nbsp;ультралёгких растительных и&nbsp;эфирных масел для курсового, переодического и&nbsp;ежедневного применения. Потрясающий вид и&nbsp;отличное состояние ваших волос уже после первых применений масел для волос от&nbsp;Delux SPA.",
         ],
@@ -273,15 +273,46 @@ export const catalogTree = [
       "Правильно подобранная дисперсия частиц, питательные масла и&nbsp;натуральные растительные экстракты&nbsp;&mdash; всё&nbsp;то, что вы&nbsp;искали для лучших результатов.",
     ],
     type: "category",
-    items: [
-      "oil_bio",
-      "oil_mint_breeze",
-      "oil_lemongrass",
-      "oil_extra_slim",
-      "oil_bubble_gum",
-      "oil_lemon_cake",
-      "oil_lime_cinnamon",
-      "oil_lemon_pepper",
+    categories: [
+      {
+        id: "scrub_for_face",
+        title: "Скрабы для лица",
+        parent: "scrub",
+        description: [
+          "Наше лицо, как и&nbsp;наше тело, для того, чтобы выглядеть молодо и&nbsp;ухожено, требует регулярного очищения от&nbsp;ороговевших частиц кожи и&nbsp;загрязнений.",
+          "Органический скраб для лица обладает мелкодисперсной структурой и&nbsp;пластичностью, что делает процедуру эксфолиации удобной и&nbsp;экономичной: достаточно лишь щепотки пасты и&nbsp;40&nbsp;секунд для тщательнлй и&nbsp;аккуратной профедуры скрабирования для сияния и&nbsp;здоровья кожи.",
+        ],
+        type: "category",
+        items: [
+          "oil_bio",
+          "oil_mint_breeze",
+          "oil_lemongrass",
+          "oil_extra_slim",
+          "oil_bubble_gum",
+          "oil_lemon_cake",
+          "oil_lime_cinnamon",
+          "oil_lemon_pepper",
+        ],
+      },
+      {
+        id: "scrub_for_body",
+        title: "Скрабы для тела",
+        parent: "scrub",
+        description: [
+          "Потрясающая серия солевых и&nbsp;кофейных скрабов различной дисперсности для ухода за&nbsp;телом и&nbsp;подготовки к&nbsp;SPA-процедурам. Широкий спектр действия: от&nbsp;питания до&nbsp;детоксикации, борьбы с&nbsp;лишним весом и&nbsp;восстановления после стрессов и&nbsp;тяжёлых нагрузок.",
+        ],
+        type: "category",
+        items: [
+          "oil_bio",
+          "oil_mint_breeze",
+          "oil_lemongrass",
+          "oil_extra_slim",
+          "oil_bubble_gum",
+          "oil_lemon_cake",
+          "oil_lime_cinnamon",
+          "oil_lemon_pepper",
+        ],
+      },
     ],
   },
   {
@@ -292,6 +323,10 @@ export const catalogTree = [
       {
         id: "essential_oil",
         title: "Эфирные масла",
+        parent: "aromatherapy",
+        description: [
+          "Органические эфирные масла для аромакологии и&nbsp;приготовления собственных эфиромасличных коктейлей, а&nbsp;также для создания крафтовой и&nbsp;селективной парфюмерии. Отобранные сортовые масла от&nbsp;известных производителей качественных и&nbsp;натуральных эфиров.",
+        ],
         type: "category",
         items: [
           "oil_bio",
@@ -306,8 +341,8 @@ export const catalogTree = [
       },
       {
         id: "aromatherapy_for_home",
-        title: "Для дома",
-        paneTitle: "Ароматерапия для дома",
+        title: "Ароматерапия для дома",
+        parent: "aromatherapy",
         type: "category",
         items: [
           "oil_bio",
@@ -328,8 +363,9 @@ export const categoriesDispayedOnPane = [
   ["massage_oil", "body_massage_oil"],
   ["massage_oil", "face_massage_oil"],
   ["massage_oil", "hair_massage_oil"],
+  ["scrub", "scrub_for_face"],
+  ["scrub", "scrub_for_body"],
   ["aromatherapy", "aromatherapy_for_home"],
-  "scrub",
   ["aromatherapy", "essential_oil"],
 ];
 

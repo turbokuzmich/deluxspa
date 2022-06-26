@@ -4,8 +4,8 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import * as Color from "color";
-import { categoriesDispayedOnPane, catalogTree } from "../constants";
-import memoize from "lodash/memoize";
+import { categoriesDispayedOnPane } from "../constants";
+import { getCategoryByPath } from "../helpers/catalog";
 
 const gridConfig = [
   (theme) => ({
@@ -37,8 +37,12 @@ const gridConfig = [
       .lighten(0.1)
       .rgb()
       .toString(),
-    gridColumnStart: 3,
-    gridColumnEnd: 5,
+  }),
+  (theme) => ({
+    backgroundColor: Color(theme.palette.background.paper)
+      .lighten(0.1)
+      .rgb()
+      .toString(),
   }),
   (theme) => ({
     backgroundColor: Color(theme.palette.custom.pane2)
@@ -49,7 +53,7 @@ const gridConfig = [
     gridRowEnd: 4,
   }),
   (theme) => ({
-    backgroundColor: Color(theme.palette.background.paper)
+    backgroundColor: Color(theme.palette.custom.pane3)
       .lighten(0.1)
       .rgb()
       .toString(),
@@ -58,28 +62,6 @@ const gridConfig = [
   }),
 ];
 
-// TODO move to helpers
-const getCategoryByPath = memoize(
-  (path) => {
-    function searcher(path, categories) {
-      const normalizedPath = [].concat(path);
-
-      if (normalizedPath.length === 1) {
-        return categories.find(({ id }) => id === normalizedPath[0]);
-      }
-
-      const categoryId = normalizedPath.shift();
-      const category = categories.find(({ id }) => id === categoryId);
-
-      return searcher(normalizedPath, category.categories);
-    }
-
-    return searcher(path, catalogTree);
-  },
-  (path) => path.toString()
-);
-
-// Плитка категорий на главной
 export default function CategoriesPane() {
   return (
     <Container sx={{ mb: 4 }}>
@@ -93,7 +75,6 @@ export default function CategoriesPane() {
       >
         {categoriesDispayedOnPane.map((categoryPath, index) => {
           const category = getCategoryByPath(categoryPath);
-          const title = category.paneTitle || category.title;
 
           return (
             <Link
@@ -164,7 +145,7 @@ export default function CategoriesPane() {
                     position: "relative",
                   }}
                 >
-                  {title}
+                  {category.title}
                 </Typography>
               </A>
             </Link>
