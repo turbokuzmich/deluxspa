@@ -343,6 +343,9 @@ export const catalogTree = [
         id: "aromatherapy_for_home",
         title: "Ароматерапия для дома",
         parent: "aromatherapy",
+        description: [
+          "Аура и&nbsp;сенсорика в&nbsp;сбалансированных эфиромасличных арома-коктейлях, диффузорах, спреях для помещений и&nbsp;белья создаст неповторимый почерк и&nbsp;станет отличительной особенностью вашего салона, а&nbsp;также наполнит гармонией ваш дом.",
+        ],
         type: "category",
         items: [
           "oil_bio",

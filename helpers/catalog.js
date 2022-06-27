@@ -1,5 +1,5 @@
 import memoize from "lodash/memoize";
-import { catalogTree } from "../constants";
+import { catalogTree, catalogItems } from "../constants";
 
 export const getCategoryByPath = memoize(
   (path) => {
@@ -43,3 +43,7 @@ export const getCategoryParentById = (id) => {
 
   return getCategoryById(category.parent);
 };
+
+export const getItemById = memoize((itemId) =>
+  catalogItems.find(({ id }) => id === itemId)
+);
