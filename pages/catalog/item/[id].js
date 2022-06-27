@@ -7,6 +7,7 @@ import Layout from "../../../components/layout";
 import Image from "../../../components/image";
 import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import get from "lodash/get";
@@ -77,7 +78,11 @@ export default function Item() {
                     <Price sum={item.price} />
                   </Typography>
                   <Link href="/map" passHref>
-                    <Button variant="outlined" size="large">
+                    <Button
+                      startIcon={<ShoppingCartIcon />}
+                      variant="outlined"
+                      size="large"
+                    >
                       Где можно купить?
                     </Button>
                   </Link>

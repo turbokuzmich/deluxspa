@@ -18,6 +18,7 @@ import {
   createContext,
   useContext,
   useCallback,
+  forwardRef,
 } from "react";
 
 const PlayerContext = createContext(false);
@@ -64,6 +65,42 @@ const getNeighborCatalogItems = memoize((index) => {
     getItemById(videoData[prevIndex].itemId),
     getItemById(videoData[nextIndex].itemId),
   ];
+});
+
+const PlayerWrapper = forwardRef(({ children }, ref) => {
+  const isPlayerReady = useContext(PlayerContext);
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        position: "relative",
+        width: playerSize.width,
+        height: playerSize.height,
+        pointerEvents: "none",
+      }}
+    >
+      <>
+        {children}
+        {isPlayerReady ? null : (
+          <Box
+            sx={{
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress size={100} />
+          </Box>
+        )}
+      </>
+    </Box>
+  );
 });
 
 export default function MainCarousel() {
@@ -174,41 +211,6 @@ export default function MainCarousel() {
         height: playerSize.height,
       }}
     />
-  );
-}
-
-function PlayerWrapper({ children }) {
-  const isPlayerReady = useContext(PlayerContext);
-
-  return (
-    <Box
-      sx={{
-        position: "relative",
-        width: playerSize.width,
-        height: playerSize.height,
-        pointerEvents: "none",
-      }}
-    >
-      <>
-        {children}
-        {isPlayerReady ? null : (
-          <Box
-            sx={{
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CircularProgress size={100} />
-          </Box>
-        )}
-      </>
-    </Box>
   );
 }
 
