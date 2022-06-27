@@ -1,32 +1,41 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
 import Image from "../../../components/image";
 import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
+import A from "@mui/material/Link";
+import Link from "next/link";
 import get from "lodash/get";
-import {
-  catalogItems,
-  compositionItems,
-  consumptionTitles,
-} from "../../../constants";
 import Price from "../../../components/price";
+import { compositionItems, consumptionTitles } from "../../../constants";
+import {
+  getItemById,
+  getItemCategoriesById,
+  getItemAuxiliaryItemsById,
+} from "../../../helpers/catalog";
 
 export default function Item() {
   const {
     query: { id },
   } = useRouter();
 
-  const item = useMemo(() => catalogItems.find((item) => item.id === id), [id]);
+  const item = useMemo(() => getItemById(id), [id]);
+  const categories = useMemo(() => getItemCategoriesById(id).slice(0, 3), [id]);
 
   return (
     <Layout>
       <>
         <Submenu />
         {item ? (
-          <Container>
+          <Container
+            sx={{
+              mb: 4,
+            }}
+          >
             <Box
               sx={{
                 gap: 6,
@@ -57,23 +66,191 @@ export default function Item() {
                 <Typography variant="h6" paragraph>
                   {item.brief}
                 </Typography>
-                <Typography variant="h3" paragraph>
-                  <Price sum={item.price} />
+                <Typography
+                  paragraph
+                  sx={{
+                    gap: 2,
+                    display: "flex",
+                  }}
+                >
+                  <Typography variant="h4">
+                    <Price sum={item.price} />
+                  </Typography>
+                  <Link href="/map" passHref>
+                    <Button variant="outlined" size="large">
+                      Где можно купить?
+                    </Button>
+                  </Link>
                 </Typography>
+                <Categories categories={categories} />
                 <Consumption item={item} />
                 <Composition item={item} />
-                {get(item, "description", []).map((line) => (
-                  <Typography
-                    dangerouslySetInnerHTML={{ __html: line }}
-                    paragraph
-                  />
-                ))}
+                <Description item={item} />
+                <Auxiliary item={item} />
               </Box>
             </Box>
           </Container>
         ) : null}
       </>
     </Layout>
+  );
+}
+
+function Auxiliary({ item }) {
+  const auxiliary = useMemo(() => getItemAuxiliaryItemsById(item.id), [item]);
+
+  return (
+    <>
+      <Typography variant="h6">Похожие товары</Typography>
+      <Box
+        sx={{
+          mt: 1,
+          gap: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {auxiliary.map((item) => (
+          <Link key={item.id} href={`/catalog/item/${item.id}`} passHref>
+            <A
+              underline="none"
+              sx={{
+                gap: 2,
+                display: "flex",
+              }}
+            >
+              <Box
+                sx={{
+                  width: 100,
+                  flexGrow: 0,
+                  flexShrink: 0,
+                  display: "flex",
+                }}
+              >
+                <Image
+                  src={item.image ? item.image : "/images/item.jpg"}
+                  sx={{ maxWidth: "100%" }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  flexShrink: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{
+                    flexGrow: 0,
+                    flexShrink: 0,
+                  }}
+                >
+                  {item.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    flexGrow: 1,
+                    flexShrink: 0,
+                  }}
+                >
+                  {item.brief}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    flexGrow: 0,
+                    flexShrink: 0,
+                  }}
+                >
+                  <Price sum={item.price} />
+                </Typography>
+              </Box>
+            </A>
+          </Link>
+        ))}
+      </Box>
+    </>
+  );
+}
+
+function Description({ item }) {
+  const lines = get(item, "description", []);
+
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const onOpen = useCallback(
+    (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      setIsCollapsed(false);
+    },
+    [setIsCollapsed]
+  );
+
+  if (lines.length === 1) {
+    return (
+      <>
+        <Typography variant="h6">Описание</Typography>
+        <Typography dangerouslySetInnerHTML={{ __html: lines[0] }} paragraph />
+      </>
+    );
+  }
+
+  if (isCollapsed) {
+    return (
+      <>
+        <Typography variant="h6">Описание</Typography>
+        <Typography paragraph>
+          <Typography
+            component="span"
+            dangerouslySetInnerHTML={{ __html: lines[0] }}
+          />{" "}
+          <A href={`/catalog/item/${item.id}`} onClick={onOpen}>
+            Подробнее
+          </A>
+        </Typography>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Typography variant="h6">Описание</Typography>
+      {lines.map((line, index) => (
+        <Typography
+          key={`item-description-${index}`}
+          dangerouslySetInnerHTML={{ __html: line }}
+          paragraph
+        />
+      ))}
+    </>
+  );
+}
+
+function Categories({ categories = [] }) {
+  if (categories.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <Typography variant="h6">
+        {categories.length === 1 ? "Категория товара" : "Категории товара"}
+      </Typography>
+      <Typography component="ul" paragraph>
+        {categories.map((category) => (
+          <Typography key={category.id} component="li">
+            <Link href={`/catalog/category/${category.id}`} passHref>
+              <A>{category.title}</A>
+            </Link>
+          </Typography>
+        ))}
+      </Typography>
+    </>
   );
 }
 
@@ -84,7 +261,7 @@ function Consumption({ item: { consumption } }) {
 
   return (
     <>
-      <Typography variant="h6">Расход на процедуру:</Typography>
+      <Typography variant="h6">Расход на процедуру</Typography>
       <Typography component="ul" paragraph>
         {["common", "back"].map((id) => (
           <Typography key={id} component="li">
@@ -103,7 +280,7 @@ function Composition({ item: { composition } }) {
 
   return (
     <>
-      <Typography variant="h6">Состав:</Typography>
+      <Typography variant="h6">Состав</Typography>
       <Typography component="ul" paragraph>
         {composition.map((id) => (
           <Typography key={id} component="li">

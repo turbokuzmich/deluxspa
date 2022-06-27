@@ -83,7 +83,7 @@ export const catalogItems = [
   },
   {
     id: "oil_lemongrass",
-    title: "Лемограсс",
+    title: "Лемонграсс",
     brief: "Масло для массажа и ухода за телом",
     price: 1090,
     composition: ["maize_oil", "wheat_oil", "vitamin_e", "lemongrass_oil"],

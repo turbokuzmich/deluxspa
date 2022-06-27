@@ -1,3 +1,5 @@
+import _ from "lodash";
+import get from "lodash/get";
 import memoize from "lodash/memoize";
 import { catalogTree, catalogItems } from "../constants";
 
@@ -21,17 +23,19 @@ export const getCategoryByPath = memoize(
   (path) => path.toString()
 );
 
+export const getFlattenCategories = memoize(() =>
+  catalogTree.reduce(
+    (categories, category) =>
+      categories.concat(
+        category,
+        ...(category.categories ? category.categories : [])
+      ),
+    []
+  )
+);
+
 export const getCategoryById = memoize((id) => {
-  return catalogTree
-    .reduce(
-      (categories, category) =>
-        categories.concat(
-          category,
-          ...(category.categories ? category.categories : [])
-        ),
-      []
-    )
-    .find((category) => category.id === id);
+  return getFlattenCategories().find((category) => category.id === id);
 });
 
 export const getCategoryParentById = (id) => {
@@ -46,4 +50,24 @@ export const getCategoryParentById = (id) => {
 
 export const getItemById = memoize((itemId) =>
   catalogItems.find(({ id }) => id === itemId)
+);
+
+export const getItemCategoriesById = memoize((id) =>
+  getFlattenCategories().reduce(
+    (categories, category) =>
+      get(category, "items", []).includes(id)
+        ? [...categories, category]
+        : categories,
+    []
+  )
+);
+
+// FIXME для каждого товара нужно выбрать сопутствующий и
+// дописать в constants; сейчас рандомно выбирается 2 товара
+export const getItemAuxiliaryItemsById = memoize((itemId) =>
+  _(catalogItems)
+    .filter(({ id }) => id !== itemId)
+    .shuffle()
+    .take(2)
+    .value()
 );

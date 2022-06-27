@@ -9,16 +9,21 @@ import {
 import "../styles/global.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
+const primaryColor = "#695530";
+
 const theme = responsiveFontSizes(
   createTheme({
     palette: {
+      primary: {
+        main: primaryColor,
+      },
       background: {
         default: "#f1e3c9",
         paper: "#e3c68e",
         footer: "#2b2a28",
       },
       custom: {
-        link: "#695530",
+        link: primaryColor,
         attention: "#76581d",
         pane2: "#FFC690",
         pane3: "#FFC59B",
