@@ -50,10 +50,7 @@ export default function Item() {
                   flexGrow: 0,
                 }}
               >
-                <Image
-                  src={item.image ? item.image : "/images/item.jpg"}
-                  sx={{ maxWidth: "100%" }}
-                />
+                <Image src={item.image} sx={{ maxWidth: "100%" }} />
               </Box>
               <Box
                 sx={{
@@ -132,10 +129,7 @@ function Auxiliary({ item }) {
                   display: "flex",
                 }}
               >
-                <Image
-                  src={item.image ? item.image : "/images/item.jpg"}
-                  sx={{ maxWidth: "100%" }}
-                />
+                <Image src={item.image} sx={{ maxWidth: "100%" }} />
               </Box>
               <Box
                 sx={{

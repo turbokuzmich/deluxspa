@@ -54,6 +54,7 @@ export const catalogItems = [
     brief: "Масло для массажа и ухода за телом",
     price: 1090,
     composition: ["maize_oil", "wheat_oil", "vitamin_e"],
+    image: "/images/items/bio.jpg",
     consumption: {
       common: "20–30 мл",
       back: "10–15 мл",
@@ -71,6 +72,7 @@ export const catalogItems = [
     brief: "Масло для массажа и ухода за телом",
     price: 1090,
     composition: ["maize_oil", "wheat_oil", "mint_oil"],
+    image: "/images/items/mint_breeze.jpg",
     consumption: {
       common: "20–30 мл",
       back: "10–15 мл",
@@ -87,6 +89,7 @@ export const catalogItems = [
     brief: "Масло для массажа и ухода за телом",
     price: 1090,
     composition: ["maize_oil", "wheat_oil", "vitamin_e", "lemongrass_oil"],
+    image: "/images/items/lemongrass.jpg",
     consumption: {
       common: "20–30 мл",
       back: "10–15 мл",
@@ -130,6 +133,7 @@ export const catalogItems = [
     price: 1890,
     brief: "Масло для массажа и ухода за телом",
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
+    image: "/images/items/bubble_gum.jpg",
     consumption: {
       common: "20–25 мл",
       back: "8–12 мл",
@@ -147,6 +151,7 @@ export const catalogItems = [
     brief: "Масло для массажа и ухода за телом",
     price: 1890,
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
+    image: "/images/items/lemon_cake.jpg",
     consumption: {
       common: "20–25 мл",
       back: "8–12 мл",

@@ -76,7 +76,7 @@ export default function Item({ id }) {
         >
           <Image
             className="image"
-            src={item.image ? item.image : "/images/item.jpg"}
+            src={item.image}
             sx={{
               maxWidth: "100%",
               maxHeight: "100%",
