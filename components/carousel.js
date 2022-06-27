@@ -138,6 +138,7 @@ export default function MainCarousel() {
         <Carousel
           className="video-carousel"
           onChange={onSlideChanged}
+          showArrows={false}
           showStatus={false}
           showThumbs={false}
           showIndicators={false}
@@ -212,6 +213,8 @@ function PlayerWrapper({ children }) {
 }
 
 function CarouselArrow({ onClick, item, forward = false }) {
+  const isPlayerReady = useContext(PlayerContext);
+
   const containerStyles = useCallback((theme) => ({
     position: "absolute",
     zIndex: 100,
@@ -242,7 +245,7 @@ function CarouselArrow({ onClick, item, forward = false }) {
     [forward]
   );
 
-  return (
+  return isPlayerReady ? (
     <Box className="carousel-arrow" onClick={onClick} sx={containerStyles}>
       <IconButton
         className="carousel-arrow-control carousel-arrow-button"
@@ -256,7 +259,7 @@ function CarouselArrow({ onClick, item, forward = false }) {
       </ArrowText>
       <ArrowText forward={forward}>{item.brief}</ArrowText>
     </Box>
-  );
+  ) : null;
 }
 
 function ArrowText({ children, forward = false, header = false }) {
