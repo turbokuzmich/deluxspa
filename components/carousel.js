@@ -1,9 +1,9 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import ArrowBack from "@mui/icons-material/ArrowBackIos";
 import ArrowForward from "@mui/icons-material/ArrowForwardIos";
+import CircularProgress from "@mui/material/CircularProgress";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import Player from "react-player/file";
@@ -11,8 +11,23 @@ import * as Color from "color";
 import { Carousel } from "react-responsive-carousel";
 import { getItemById } from "../helpers/catalog";
 import memoize from "lodash/memoize";
+import {
+  useEffect,
+  useState,
+  useMemo,
+  createContext,
+  useContext,
+  useCallback,
+} from "react";
+
+const PlayerContext = createContext(false);
 
 const originalVideoProportion = 770 / 2600;
+
+const playerSize = {
+  width: "100vmax",
+  height: `${originalVideoProportion * 100}vmax`,
+};
 
 const videoData = [
   {
@@ -52,12 +67,18 @@ const getNeighborCatalogItems = memoize((index) => {
 });
 
 export default function MainCarousel() {
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [canShowCarousel, setCanShowCarousel] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
 
   const [prevItem, nextItem] = useMemo(
     () => getNeighborCatalogItems(slideIndex),
     [slideIndex]
+  );
+
+  const onPlayerReady = useCallback(
+    () => setIsPlayerReady(true),
+    [setIsPlayerReady]
   );
 
   const onSlideChanged = useCallback(
@@ -91,58 +112,103 @@ export default function MainCarousel() {
   useEffect(() => setCanShowCarousel(true), [setCanShowCarousel]);
 
   return canShowCarousel ? (
-    <Box
-      sx={(theme) => ({
-        mb: 4,
-        "& .carousel-arrow-text": {},
-        "& .carousel-arrow .carousel-arrow-control": {
-          backgroundColor: Color(theme.palette.grey["900"])
-            .alpha(0.5)
-            .rgb()
-            .string(),
-        },
-        "& .carousel-arrow:hover .carousel-arrow-control, &:hover .carousel-arrow:hover .carousel-arrow-control":
-          {
+    <PlayerContext.Provider value={isPlayerReady}>
+      <Box
+        sx={(theme) => ({
+          mb: 4,
+          "& .carousel-arrow .carousel-arrow-control": {
             backgroundColor: Color(theme.palette.grey["900"])
-              .alpha(0.3)
+              .alpha(0.5)
               .rgb()
               .string(),
           },
-        "&:hover .carousel-arrow .carousel-arrow-control": {
-          opacity: 1,
-          transform: "translate(0, 0)",
-        },
-      })}
-    >
-      <Carousel
-        className="video-carousel"
-        onChange={onSlideChanged}
-        showStatus={false}
-        showThumbs={false}
-        showIndicators={false}
-        selectedItem={slideIndex}
-        renderArrowPrev={renderPrev}
-        renderArrowNext={renderNext}
-        infiniteLoop
-        emulateTouch
+          "& .carousel-arrow:hover .carousel-arrow-control, &:hover .carousel-arrow:hover .carousel-arrow-control":
+            {
+              backgroundColor: Color(theme.palette.grey["900"])
+                .alpha(0.3)
+                .rgb()
+                .string(),
+            },
+          "&:hover .carousel-arrow .carousel-arrow-control": {
+            opacity: 1,
+            transform: "translate(0, 0)",
+          },
+        })}
       >
-        {videoData.map(({ link }, index) => (
-          <Link key={index} href={link} passHref>
-            <A>
-              <Player
-                playing={index === slideIndex}
-                url={`/video/${index + 1}.mp4`}
-                width="100vmax"
-                height={`${originalVideoProportion * 100}vmax`}
-                muted
-                loop
-              />
-            </A>
-          </Link>
-        ))}
-      </Carousel>
+        <Carousel
+          className="video-carousel"
+          onChange={onSlideChanged}
+          showStatus={false}
+          showThumbs={false}
+          showIndicators={false}
+          selectedItem={slideIndex}
+          renderArrowPrev={renderPrev}
+          renderArrowNext={renderNext}
+          infiniteLoop
+          emulateTouch
+        >
+          {videoData.map(({ link }, index) => (
+            <Link key={index} href={link} passHref>
+              <A>
+                <Player
+                  onReady={index === 0 ? onPlayerReady : undefined}
+                  playing={index === slideIndex}
+                  url={`/video/${index + 1}.mp4`}
+                  width={playerSize.width}
+                  height={playerSize.height}
+                  wrapper={PlayerWrapper}
+                  muted
+                  loop
+                />
+              </A>
+            </Link>
+          ))}
+        </Carousel>
+      </Box>
+    </PlayerContext.Provider>
+  ) : (
+    <Box
+      sx={{
+        width: playerSize.width,
+        height: playerSize.height,
+      }}
+    />
+  );
+}
+
+function PlayerWrapper({ children }) {
+  const isPlayerReady = useContext(PlayerContext);
+
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        width: playerSize.width,
+        height: playerSize.height,
+        pointerEvents: "none",
+      }}
+    >
+      <>
+        {children}
+        {isPlayerReady ? null : (
+          <Box
+            sx={{
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress size={100} />
+          </Box>
+        )}
+      </>
     </Box>
-  ) : null;
+  );
 }
 
 function CarouselArrow({ onClick, item, forward = false }) {
@@ -200,7 +266,7 @@ function ArrowText({ children, forward = false, header = false }) {
   return (
     <Typography
       variant={header ? "h5" : "body1"}
-      className="carousel-arrow-control carousel-arrow-text"
+      className="carousel-arrow-control"
       sx={{
         pl: 2,
         pr: 2,
