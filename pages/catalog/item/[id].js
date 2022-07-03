@@ -48,6 +48,7 @@ export default function Item() {
                   width: "50%",
                   flexShrink: 0,
                   flexGrow: 0,
+                  pt: 4,
                 }}
               >
                 <Image src={item.image} sx={{ maxWidth: "100%" }} />

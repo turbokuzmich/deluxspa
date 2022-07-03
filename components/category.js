@@ -6,7 +6,6 @@ export default function Category({ title, description }) {
   return (
     <Box
       sx={{
-        mb: 4,
         backgroundColor: "background.paper",
       }}
     >
@@ -27,7 +26,7 @@ export default function Category({ title, description }) {
         >
           <Typography
             variant="h4"
-            sx={{ textTransform: "uppercase" }}
+            sx={{ textTransform: "uppercase", fontWeight: "bold" }}
             paragraph
           >
             {title}

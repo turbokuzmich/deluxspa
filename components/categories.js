@@ -65,7 +65,12 @@ const gridConfig = [
 export default function CategoriesPane() {
   return (
     <Container sx={{ mb: 4 }}>
-      <Typography align="center" variant="h4" paragraph>
+      <Typography
+        align="center"
+        variant="h4"
+        sx={{ fontWeight: "bold" }}
+        paragraph
+      >
         Наша продукция
       </Typography>
       <Box

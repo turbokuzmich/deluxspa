@@ -4,7 +4,7 @@ import Item from "./item";
 
 export default function Items({ items }) {
   return (
-    <Box sx={{ mb: 4 }}>
+    <Box sx={{ mb: 4, mt: 4 }}>
       <Container
         sx={{
           display: "flex",

@@ -152,7 +152,6 @@ export default function MainCarousel() {
     <PlayerContext.Provider value={isPlayerReady}>
       <Box
         sx={(theme) => ({
-          mb: 4,
           "& .carousel-arrow .carousel-arrow-control": {
             backgroundColor: Color(theme.palette.grey["900"])
               .alpha(0.5)

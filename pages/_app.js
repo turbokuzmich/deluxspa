@@ -14,12 +14,15 @@ const primaryColor = "#695530";
 const theme = responsiveFontSizes(
   createTheme({
     palette: {
+      text: {
+        primary: Color("#342e25").lighten(0.8).rgb().toString(),
+      },
       primary: {
         main: primaryColor,
       },
       background: {
-        default: "#f1e3c9",
-        paper: "#e3c68e",
+        default: Color("#f1e3c9").lighten(0.11).rgb().toString(),
+        paper: Color("#e3c68e").lighten(0.2).rgb().toString(),
         footer: "#2b2a28",
       },
       custom: {
