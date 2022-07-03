@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Logo from "../components/logo";
+import Eco from "../components/eco";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import { mainMenu } from "../constants";
@@ -20,11 +21,21 @@ export default function Header(props) {
         }}
       >
         <Link href="/" passHref>
-          <A>
+          <A sx={{ position: "relative" }}>
             <Logo
               sx={{
-                width: 80,
+                width: 100,
                 display: "block",
+              }}
+            />
+            <Eco
+              sx={{
+                top: 0,
+                fill: "#48ba00",
+                right: -18,
+                width: 30,
+                position: "absolute",
+                transform: "rotate(50deg)",
               }}
             />
           </A>
