@@ -13,7 +13,11 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import get from "lodash/get";
 import Price from "../../../components/price";
-import { compositionItems, consumptionTitles } from "../../../constants";
+import {
+  compositionItems,
+  compositionItemDescription,
+  consumptionTitles,
+} from "../../../constants";
 import {
   getItemById,
   getItemCategoriesById,
