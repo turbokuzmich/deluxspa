@@ -7,6 +7,7 @@ import Layout from "../../../components/layout";
 import Image from "../../../components/image";
 import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import A from "@mui/material/Link";
 import Link from "next/link";
@@ -21,11 +22,14 @@ import {
 
 export default function Item() {
   const {
+    push,
     query: { id },
   } = useRouter();
 
   const item = useMemo(() => getItemById(id), [id]);
   const categories = useMemo(() => getItemCategoriesById(id).slice(0, 3), [id]);
+
+  const onGoToMap = useCallback(() => push(`/map`), []);
 
   return (
     <Layout>
@@ -75,15 +79,20 @@ export default function Item() {
                   <Typography variant="h4">
                     <Price sum={item.price} />
                   </Typography>
-                  <Link href="/map" passHref>
+                  <Tooltip
+                    title="Узнайте, где ближайших магазин"
+                    placement="right"
+                    arrow
+                  >
                     <Button
+                      onClick={onGoToMap}
                       startIcon={<ShoppingCartIcon />}
                       variant="outlined"
                       size="large"
                     >
                       Где можно купить?
                     </Button>
-                  </Link>
+                  </Tooltip>
                 </Typography>
                 <Categories categories={categories} />
                 <Consumption item={item} />
