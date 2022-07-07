@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Item from "./item";
@@ -12,9 +13,11 @@ export default function Items({ items }) {
           gap: 4,
         }}
       >
-        {items.map((id) => (
-          <Item key={id} id={id} />
-        ))}
+        {items.length ? (
+          items.map((id) => <Item key={id} id={id} />)
+        ) : (
+          <Typography>В этой категории пока нет товаров.</Typography>
+        )}
       </Container>
     </Box>
   );

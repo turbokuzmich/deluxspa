@@ -5,32 +5,45 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import * as Color from "color";
-import { categoriesDispayedOnPane } from "../constants";
-import { getCategoryByPath } from "../helpers/catalog";
+import { getCategoriesWithItems } from "../helpers/catalog";
 import { useTheme } from "@mui/material/styles";
 
 const gridConfig = [
   {
     gridRowStart: 1,
-    gridRowEnd: 4,
+    gridRowEnd: 3,
+    backgroundSize: "100%",
   },
   {
     gridRowStart: 1,
+    gridRowEnd: 2,
+    backgroundPosition: "50% 0",
+  },
+  {
+    gridRowStart: 2,
     gridRowEnd: 3,
+    backgroundPosition: "50% 0",
   },
   {
-    gridRowStart: 3,
-    gridRowEnd: 4,
-  },
-  {},
-  {},
-  {
-    gridRowStart: 2,
-    gridRowEnd: 4,
+    gridRowStart: 1,
+    gridRowEnd: 2,
+    backgroundSize: "contain",
   },
   {
     gridRowStart: 2,
-    gridRowEnd: 4,
+    gridRowEnd: 3,
+    backgroundPosition: "50% 0",
+    backgroundSize: "50%",
+  },
+  {
+    gridRowStart: 1,
+    gridRowEnd: 2,
+    backgroundPosition: "50% 0",
+  },
+  {
+    gridRowStart: 2,
+    gridRowEnd: 3,
+    backgroundPosition: "66% 17%",
   },
 ];
 
@@ -57,18 +70,17 @@ export default function CategoriesPane() {
         sx={(theme) => ({
           display: "grid",
           gridGap: theme.spacing(2),
-          gridAutoRows: "130px",
+          gridAutoRows: "200px",
           gridTemplateColumns: "repeat(4, 1fr)",
         })}
       >
-        {categoriesDispayedOnPane.map((categoryPath, index) => {
-          const category = getCategoryByPath(categoryPath);
+        {getCategoriesWithItems().map((category, index) => {
           const backgroundColor =
             backgroundColors[index % backgroundColors.length];
 
           return (
             <Link
-              key={categoryPath}
+              key={category.id}
               href={`/catalog/category/${category.id}`}
               passHref
             >
@@ -79,17 +91,15 @@ export default function CategoriesPane() {
                   const itemStyles = gridConfig[index];
 
                   return {
-                    ...itemStyles,
-                    p: 2,
                     backgroundColor,
                     display: "flex",
                     position: "relative",
                     alignItems: "flex-end",
                     color: "text.primary",
-                    backgroundImage: "url(/images/face.png)",
+                    backgroundImage: `url(${category.image})`,
                     backgroundSize: "80%",
                     backgroundRepeat: "no-repeat",
-                    backgroundPosition: "100% 100%",
+                    backgroundPosition: "50% 100%",
                     "&::after": {
                       content: '""',
                       opacity: 0,
@@ -127,17 +137,33 @@ export default function CategoriesPane() {
                     "&:hover .title::after": {
                       right: 0,
                     },
+                    ...itemStyles,
                   };
                 }}
               >
-                <Typography
-                  className="title"
+                <Box
                   sx={{
-                    position: "relative",
+                    pb: 2,
+                    pt: 5,
+                    textAlign: "center",
+                    width: "100%",
+                    background: `linear-gradient(${[
+                      "to bottom",
+                      Color(backgroundColor).alpha(0).rgb().toString(),
+                      Color(backgroundColor).alpha(1).rgb().toString(),
+                    ].join(",")})`,
                   }}
                 >
-                  {category.title}
-                </Typography>
+                  <Typography
+                    className="title"
+                    component="span"
+                    sx={{
+                      position: "relative",
+                    }}
+                  >
+                    {category.title}
+                  </Typography>
+                </Box>
               </A>
             </Link>
           );

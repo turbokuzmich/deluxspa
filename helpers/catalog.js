@@ -1,7 +1,23 @@
 import _ from "lodash";
 import get from "lodash/get";
 import memoize from "lodash/memoize";
-import { catalogTree, catalogItems } from "../constants";
+import { auxColors, catalogTree, catalogItems } from "../constants";
+
+export const getCategoriesWithItems = memoize(() => {
+  return catalogTree.reduce(
+    (categories, category) => [...categories, ...category.categories],
+    []
+  );
+});
+
+export const getCategoryColorById = memoize((id) => {
+  const categoriesWithItems = getCategoriesWithItems();
+  const index = categoriesWithItems.findIndex((category) => category.id === id);
+
+  if (index > -1) {
+    return auxColors[index];
+  }
+});
 
 export const getCategoryByPath = memoize(
   (path) => {

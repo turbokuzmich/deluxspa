@@ -9,7 +9,7 @@ import Link from "next/link";
 import { catalogTree } from "../constants";
 import get from "lodash/get";
 
-export default function Submenu({ selected }) {
+export default function Submenu({ selected, sx = {} }) {
   const router = useRouter();
 
   const [selectedCategoryRef, setSelectedCategoryRef] = useState(null);
@@ -53,6 +53,7 @@ export default function Submenu({ selected }) {
     <Box
       sx={{
         backgroundColor: "background.paper",
+        ...sx,
       }}
     >
       <Container

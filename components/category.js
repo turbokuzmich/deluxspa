@@ -1,27 +1,77 @@
+import get from "lodash/get";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-export default function Category({ title, description }) {
+const defaultSx = {
+  category: {},
+};
+
+const categoryStyleOverride = {
+  body_massage_oil: {
+    backgroundSize: "24%",
+  },
+  face_massage_oil: {
+    backgroundSize: "28%",
+  },
+  hair_massage_oil: {
+    backgroundSize: "28%",
+    backgroundPosition: "86% 100%",
+  },
+  scrub_for_face: {
+    backgroundSize: "contain",
+    backgroundPosition: "100% 100%",
+  },
+  scrub_for_body: {
+    backgroundSize: "28%",
+    backgroundPosition: "80% -76%",
+  },
+  essential_oil: {
+    backgroundPosition: "80% 74%",
+  },
+  aromatherapy_for_home: {
+    backgroundPosition: "80% 78%",
+  },
+};
+
+export default function Category({
+  id,
+  title,
+  image,
+  addonBefore,
+  description,
+  sx = defaultSx,
+}) {
+  const { category: categorySx, ...containerSx } = sx;
+
   return (
     <Box
       sx={{
         backgroundColor: "background.paper",
+        ...containerSx,
       }}
     >
+      {addonBefore}
       <Container
         sx={{
+          backgroundImage: `url(${image})`,
+          backgroundPosition: "80% 100%",
+          backgroundSize: "30%",
+          backgroundRepeat: "no-repeat",
           display: "flex",
           gap: 4,
+          position: "relative",
+          ...categorySx,
+          ...get(categoryStyleOverride, id, {}),
         }}
       >
         <Box
           sx={{
+            pt: 6,
+            pb: 6,
             width: "50%",
             flexShrink: 0,
             flexGrow: 0,
-            paddingTop: 6,
-            paddingBottom: 6,
           }}
         >
           <Typography
@@ -35,6 +85,7 @@ export default function Category({ title, description }) {
             ? description.map((line, index) => (
                 <Typography
                   key={index}
+                  variant="h6"
                   paragraph={index < description.length - 1}
                   dangerouslySetInnerHTML={{ __html: line }}
                 />
@@ -49,10 +100,6 @@ export default function Category({ title, description }) {
             justifyContent: "center",
             flexShrink: 0,
             flexGrow: 0,
-            backgroundImage: "url(/images/face.png)",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
           }}
         />
       </Container>

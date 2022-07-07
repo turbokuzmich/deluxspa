@@ -1,5 +1,6 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import * as Color from "color";
+import { aucColors, auxColors } from "../constants";
 import {
   createTheme,
   ThemeProvider,
@@ -28,15 +29,7 @@ const theme = responsiveFontSizes(
       custom: {
         link: primaryColor,
         attention: "#76581d",
-        panes: [
-          "#c6e3e9",
-          "#ffcdb5",
-          "#d7f2c9",
-          "#c9d7f2",
-          "#e4c9f2",
-          "#fff7b1",
-          "#f9bab9",
-        ],
+        panes: auxColors,
       },
     },
     typography: {
