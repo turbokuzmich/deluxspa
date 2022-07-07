@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import A from "@mui/material/Link";
@@ -6,63 +7,42 @@ import Typography from "@mui/material/Typography";
 import * as Color from "color";
 import { categoriesDispayedOnPane } from "../constants";
 import { getCategoryByPath } from "../helpers/catalog";
+import { useTheme } from "@mui/material/styles";
 
 const gridConfig = [
-  (theme) => ({
-    backgroundColor: Color(theme.palette.background.paper)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
+  {
     gridRowStart: 1,
     gridRowEnd: 4,
-  }),
-  (theme) => ({
-    backgroundColor: Color(theme.palette.custom.pane2)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
+  },
+  {
     gridRowStart: 1,
     gridRowEnd: 3,
-  }),
-  (theme) => ({
-    backgroundColor: Color(theme.palette.custom.pane3)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
+  },
+  {
     gridRowStart: 3,
     gridRowEnd: 4,
-  }),
-  (theme) => ({
-    backgroundColor: Color(theme.palette.custom.pane4)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
-  }),
-  (theme) => ({
-    backgroundColor: Color(theme.palette.background.paper)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
-  }),
-  (theme) => ({
-    backgroundColor: Color(theme.palette.custom.pane2)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
+  },
+  {},
+  {},
+  {
     gridRowStart: 2,
     gridRowEnd: 4,
-  }),
-  (theme) => ({
-    backgroundColor: Color(theme.palette.custom.pane3)
-      .lighten(0.1)
-      .rgb()
-      .toString(),
+  },
+  {
     gridRowStart: 2,
     gridRowEnd: 4,
-  }),
+  },
 ];
 
 export default function CategoriesPane() {
+  const theme = useTheme();
+
+  const backgroundColors = useMemo(() =>
+    theme.palette.custom.panes.map((color) =>
+      Color(color).lighten(0.1).rgb().toString()
+    )
+  );
+
   return (
     <Container sx={{ mb: 4 }}>
       <Typography
@@ -83,6 +63,8 @@ export default function CategoriesPane() {
       >
         {categoriesDispayedOnPane.map((categoryPath, index) => {
           const category = getCategoryByPath(categoryPath);
+          const backgroundColor =
+            backgroundColors[index % backgroundColors.length];
 
           return (
             <Link
@@ -94,11 +76,12 @@ export default function CategoriesPane() {
                 underline="none"
                 variant="subtitle2"
                 sx={(theme) => {
-                  const itemStyles = gridConfig[index](theme);
+                  const itemStyles = gridConfig[index];
 
                   return {
                     ...itemStyles,
                     p: 2,
+                    backgroundColor,
                     display: "flex",
                     position: "relative",
                     alignItems: "flex-end",
@@ -119,7 +102,7 @@ export default function CategoriesPane() {
                       background: `linear-gradient(${[
                         "to bottom right",
                         theme.palette.background.default,
-                        `${Color(itemStyles.backgroundColor)
+                        `${Color(backgroundColor)
                           .alpha(0)
                           .rgb()
                           .toString()}  30%`,

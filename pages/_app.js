@@ -22,15 +22,21 @@ const theme = responsiveFontSizes(
       },
       background: {
         default: Color("#f1e3c9").lighten(0.11).rgb().toString(),
-        paper: Color("#e3c68e").lighten(0.2).rgb().toString(),
+        paper: Color("#e3c68e").lighten(0.15).rgb().toString(),
         footer: "#2b2a28",
       },
       custom: {
         link: primaryColor,
         attention: "#76581d",
-        pane2: "#FFC690",
-        pane3: "#FFC59B",
-        pane4: "#FFC2B1",
+        panes: [
+          "#c6e3e9",
+          "#ffcdb5",
+          "#d7f2c9",
+          "#c9d7f2",
+          "#e4c9f2",
+          "#fff7b1",
+          "#f9bab9",
+        ],
       },
     },
     typography: {

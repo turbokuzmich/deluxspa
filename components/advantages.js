@@ -10,7 +10,7 @@ import * as Color from "color";
 const iconProps = {
   fontSize: "inherit",
   sx: (theme) => ({
-    color: Color(theme.palette.primary.main).lighten(1.2).rgb().toString(),
+    color: Color(theme.palette.custom.panes[6]).rgb().toString(),
   }),
 };
 
