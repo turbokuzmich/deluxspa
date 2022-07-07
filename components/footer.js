@@ -2,6 +2,8 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
 
 export default function Footer() {
   return (
@@ -32,7 +34,9 @@ export default function Footer() {
             Продукция из&nbsp;лучших компонентов по&nbsp;привлекательной
             стоимости.
           </Typography>
-          <Typography>Delux SPA&nbsp;&mdash; лучшее от&nbsp;природы.</Typography>
+          <Typography>
+            Delux SPA&nbsp;&mdash; лучшее от&nbsp;природы.
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -53,7 +57,21 @@ export default function Footer() {
             flexGrow: 0,
           }}
         >
-          <Typography>
+          <Typography
+            sx={{
+              position: "relative",
+              pl: 4,
+            }}
+            paragraph
+          >
+            <PhoneIcon
+              fontSize="small"
+              sx={{
+                position: "absolute",
+                left: 0,
+                top: 5,
+              }}
+            />
             <Link href="tel:+74956659015" data-variant="footer">
               +7 (495) 665 9015
             </Link>
@@ -61,7 +79,21 @@ export default function Footer() {
             <Link href="tel:+79263853751" data-variant="footer">
               +7 926 385 3751
             </Link>
-            <br />
+          </Typography>
+          <Typography
+            sx={{
+              position: "relative",
+              pl: 4,
+            }}
+          >
+            <EmailIcon
+              fontSize="small"
+              sx={{
+                position: "absolute",
+                left: 0,
+                top: 5,
+              }}
+            />
             <Link href="mailto:office@deluxspa.ru" data-variant="footer">
               office@deluxspa.ru
             </Link>
