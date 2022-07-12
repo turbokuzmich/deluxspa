@@ -13,11 +13,7 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import get from "lodash/get";
 import Price from "../../../components/price";
-import {
-  compositionItems,
-  compositionItemDescription,
-  consumptionTitles,
-} from "../../../constants";
+import { compositionItems, consumptionTitles } from "../../../constants";
 import {
   getItemById,
   getItemCategoriesById,
@@ -311,9 +307,9 @@ function Composition({ item }) {
       <Typography component="ul" paragraph>
         {composition.map((id) => (
           <Typography key={id} component="li">
-            {compositionItemDescription[id] ? (
+            {compositionItems[id].brief ? (
               <Tooltip
-                title={compositionItemDescription[id].brief}
+                title={compositionItems[id].brief}
                 placement="right"
                 arrow
               >
