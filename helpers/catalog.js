@@ -87,3 +87,7 @@ export const getItemAuxiliaryItemsById = memoize((itemId) =>
     .take(2)
     .value()
 );
+
+export const getItemsByCompositionId = memoize((compositionId) =>
+  catalogItems.filter(({ composition }) => composition.includes(compositionId))
+);

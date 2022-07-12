@@ -10,59 +10,57 @@ import Link from "next/link";
 export default function Ingredients() {
   return (
     <Layout>
-      <>
-        <Container>
-          <Box
+      <Container>
+        <Box
+          sx={{
+            pt: 8,
+          }}
+        >
+          <Typography
+            variant="h3"
             sx={{
-              pt: 8,
+              mb: 4,
             }}
           >
-            <Typography
-              variant="h3"
-              sx={{
-                mb: 4,
-              }}
-            >
-              Ингредиенты
-            </Typography>
-            <Grid rowSpacing={4} columnSpacing={8} container>
-              {compositionItemsGridOrder.map((id) => (
-                <Grid md={6} item>
-                  <Link key={id} href={`/ingredients/${id}`} passHref>
-                    <A
-                      underline="none"
+            Ингредиенты
+          </Typography>
+          <Grid rowSpacing={4} columnSpacing={8} container>
+            {compositionItemsGridOrder.map((id) => (
+              <Grid md={6} item>
+                <Link key={id} href={`/ingredients/${id}`} passHref>
+                  <A
+                    underline="none"
+                    sx={{
+                      "&:hover .title": {
+                        textDecoration: "underline",
+                      },
+                      "&:hover .brief": {
+                        textDecoration: "none",
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      className="title"
                       sx={{
-                        "&:hover .title": {
-                          textDecoration: "underline",
-                        },
-                        "&:hover .brief": {
-                          textDecoration: "none",
-                        },
+                        textTransform: "uppercase",
                       }}
                     >
-                      <Typography
-                        variant="h5"
-                        className="title"
-                        sx={{
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {compositionItems[id].title}
-                      </Typography>
-                      <Typography
-                        className="brief"
-                        dangerouslySetInnerHTML={{
-                          __html: compositionItems[id].brief,
-                        }}
-                      ></Typography>
-                    </A>
-                  </Link>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </Container>
-      </>
+                      {compositionItems[id].title}
+                    </Typography>
+                    <Typography
+                      className="brief"
+                      dangerouslySetInnerHTML={{
+                        __html: compositionItems[id].brief,
+                      }}
+                    ></Typography>
+                  </A>
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Container>
     </Layout>
   );
 }
