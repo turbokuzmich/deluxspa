@@ -54,6 +54,7 @@ export default function Header(props) {
 
               const styles = {
                 position: "relative",
+                textTransform: "uppercase",
                 "&::before, &::after": {
                   content: '""',
                   position: "absolute",

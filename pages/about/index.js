@@ -18,7 +18,13 @@ export default function About() {
               },
             }}
           >
-            <Typography variant="h4">DeluxSPA</Typography>
+            <Typography
+              variant="h3"
+              sx={{ textTransform: "uppercase" }}
+              paragraph
+            >
+              DeluxSPA
+            </Typography>
             <Typography variant="h5" paragraph>
               Профессиональный путь к красоте
             </Typography>

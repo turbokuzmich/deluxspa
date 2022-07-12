@@ -77,6 +77,7 @@ export default function Submenu({ selected, sx = {} }) {
                 data-id={id}
                 sx={{
                   position: "relative",
+                  textTransform: "uppercase",
                   color: isContextMenuOpen ? "text.primary" : "custom.link",
                   pt: 3,
                   pb: 3,
@@ -126,6 +127,7 @@ export default function Submenu({ selected, sx = {} }) {
                   key={category.id}
                   data-id={category.id}
                   onClick={onCategory}
+                  sx={{ textTransform: "uppercase" }}
                 >
                   {category.title}
                 </MenuItem>

@@ -56,6 +56,7 @@ export default function Item({ id }) {
             pr: 2,
             position: "absolute",
             backgroundColor: "custom.attention",
+            display: "none",
           }}
         >
           <Typography
@@ -88,6 +89,7 @@ export default function Item({ id }) {
           variant="h6"
           sx={{
             pb: 1,
+            textTransform: "uppercase",
             position: "relative",
           }}
         >

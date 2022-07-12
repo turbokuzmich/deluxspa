@@ -19,6 +19,7 @@ export default function Ingredients() {
           <Typography
             variant="h3"
             sx={{
+              textTransform: "uppercase",
               mb: 4,
             }}
           >

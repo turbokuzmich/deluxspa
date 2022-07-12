@@ -65,7 +65,9 @@ export default function Item() {
                   pt: 4,
                 }}
               >
-                <Typography variant="h4">{item.title}</Typography>
+                <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+                  {item.title}
+                </Typography>
                 <Typography variant="h6" paragraph>
                   {item.brief}
                 </Typography>

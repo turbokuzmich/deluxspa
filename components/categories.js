@@ -61,10 +61,10 @@ export default function CategoriesPane() {
       <Typography
         align="center"
         variant="h4"
-        sx={{ fontWeight: "bold" }}
+        sx={{ fontWeight: "bold", textTransform: "uppercase" }}
         paragraph
       >
-        Наша продукция
+        ваше время — бесценно!
       </Typography>
       <Box
         sx={(theme) => ({
@@ -157,8 +157,10 @@ export default function CategoriesPane() {
                   <Typography
                     className="title"
                     component="span"
+                    variant="body2"
                     sx={{
                       position: "relative",
+                      textTransform: "uppercase",
                     }}
                   >
                     {category.title}
