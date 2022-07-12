@@ -74,6 +74,7 @@ export default function Item() {
                   {item.brief}
                 </Typography>
                 <Typography
+                  component="div"
                   paragraph
                   sx={{
                     gap: 2,
@@ -286,9 +287,22 @@ function Consumption({ item: { consumption } }) {
   );
 }
 
-function Composition({ item: { composition } }) {
-  if (!composition || !Array.isArray(composition) || composition.length === 0) {
-    return null;
+function Composition({ item }) {
+  const composition = get(item, "composition", []);
+
+  const { push } = useRouter();
+
+  const onClick = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      push(event.target.getAttribute("href"));
+    },
+    [push]
+  );
+
+  if (composition.length === 0) {
+    return;
   }
 
   return (
@@ -297,7 +311,19 @@ function Composition({ item: { composition } }) {
       <Typography component="ul" paragraph>
         {composition.map((id) => (
           <Typography key={id} component="li">
-            {compositionItems[id].title}
+            {compositionItemDescription[id] ? (
+              <Tooltip
+                title={compositionItemDescription[id].brief}
+                placement="right"
+                arrow
+              >
+                <A href={`/ingredients/${id}`} onClick={onClick}>
+                  {compositionItems[id].title}
+                </A>
+              </Tooltip>
+            ) : (
+              compositionItems[id].title
+            )}
           </Typography>
         ))}
       </Typography>
