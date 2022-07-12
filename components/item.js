@@ -111,7 +111,7 @@ export default function Item({ id }) {
           >
             <Price sum={item.price} />
           </Typography>
-          <Typography variant="subtitle2">200 мл.</Typography>
+          <Typography variant="subtitle2">1000 мл.</Typography>
         </Box>
       </A>
     </Link>

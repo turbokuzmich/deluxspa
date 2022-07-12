@@ -1,7 +1,8 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+import A from "@mui/material/Link";
+import Link from "next/link";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 
@@ -45,9 +46,15 @@ export default function Footer() {
             flexGrow: 0,
           }}
         >
-          <Typography>
-            Россия, г. Москва, г. Московский, ул. Академика Чумакова, д. 6, оф.
-            117
+          <Typography paragraph>
+            <Link href="/promo" passHref>
+              <A data-variant="footer">Акции</A>
+            </Link>
+          </Typography>
+          <Typography paragraph>
+            <Link href="/cooperation" passHref>
+              <A data-variant="footer">Сотрудничество</A>
+            </Link>
           </Typography>
         </Box>
         <Box
@@ -72,13 +79,13 @@ export default function Footer() {
                 top: 5,
               }}
             />
-            <Link href="tel:+74956659015" data-variant="footer">
+            <A href="tel:+74956659015" data-variant="footer">
               +7 (495) 665 9015
-            </Link>
+            </A>
             <br />
-            <Link href="tel:+79263853751" data-variant="footer">
+            <A href="tel:+79263853751" data-variant="footer">
               +7 926 385 3751
-            </Link>
+            </A>
           </Typography>
           <Typography
             sx={{
@@ -94,9 +101,9 @@ export default function Footer() {
                 top: 5,
               }}
             />
-            <Link href="mailto:office@deluxspa.ru" data-variant="footer">
+            <A href="mailto:office@deluxspa.ru" data-variant="footer">
               office@deluxspa.ru
-            </Link>
+            </A>
           </Typography>
         </Box>
       </Container>

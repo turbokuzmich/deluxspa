@@ -255,10 +255,10 @@ function CarouselArrow({ onClick, item, forward = false }) {
       >
         {forward ? <ArrowForward /> : <ArrowBack />}
       </IconButton>
-      <ArrowText forward={forward} header>
+      {/*<ArrowText forward={forward} header>
         {item.title}
       </ArrowText>
-      <ArrowText forward={forward}>{item.brief}</ArrowText>
+      <ArrowText forward={forward}>{item.brief}</ArrowText>*/}
     </Box>
   ) : null;
 }

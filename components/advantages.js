@@ -3,8 +3,8 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import LocalShipping from "@mui/icons-material/LocalShipping";
-import Shield from "@mui/icons-material/Shield";
-import Language from "@mui/icons-material/Language";
+import Card from "@mui/icons-material/CardMembership";
+import Verified from "@mui/icons-material/Verified";
 import * as Color from "color";
 
 const iconProps = {
@@ -16,22 +16,19 @@ const iconProps = {
 
 const advantages = [
   {
+    id: "global",
+    icon: <Verified {...iconProps} />,
+    title: "Высокое качество",
+  },
+  {
     id: "shipping",
     icon: <LocalShipping {...iconProps} />,
-    title: "Бесплатная доставка",
-    subtitle: "На все заказы более 1 500₽",
+    title: "Доставка по РФ и СНГ",
   },
   {
     id: "warranty",
-    icon: <Shield {...iconProps} />,
-    title: "Гарантия — 30 дней",
-    subtitle: "На все заказы более 1 500₽",
-  },
-  {
-    id: "global",
-    icon: <Language {...iconProps} />,
-    title: "Доставка по всему миру",
-    subtitle: "На все заказы более 1 500₽",
+    icon: <Card {...iconProps} />,
+    title: "Продукция сертифицирована",
   },
 ];
 
@@ -40,7 +37,7 @@ export default function Advantages() {
     <Box sx={{ mb: 4, backgroundColor: "common.white" }}>
       <Container>
         <Grid container>
-          {advantages.map(({ id, icon, title, subtitle }) => (
+          {advantages.map(({ id, icon, title }) => (
             <Grid
               key={id}
               xs={12}
@@ -48,19 +45,16 @@ export default function Advantages() {
               sx={{
                 pt: 3,
                 pb: 3,
-                fontSize: 40,
+                fontSize: 32,
                 display: "flex",
                 flexDirection: "row",
               }}
               item
             >
               {icon}
-              <Box sx={{ ml: 2 }}>
+              <Box sx={{ ml: 1 }}>
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                   {title}
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}>
-                  {subtitle}
                 </Typography>
               </Box>
             </Grid>

@@ -4,11 +4,25 @@ import Logo from "../components/logo";
 import Eco from "../components/eco";
 import A from "@mui/material/Link";
 import Link from "next/link";
+import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
+import { useTheme } from "@emotion/react";
+import { useMemo } from "react";
 
-export default function Header(props) {
+export default function Header() {
   const { pathname } = useRouter();
+
+  const {
+    palette: {
+      custom: { eco },
+    },
+  } = useTheme();
+
+  const ecoColor = useMemo(
+    () => Color(eco).lighten(0.4).hex().toString(),
+    [eco]
+  );
 
   return (
     <Box sx={{ backgroundColor: "common.white", flexShrink: 0, flexGrow: 0 }}>
@@ -31,7 +45,7 @@ export default function Header(props) {
             <Eco
               sx={{
                 top: 0,
-                fill: "#48ba00",
+                fill: ecoColor,
                 right: -18,
                 width: 30,
                 position: "absolute",
@@ -50,11 +64,12 @@ export default function Header(props) {
           {mainMenu
             .filter(({ hidden }) => !hidden)
             .map(({ title, link }) => {
-              const isSelected = link !== "/" && pathname.startsWith(link);
+              const isSelected = pathname.startsWith(link);
 
               const styles = {
                 position: "relative",
                 textTransform: "uppercase",
+                color: "custom.eco",
                 "&::before, &::after": {
                   content: '""',
                   position: "absolute",

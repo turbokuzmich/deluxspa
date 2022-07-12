@@ -65,12 +65,15 @@ export default function Item() {
                   pt: 4,
                 }}
               >
-                <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+                <Typography
+                  variant="h4"
+                  sx={{ textTransform: "uppercase" }}
+                  paragraph
+                >
                   {item.title}
                 </Typography>
-                <Typography variant="h6" paragraph>
-                  {item.brief}
-                </Typography>
+                <Typography variant="h6">{item.brief}</Typography>
+                <Typography paragraph>Объем — 1000 мл.</Typography>
                 <Typography
                   component="div"
                   paragraph
