@@ -9,42 +9,76 @@ import { getCategoriesWithItems } from "../helpers/catalog";
 import { useTheme } from "@mui/material/styles";
 
 const gridConfig = [
-  {
-    gridRowStart: 1,
-    gridRowEnd: 3,
-    backgroundSize: "100%",
-  },
-  {
-    gridRowStart: 1,
-    gridRowEnd: 2,
-    backgroundPosition: "50% 0",
-  },
-  {
-    gridRowStart: 2,
-    gridRowEnd: 3,
-    backgroundPosition: "50% 0",
-  },
-  {
-    gridRowStart: 1,
-    gridRowEnd: 2,
-    backgroundSize: "contain",
-  },
-  {
-    gridRowStart: 2,
-    gridRowEnd: 3,
-    backgroundPosition: "50% 0",
+  (theme) => ({
+    height: 200,
+    backgroundSize: "43%",
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 1,
+      gridRowEnd: 3,
+      backgroundSize: "100%",
+    },
+  }),
+  (theme) => ({
+    height: 200,
     backgroundSize: "50%",
-  },
-  {
-    gridRowStart: 1,
-    gridRowEnd: 2,
-    backgroundPosition: "50% 0",
-  },
-  {
-    gridRowStart: 2,
-    gridRowEnd: 3,
-    backgroundPosition: "66% 17%",
-  },
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 1,
+      gridRowEnd: 2,
+      backgroundPosition: "50% 0",
+    },
+  }),
+  (theme) => ({
+    height: 200,
+    backgroundSize: "46%",
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 2,
+      gridRowEnd: 3,
+      backgroundPosition: "50% 0",
+    },
+  }),
+  (theme) => ({
+    height: 200,
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 1,
+      gridRowEnd: 2,
+      backgroundSize: "contain",
+    },
+  }),
+  (theme) => ({
+    height: 200,
+    backgroundSize: "34%",
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 2,
+      gridRowEnd: 3,
+      backgroundPosition: "50% 0",
+      backgroundSize: "50%",
+    },
+  }),
+  (theme) => ({
+    height: 200,
+    backgroundSize: "71%",
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 1,
+      gridRowEnd: 2,
+      backgroundPosition: "50% 0",
+    },
+  }),
+  (theme) => ({
+    height: 200,
+    backgroundSize: "72%",
+    [theme.breakpoints.up("md")]: {
+      height: "auto",
+      gridRowStart: 2,
+      gridRowEnd: 3,
+      backgroundPosition: "66% 17%",
+    },
+  }),
 ];
 
 export default function CategoriesPane() {
@@ -57,7 +91,7 @@ export default function CategoriesPane() {
   );
 
   return (
-    <Container sx={{ mb: 4 }}>
+    <Container sx={{ mb: 4, mt: 4 }}>
       <Typography
         align="center"
         variant="h4"
@@ -70,8 +104,12 @@ export default function CategoriesPane() {
         sx={(theme) => ({
           display: "grid",
           gridGap: theme.spacing(2),
-          gridAutoRows: "200px",
-          gridTemplateColumns: "repeat(4, 1fr)",
+          [theme.breakpoints.up("md")]: {
+            display: "grid",
+            gridGap: theme.spacing(2),
+            gridAutoRows: "200px",
+            gridTemplateColumns: "repeat(4, 1fr)",
+          },
         })}
       >
         {getCategoriesWithItems().map((category, index) => {
@@ -88,7 +126,7 @@ export default function CategoriesPane() {
                 underline="none"
                 variant="subtitle2"
                 sx={(theme) => {
-                  const itemStyles = gridConfig[index];
+                  const itemStyles = gridConfig[index](theme);
 
                   return {
                     backgroundColor,

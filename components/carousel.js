@@ -11,6 +11,7 @@ import * as Color from "color";
 import { Carousel } from "react-responsive-carousel";
 import { getItemById } from "../helpers/catalog";
 import memoize from "lodash/memoize";
+import debounce from "lodash/debounce";
 import {
   useEffect,
   useState,
@@ -21,7 +22,8 @@ import {
   forwardRef,
 } from "react";
 
-const PlayerContext = createContext(false);
+const PlayerReadinessContext = createContext(false);
+const PlayerCenterContext = createContext(false);
 
 const originalVideoProportion = 770 / 2600;
 
@@ -68,16 +70,24 @@ const getNeighborCatalogItems = memoize((index) => {
 });
 
 const PlayerWrapper = forwardRef(({ children }, ref) => {
-  const isPlayerReady = useContext(PlayerContext);
+  const isPlayerReady = useContext(PlayerReadinessContext);
+  const shouldCenterVideo = useContext(PlayerCenterContext);
 
   return (
     <Box
       ref={ref}
       sx={{
-        position: "relative",
         width: playerSize.width,
         height: playerSize.height,
         pointerEvents: "none",
+        position: "relative",
+        ...(shouldCenterVideo
+          ? {
+              "& > video": {
+                transform: "translateX(calc(50vw - 50vmax))",
+              },
+            }
+          : {}),
       }}
     >
       <>
@@ -107,6 +117,7 @@ export default function MainCarousel() {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [canShowCarousel, setCanShowCarousel] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
+  const [shouldCenterVideo, setShouldCenterVideo] = useState(false);
 
   const [prevItem, nextItem] = useMemo(
     () => getNeighborCatalogItems(slideIndex),
@@ -148,61 +159,86 @@ export default function MainCarousel() {
 
   useEffect(() => setCanShowCarousel(true), [setCanShowCarousel]);
 
+  useEffect(() => {
+    function calcVideoOffset() {
+      setShouldCenterVideo(window.innerWidth / window.innerHeight < 1);
+    }
+
+    calcVideoOffset();
+
+    const reCalcVideoOffset = debounce(calcVideoOffset, 500);
+
+    window.addEventListener("resize", reCalcVideoOffset);
+
+    return () => {
+      window.removeEventListener("resize", reCalcVideoOffset);
+    };
+  }, [setShouldCenterVideo]);
+
   return canShowCarousel ? (
-    <PlayerContext.Provider value={isPlayerReady}>
-      <Box
-        sx={(theme) => ({
-          "& .carousel-arrow .carousel-arrow-control": {
-            backgroundColor: Color(theme.palette.grey["900"])
-              .alpha(0.5)
-              .rgb()
-              .string(),
-          },
-          "& .carousel-arrow:hover .carousel-arrow-control, &:hover .carousel-arrow:hover .carousel-arrow-control":
-            {
+    <PlayerReadinessContext.Provider value={isPlayerReady}>
+      <PlayerCenterContext.Provider value={shouldCenterVideo}>
+        <Box
+          sx={(theme) => ({
+            "& .carousel-arrow .carousel-arrow-control": {
               backgroundColor: Color(theme.palette.grey["900"])
-                .alpha(0.3)
+                .alpha(0.5)
                 .rgb()
                 .string(),
             },
-          "&:hover .carousel-arrow .carousel-arrow-control": {
-            opacity: 1,
-            transform: "translate(0, 0)",
-          },
-        })}
-      >
-        <Carousel
-          className="video-carousel"
-          onChange={onSlideChanged}
-          showArrows={false}
-          showStatus={false}
-          showThumbs={false}
-          showIndicators={false}
-          selectedItem={slideIndex}
-          renderArrowPrev={renderPrev}
-          renderArrowNext={renderNext}
-          infiniteLoop
-          emulateTouch
+            "& .carousel-arrow:hover .carousel-arrow-control, &:hover .carousel-arrow:hover .carousel-arrow-control":
+              {
+                backgroundColor: Color(theme.palette.grey["900"])
+                  .alpha(0.3)
+                  .rgb()
+                  .string(),
+              },
+            "&:hover .carousel-arrow .carousel-arrow-control": {
+              opacity: 1,
+              transform: "translate(0, 0)",
+            },
+          })}
         >
-          {videoData.map(({ link }, index) => (
-            <Link key={index} href={link} passHref>
-              <A>
-                <Player
-                  onReady={index === 0 ? onPlayerReady : undefined}
-                  playing={index === slideIndex}
-                  url={`/video/${index + 1}.mp4`}
-                  width={playerSize.width}
-                  height={playerSize.height}
-                  wrapper={PlayerWrapper}
-                  muted
-                  loop
-                />
-              </A>
-            </Link>
-          ))}
-        </Carousel>
-      </Box>
-    </PlayerContext.Provider>
+          <Carousel
+            className="video-carousel"
+            onChange={onSlideChanged}
+            showArrows={false}
+            showStatus={false}
+            showThumbs={false}
+            showIndicators={false}
+            selectedItem={slideIndex}
+            renderArrowPrev={renderPrev}
+            renderArrowNext={renderNext}
+            infiniteLoop
+            emulateTouch
+          >
+            {videoData.map(({ link }, index) => (
+              <Link key={index} href={link} passHref>
+                <A
+                  sx={{
+                    display: "block",
+                    width: "100%",
+                    height: playerSize.height,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Player
+                    onReady={index === 0 ? onPlayerReady : undefined}
+                    playing={index === slideIndex}
+                    url={`/video/${index + 1}.mp4`}
+                    width={playerSize.width}
+                    height={playerSize.height}
+                    wrapper={PlayerWrapper}
+                    muted
+                    loop
+                  />
+                </A>
+              </Link>
+            ))}
+          </Carousel>
+        </Box>
+      </PlayerCenterContext.Provider>
+    </PlayerReadinessContext.Provider>
   ) : (
     <Box
       sx={{
@@ -214,7 +250,7 @@ export default function MainCarousel() {
 }
 
 function CarouselArrow({ onClick, item, forward = false }) {
-  const isPlayerReady = useContext(PlayerContext);
+  const isPlayerReady = useContext(PlayerReadinessContext);
 
   const containerStyles = useCallback((theme) => ({
     position: "absolute",
@@ -224,9 +260,12 @@ function CarouselArrow({ onClick, item, forward = false }) {
     left: forward ? "initial" : theme.spacing(4),
     right: forward ? theme.spacing(4) : "initial",
     cursor: "pointer",
-    display: "flex",
     flexDirection: "column",
     alignItems: forward ? "flex-end" : "flex-start",
+    display: {
+      xs: "none",
+      md: "flex",
+    },
   }));
 
   const buttonStyles = useMemo(

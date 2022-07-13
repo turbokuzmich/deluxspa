@@ -20,15 +20,29 @@ export default function Footer() {
     >
       <Container
         sx={{
-          gap: 8,
+          gap: {
+            xs: 6,
+            md: 8,
+          },
           display: "flex",
+          flexDirection: {
+            xs: "column",
+            md: "row",
+          },
         }}
       >
         <Box
           sx={{
-            width: "33.333%",
+            width: {
+              xs: "100%",
+              md: "33.333%",
+            },
             flexShrink: 0,
             flexGrow: 0,
+            textAlign: {
+              xs: "center",
+              md: "initial",
+            },
           }}
         >
           <Typography paragraph>
@@ -41,6 +55,31 @@ export default function Footer() {
         </Box>
         <Box
           sx={{
+            display: {
+              xs: "flex",
+              md: "none",
+            },
+            justifyContent: "center",
+            gap: 2,
+          }}
+        >
+          <Typography>
+            <Link href="/promo" passHref>
+              <A data-variant="footer">Акции</A>
+            </Link>
+          </Typography>
+          <Typography>
+            <Link href="/cooperation" passHref>
+              <A data-variant="footer">Сотрудничество</A>
+            </Link>
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: {
+              xs: "none",
+              md: "initial",
+            },
             width: "33.333%",
             flexShrink: 0,
             flexGrow: 0,
@@ -59,7 +98,16 @@ export default function Footer() {
         </Box>
         <Box
           sx={{
-            width: "33.333%",
+            width: {
+              xs: "100%",
+              md: "33.333%",
+            },
+            display: {
+              xs: "flex",
+              md: "initial",
+            },
+            flexDirection: "column",
+            alignItems: "center",
             flexShrink: 0,
             flexGrow: 0,
           }}
@@ -68,6 +116,10 @@ export default function Footer() {
             sx={{
               position: "relative",
               pl: 4,
+              width: {
+                xs: 180,
+                md: "auto",
+              },
             }}
             paragraph
           >
@@ -91,6 +143,10 @@ export default function Footer() {
             sx={{
               position: "relative",
               pl: 4,
+              width: {
+                xs: 180,
+                md: "auto",
+              },
             }}
           >
             <EmailIcon

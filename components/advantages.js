@@ -34,7 +34,7 @@ const advantages = [
 
 export default function Advantages() {
   return (
-    <Box sx={{ mb: 4, backgroundColor: "common.white" }}>
+    <Box sx={{ pb: 2, pt: 2, backgroundColor: "common.white" }}>
       <Container>
         <Grid container>
           {advantages.map(({ id, icon, title }) => (
@@ -43,8 +43,14 @@ export default function Advantages() {
               xs={12}
               md={4}
               sx={{
-                pt: 3,
-                pb: 3,
+                pt: {
+                  xs: 1,
+                  md: 3,
+                },
+                pb: {
+                  xs: 1,
+                  md: 3,
+                },
                 fontSize: 32,
                 display: "flex",
                 flexDirection: "row",

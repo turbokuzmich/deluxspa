@@ -57,7 +57,10 @@ export default function Header() {
         <Box
           sx={{
             ml: 6,
-            display: "flex",
+            display: {
+              xs: "none",
+              md: "flex",
+            },
             gap: 2,
           }}
         >
