@@ -12,7 +12,14 @@ export default function About() {
         <Container>
           <Box
             sx={{
-              pt: 8,
+              pt: {
+                xs: 4,
+                md: 8,
+              },
+              pb: {
+                xs: 4,
+                md: 8,
+              },
               width: {
                 md: 800,
               },

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import Script from "next/script";
 import Layout from "../../components/layout";
 import { map as retailers } from "../../constants";
@@ -73,11 +74,29 @@ export default function DeluxSpaMap() {
         onLoad={onApiLoaded}
       />
       <Layout>
-        <Container sx={{ pt: 8 }}>
+        <Container
+          sx={{
+            pt: {
+              xs: 4,
+              md: 8,
+            },
+            pb: {
+              xs: 4,
+              md: 8,
+            },
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{ textTransform: "uppercase" }}
+            paragraph
+          >
+            Где купить
+          </Typography>
           <Box
             ref={mapsContainerRef}
             sx={{
-              height: 600,
+              height: { xs: 400, md: 600 },
             }}
           ></Box>
         </Container>

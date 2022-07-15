@@ -29,11 +29,25 @@ function Content({ id, title, brief, description }) {
       >
         {title}
       </Typography>
-      <Box sx={{ display: "flex", gap: 8, mb: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: {
+            xs: 2,
+            md: 8,
+          },
+          flexDirection: {
+            xs: "column",
+            md: "row",
+          },
+        }}
+      >
         <Box
           sx={{
             flexGrow: 0,
-            width: "60%",
+            width: {
+              md: "60%",
+            },
             flexShrink: 0,
           }}
         >
@@ -57,7 +71,9 @@ function Content({ id, title, brief, description }) {
         <Box
           sx={{
             flexGrow: 0,
-            width: "40%",
+            width: {
+              md: "40%",
+            },
             flexShrink: 0,
           }}
         >
@@ -92,7 +108,7 @@ function Content({ id, title, brief, description }) {
                   <Box
                     sx={{
                       flexGrow: 1,
-                      flexShrink: 0,
+                      flexShrink: 1,
                       display: "flex",
                       flexDirection: "column",
                     }}
@@ -147,7 +163,14 @@ export default function Ingredient() {
       <Container>
         <Box
           sx={{
-            pt: 8,
+            pt: {
+              xs: 4,
+              md: 8,
+            },
+            pb: {
+              xs: 4,
+              md: 8,
+            },
           }}
         >
           {ingredient ? <Content id={id} {...ingredient} /> : null}

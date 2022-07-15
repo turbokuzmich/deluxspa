@@ -13,7 +13,14 @@ export default function Ingredients() {
       <Container>
         <Box
           sx={{
-            pt: 8,
+            pt: {
+              xs: 4,
+              md: 8,
+            },
+            pb: {
+              xs: 4,
+              md: 8,
+            },
           }}
         >
           <Typography
@@ -25,10 +32,17 @@ export default function Ingredients() {
           >
             Ингредиенты
           </Typography>
-          <Grid rowSpacing={4} columnSpacing={8} container>
+          <Grid
+            rowSpacing={{
+              xs: 2,
+              md: 4,
+            }}
+            columnSpacing={8}
+            container
+          >
             {compositionItemsGridOrder.map((id) => (
-              <Grid md={6} item>
-                <Link key={id} href={`/ingredients/${id}`} passHref>
+              <Grid key={id} md={6} item>
+                <Link href={`/ingredients/${id}`} passHref>
                   <A
                     underline="none"
                     sx={{
