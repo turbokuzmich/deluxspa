@@ -43,13 +43,21 @@ export default function Item() {
           >
             <Box
               sx={{
-                gap: 6,
+                gap: {
+                  md: 6,
+                },
                 display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
+                },
               }}
             >
               <Box
                 sx={{
-                  width: "50%",
+                  width: {
+                    md: "50%",
+                  },
                   flexShrink: 0,
                   flexGrow: 0,
                   pt: 4,
@@ -59,10 +67,15 @@ export default function Item() {
               </Box>
               <Box
                 sx={{
-                  width: "50%",
+                  width: {
+                    md: "50%",
+                  },
                   flexShrink: 0,
                   flexGrow: 0,
-                  pt: 4,
+                  pt: {
+                    xs: 2,
+                    md: 4,
+                  },
                 }}
               >
                 <Typography
@@ -80,6 +93,7 @@ export default function Item() {
                   sx={{
                     gap: 2,
                     display: "flex",
+                    alignItems: "center",
                   }}
                 >
                   <Typography variant="h4">
@@ -150,7 +164,7 @@ function Auxiliary({ item }) {
               <Box
                 sx={{
                   flexGrow: 1,
-                  flexShrink: 0,
+                  flexShrink: 1,
                   display: "flex",
                   flexDirection: "column",
                 }}

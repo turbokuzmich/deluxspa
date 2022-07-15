@@ -17,7 +17,10 @@ export default function Item({ id }) {
         sx={{
           p: 4,
           color: "custom.link",
-          width: 362,
+          width: {
+            xs: "100%",
+            md: 362,
+          },
           flexShrink: 0,
           position: "relative",
           backgroundColor: "common.white",

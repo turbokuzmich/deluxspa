@@ -130,10 +130,7 @@ export default function MainCarousel() {
   );
 
   const onSlideChanged = useCallback(
-    (index) => {
-      console.log(index);
-      setSlideIndex(index);
-    },
+    (index) => setSlideIndex(index),
     [setSlideIndex]
   );
 
