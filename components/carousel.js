@@ -97,8 +97,8 @@ const PlayerWrapper = forwardRef(({ children }, ref) => {
             sx={{
               top: 0,
               left: 0,
-              width: "100%",
-              height: "100%",
+              width: "100vw",
+              height: playerSize.height,
               position: "absolute",
               display: "flex",
               alignItems: "center",
@@ -130,7 +130,10 @@ export default function MainCarousel() {
   );
 
   const onSlideChanged = useCallback(
-    (index) => setSlideIndex(index),
+    (index) => {
+      console.log(index);
+      setSlideIndex(index);
+    },
     [setSlideIndex]
   );
 
@@ -201,16 +204,18 @@ export default function MainCarousel() {
         >
           <Carousel
             className="video-carousel"
-            onChange={onSlideChanged}
+            interval={8000}
             showArrows={false}
             showStatus={false}
             showThumbs={false}
             showIndicators={false}
             selectedItem={slideIndex}
+            onChange={onSlideChanged}
             renderArrowPrev={renderPrev}
             renderArrowNext={renderNext}
             infiniteLoop
             emulateTouch
+            autoPlay
           >
             {videoData.map(({ link }, index) => (
               <Link key={index} href={link} passHref>
