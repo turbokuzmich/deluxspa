@@ -4,14 +4,20 @@ import Logo from "../components/logo";
 import Eco from "../components/eco";
 import A from "@mui/material/Link";
 import Link from "next/link";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
 import { useTheme } from "@emotion/react";
-import { useMemo } from "react";
+import { useCallback, useState, useMemo } from "react";
 
 export default function Header() {
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const {
     palette: {
@@ -19,9 +25,33 @@ export default function Header() {
     },
   } = useTheme();
 
+  const handleClose = useCallback(() => setAnchorEl(null), [setAnchorEl]);
+
+  const handleClick = useCallback(
+    (event) => {
+      setAnchorEl(event.currentTarget);
+    },
+    [setAnchorEl]
+  );
+
   const ecoColor = useMemo(
     () => Color(eco).lighten(0.4).hex().toString(),
     [eco]
+  );
+
+  const clickHandlers = useMemo(
+    () =>
+      mainMenu.reduce(
+        (handlers, { link }) => ({
+          ...handlers,
+          [link]: () => {
+            handleClose();
+            push(link);
+          },
+        }),
+        {}
+      ),
+    [handleClose, push]
   );
 
   return (
@@ -30,6 +60,10 @@ export default function Header() {
         sx={{
           display: "flex",
           alignItems: "center",
+          justifyContent: {
+            xs: "space-between",
+            md: "flex-start",
+          },
           pt: 1,
           pb: 1,
         }}
@@ -38,7 +72,10 @@ export default function Header() {
           <A sx={{ position: "relative" }}>
             <Logo
               sx={{
-                width: 100,
+                width: {
+                  xs: 70,
+                  md: 100,
+                },
                 display: "block",
               }}
             />
@@ -54,6 +91,42 @@ export default function Header() {
             />
           </A>
         </Link>
+        <IconButton
+          edge="start"
+          onClick={handleClick}
+          sx={{
+            display: {
+              md: "none",
+            },
+          }}
+        >
+          <MenuIcon
+            sx={{
+              fontSize: "2rem",
+            }}
+          />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={anchorEl !== null}
+          onClose={handleClose}
+          sx={{
+            "& .MuiPaper-root": {
+              minWidth: 200,
+            },
+            "& .MuiMenuItem-root": {
+              fontSize: "1.3rem",
+            },
+          }}
+        >
+          {mainMenu
+            .filter(({ hidden }) => !hidden)
+            .map(({ title, link }) => (
+              <MenuItem key={link} onClick={clickHandlers[link]}>
+                {title}
+              </MenuItem>
+            ))}
+        </Menu>
         <Box
           sx={{
             ml: 6,
