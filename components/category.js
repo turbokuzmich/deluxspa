@@ -54,7 +54,9 @@ export default function Category({
       {addonBefore}
       <Container
         sx={{
-          backgroundImage: `url(${image})`,
+          backgroundImage: {
+            md: `url(${image})`,
+          },
           backgroundPosition: "80% 100%",
           backgroundSize: "30%",
           backgroundRepeat: "no-repeat",
@@ -69,14 +71,23 @@ export default function Category({
           sx={{
             pt: 6,
             pb: 6,
-            width: "50%",
-            flexShrink: 0,
-            flexGrow: 0,
+            flexShrink: {
+              md: 0,
+            },
+            flexGrow: {
+              md: 0,
+            },
+            width: {
+              md: "50%",
+            },
           }}
         >
           <Typography
             variant="h4"
-            sx={{ textTransform: "uppercase", fontWeight: "bold" }}
+            sx={{
+              textTransform: "uppercase",
+              fontWeight: "bold",
+            }}
             paragraph
           >
             {title}
@@ -95,11 +106,10 @@ export default function Category({
         <Box
           sx={{
             width: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            flexGrow: 0,
+            display: {
+              xs: "none",
+              md: "initial",
+            },
           }}
         />
       </Container>

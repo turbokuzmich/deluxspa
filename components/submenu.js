@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import HoverMenu from "material-ui-popup-state/HoverMenu";
 import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import { catalogTree } from "../constants";
@@ -62,45 +63,44 @@ function HoverSubmenuItem({ id, title, selected }) {
 
   return (
     <>
-      <Link href={`/catalog/category/${id}`} passHref>
-        <A
-          underline="none"
-          variant="h6"
-          sx={{
-            position: "relative",
-            textTransform: "uppercase",
-            color: isSelected ? "text.primary" : "custom.link",
-            pt: 3,
-            pb: 3,
-            "&::before, &::after": {
-              content: '""',
-              position: "absolute",
-              bottom: 0,
-              height: "2px",
-              backgroundColor: "text.primary",
-              transition: "left .2s ease-out, right .2s ease-out",
-              bottom: 27,
-              left: "50%",
-              right: "50%",
-            },
-            "&::before": {
-              left: isSelected ? 0 : "50%",
-            },
-            "&:hover::before": {
-              left: 0,
-            },
-            "&::after": {
-              right: isSelected ? 0 : "50%",
-            },
-            "&:hover::after": {
-              right: 0,
-            },
-          }}
-          {...bindHover(popupState)}
-        >
-          {title}
-        </A>
-      </Link>
+      <Typography
+        underline="none"
+        variant="h6"
+        sx={{
+          cursor: "pointer",
+          position: "relative",
+          textTransform: "uppercase",
+          color: isSelected ? "text.primary" : "custom.link",
+          pt: 3,
+          pb: 3,
+          "&::before, &::after": {
+            content: '""',
+            position: "absolute",
+            bottom: 0,
+            height: "2px",
+            backgroundColor: "text.primary",
+            transition: "left .2s ease-out, right .2s ease-out",
+            bottom: 27,
+            left: "50%",
+            right: "50%",
+          },
+          "&::before": {
+            left: isSelected ? 0 : "50%",
+          },
+          "&:hover::before": {
+            left: 0,
+          },
+          "&::after": {
+            right: isSelected ? 0 : "50%",
+          },
+          "&:hover::after": {
+            right: 0,
+          },
+        }}
+        {...bindHover(popupState)}
+      >
+        {title}
+      </Typography>
       <HoverMenu {...bindMenu(popupState)}>
         {getCategoryById(id).categories.map((category) => (
           <MenuItem
