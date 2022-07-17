@@ -14,14 +14,20 @@ export default function Footer() {
         color: "common.white",
         flexShrink: 0,
         flexGrow: 0,
-        pt: 6,
-        pb: 6,
+        pt: {
+          xs: 3,
+          md: 6,
+        },
+        pb: {
+          xs: 3,
+          md: 6,
+        },
       }}
     >
       <Container
         sx={{
           gap: {
-            xs: 6,
+            xs: 2,
             md: 8,
           },
           display: "flex",
@@ -45,7 +51,13 @@ export default function Footer() {
             },
           }}
         >
-          <Typography paragraph>
+          <Typography
+            sx={{
+              mb: {
+                md: 2,
+              },
+            }}
+          >
             Продукция из&nbsp;лучших компонентов по&nbsp;привлекательной
             стоимости.
           </Typography>

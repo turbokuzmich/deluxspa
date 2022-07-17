@@ -1,16 +1,16 @@
 import { useRouter } from "next/router";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import Box from "@mui/material/Box";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import ListSubheader from "@mui/material/ListSubheader";
 import HoverMenu from "material-ui-popup-state/HoverMenu";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import A from "@mui/material/Link";
-import Link from "next/link";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { catalogTree } from "../constants";
 import { getCategoryById } from "../helpers/catalog";
-import get from "lodash/get";
 import { isTouch as detectTouch } from "../helpers/features";
 import {
   usePopupState,
@@ -18,7 +18,7 @@ import {
   bindMenu,
 } from "material-ui-popup-state/hooks";
 
-function HoverSubmenu({ selected, sx = {} }) {
+function HoverSubmenu({ parentSelected, sx = {} }) {
   return (
     <Box
       sx={{
@@ -38,7 +38,7 @@ function HoverSubmenu({ selected, sx = {} }) {
             key={id}
             id={id}
             title={title}
-            selected={selected === id}
+            selected={parentSelected === id}
           />
         ))}
       </Container>
@@ -117,8 +117,60 @@ function HoverSubmenuItem({ id, title, selected }) {
   );
 }
 
-function TouchSubmenu({ selected, sx = {} }) {
-  return <div>touch</div>;
+function TouchSubmenu({ selected = "", sx = {} }) {
+  const { push } = useRouter();
+
+  const onCategory = useCallback(
+    (event) => {
+      push(`/catalog/category/${event.target.value}`);
+      requestAnimationFrame(() => document.activeElement.blur());
+    },
+    [push]
+  );
+
+  const menuItems = useMemo(
+    () =>
+      catalogTree.reduce(
+        (items, category) => [
+          ...items,
+          <ListSubheader key={category.id}>{category.title}</ListSubheader>,
+          ...category.categories.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.title}
+            </MenuItem>
+          )),
+        ],
+        []
+      ),
+    []
+  );
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: "background.paper",
+        pt: 2,
+        pb: 2,
+        ...sx,
+      }}
+    >
+      <Container>
+        <FormControl variant="standard" fullWidth>
+          <InputLabel id="submenu-label">
+            Выберите категорию продукции
+          </InputLabel>
+          <Select
+            labelId="submenu-label"
+            value={selected}
+            onChange={onCategory}
+            label="Выберите категорию продукции"
+          >
+            {menuItems}
+          </Select>
+        </FormControl>
+      </Container>
+    </Box>
+  );
 }
 
 export default function Submenu(props) {

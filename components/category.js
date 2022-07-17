@@ -69,7 +69,10 @@ export default function Category({
       >
         <Box
           sx={{
-            pt: 6,
+            pt: {
+              xs: 2,
+              md: 6,
+            },
             pb: 6,
             flexShrink: {
               md: 0,

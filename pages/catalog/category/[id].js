@@ -37,7 +37,8 @@ export default function CategoryView() {
             }}
             addonBefore={
               <Submenu
-                selected={get(parent, "id")}
+                selected={id}
+                parentSelected={get(parent, "id")}
                 sx={{
                   backgroundColor: Color(color).alpha(0.8).rgb().toString(),
                   position: "absolute",
