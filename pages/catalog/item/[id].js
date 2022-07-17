@@ -9,6 +9,7 @@ import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Number from "../../../components/number";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import get from "lodash/get";
@@ -61,6 +62,10 @@ export default function Item() {
                   flexShrink: 0,
                   flexGrow: 0,
                   pt: 4,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  fontSize: "120px",
                 }}
               >
                 <Image src={item.image} sx={{ maxWidth: "100%" }} />
@@ -86,7 +91,9 @@ export default function Item() {
                   {item.title}
                 </Typography>
                 <Typography variant="h6">{item.brief}</Typography>
-                <Typography paragraph>Объем — 1000 мл.</Typography>
+                <Typography paragraph>
+                  Объем — <Number value={item.volume} /> мл.
+                </Typography>
                 <Typography
                   component="div"
                   paragraph

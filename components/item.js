@@ -4,6 +4,7 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import Image from "./image";
+import Number from "./number";
 import { catalogItems } from "../constants";
 import Price from "./price";
 
@@ -76,6 +77,7 @@ export default function Item({ id }) {
             alignItems: "center",
             justifyContent: "center",
             display: "flex",
+            fontSize: "60px",
           }}
         >
           <Image
@@ -114,7 +116,9 @@ export default function Item({ id }) {
           >
             <Price sum={item.price} />
           </Typography>
-          <Typography variant="subtitle2">1000 мл.</Typography>
+          <Typography variant="subtitle2">
+            <Number value={item.volume} /> мл.
+          </Typography>
         </Box>
       </A>
     </Link>

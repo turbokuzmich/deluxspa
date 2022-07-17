@@ -5,13 +5,12 @@ import Grid from "@mui/material/Grid";
 import LocalShipping from "@mui/icons-material/LocalShipping";
 import Card from "@mui/icons-material/CardMembership";
 import Verified from "@mui/icons-material/Verified";
-import * as Color from "color";
 
 const iconProps = {
   fontSize: "inherit",
-  sx: (theme) => ({
-    color: Color(theme.palette.custom.panes[6]).rgb().toString(),
-  }),
+  sx: {
+    color: "custom.eco",
+  },
 };
 
 const advantages = [
