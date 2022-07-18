@@ -100,7 +100,11 @@ export default function CategoriesPane() {
       <Typography
         align="center"
         variant="h4"
-        sx={{ fontWeight: "bold", textTransform: "uppercase" }}
+        sx={{
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          fontFamily: "BancoLight",
+        }}
         paragraph
       >
         ваше время — бесценно!

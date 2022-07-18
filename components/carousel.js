@@ -69,7 +69,7 @@ const getNeighborCatalogItems = memoize((index) => {
   ];
 });
 
-const PlayerWrapper = forwardRef(({ children }, ref) => {
+const PlayerWrapper = forwardRef(function PlayerWrapper({ children }, ref) {
   const isPlayerReady = useContext(PlayerReadinessContext);
   const shouldCenterVideo = useContext(PlayerCenterContext);
 

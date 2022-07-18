@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import Layout from "../components/layout";
 import Carousel from "../components/carousel";
 import CategoriesPane from "../components/categories";

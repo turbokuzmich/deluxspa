@@ -145,19 +145,15 @@ export default function Header() {
               const styles = {
                 position: "relative",
                 textTransform: "uppercase",
-                color: "custom.eco",
                 "&::before, &::after": {
                   content: '""',
                   position: "absolute",
                   bottom: 0,
                   height: "2px",
-                  backgroundColor: "text.primary",
+                  backgroundColor: "custom.eco",
                   transition: "left .2s ease-out, right .2s ease-out",
                   left: "50%",
                   right: "50%",
-                },
-                "&:hover": {
-                  color: "text.primary",
                 },
                 "&:hover::before": {
                   left: 0,
