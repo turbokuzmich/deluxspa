@@ -69,7 +69,10 @@ const getNeighborCatalogItems = memoize((index) => {
   ];
 });
 
-const PlayerWrapper = forwardRef(function PlayerWrapper({ children }, ref) {
+const PlayerWrapper = forwardRef(function PlayerWrapper(
+  { children, index },
+  ref
+) {
   const isPlayerReady = useContext(PlayerReadinessContext);
   const shouldCenterVideo = useContext(PlayerCenterContext);
 
@@ -81,6 +84,8 @@ const PlayerWrapper = forwardRef(function PlayerWrapper({ children }, ref) {
         height: playerSize.height,
         pointerEvents: "none",
         position: "relative",
+        backgroundImage: `url(/images/carousel/${index + 1}.jpg)`,
+        backgroundSize: "contain",
         ...(shouldCenterVideo
           ? {
               "& > video": {
@@ -122,6 +127,16 @@ export default function MainCarousel() {
   const [prevItem, nextItem] = useMemo(
     () => getNeighborCatalogItems(slideIndex),
     [slideIndex]
+  );
+
+  const wrappers = useMemo(
+    () =>
+      videoData.map((_, index) =>
+        forwardRef(function IndexedPlayerWrapper(props, ref) {
+          return <PlayerWrapper index={index} ref={ref} {...props} />;
+        })
+      ),
+    []
   );
 
   const onPlayerReady = useCallback(
@@ -201,7 +216,7 @@ export default function MainCarousel() {
         >
           <Carousel
             className="video-carousel"
-            interval={8000}
+            interval={80000}
             showArrows={false}
             showStatus={false}
             showThumbs={false}
@@ -230,7 +245,7 @@ export default function MainCarousel() {
                     url={`/video/${index + 1}.mp4`}
                     width={playerSize.width}
                     height={playerSize.height}
-                    wrapper={PlayerWrapper}
+                    wrapper={wrappers[index]}
                     muted
                     loop
                   />
