@@ -34,28 +34,34 @@ const playerSize = {
 
 const videoData = [
   {
-    itemId: "oil_lemon_pepper",
-    link: "/catalog/item/oil_lemon_pepper",
-  },
-  {
-    itemId: "oil_lemongrass",
-    link: "/catalog/item/oil_lemongrass",
-  },
-  {
-    itemId: "oil_extra_slim",
-    link: "/catalog/item/oil_extra_slim",
-  },
-  {
+    index: 4,
     itemId: "oil_bio",
-    link: "/catalog/item/oil_bio",
+    link: "/catalog/item/oil_bio_1000",
   },
   {
-    itemId: "oil_lime_cinnamon",
-    link: "/catalog/item/oil_lime_cinnamon",
-  },
-  {
+    index: 6,
     itemId: "oil_mint_breeze",
-    link: "/catalog/item/oil_mint_breeze",
+    link: "/catalog/item/oil_mint_breeze_1000",
+  },
+  {
+    index: 2,
+    itemId: "oil_lemongrass",
+    link: "/catalog/item/oil_lemongrass_1000",
+  },
+  {
+    index: 3,
+    itemId: "oil_extra_slim",
+    link: "/catalog/item/oil_extra_slim_1000",
+  },
+  {
+    index: 5,
+    itemId: "oil_lime_cinnamon",
+    link: "/catalog/item/oil_lime_cinnamon_1000",
+  },
+  {
+    index: 1,
+    itemId: "oil_lemon_pepper",
+    link: "/catalog/item/oil_lemon_pepper_1000",
   },
 ];
 
@@ -84,7 +90,7 @@ const PlayerWrapper = forwardRef(function PlayerWrapper(
         height: playerSize.height,
         pointerEvents: "none",
         position: "relative",
-        backgroundImage: `url(/images/carousel/${index + 1}.jpg)`,
+        backgroundImage: `url(/images/carousel/${index}.jpg)`,
         backgroundSize: "contain",
         ...(shouldCenterVideo
           ? {
@@ -131,7 +137,7 @@ export default function MainCarousel() {
 
   const wrappers = useMemo(
     () =>
-      videoData.map((_, index) =>
+      videoData.map(({ index }) =>
         forwardRef(function IndexedPlayerWrapper(props, ref) {
           return <PlayerWrapper index={index} ref={ref} {...props} />;
         })
@@ -229,8 +235,8 @@ export default function MainCarousel() {
             infiniteLoop
             emulateTouch
           >
-            {videoData.map(({ link }, index) => (
-              <Link key={index} href={link} passHref>
+            {videoData.map(({ itemId, link, index }, idx) => (
+              <Link key={itemId} href={link} passHref>
                 <A
                   sx={{
                     display: "block",
@@ -240,12 +246,12 @@ export default function MainCarousel() {
                   }}
                 >
                   <Player
-                    onReady={index === 0 ? onPlayerReady : undefined}
-                    playing={index === slideIndex}
-                    url={`/video/${index + 1}.mp4`}
+                    onReady={idx === 0 ? onPlayerReady : undefined}
+                    playing={idx === slideIndex}
+                    url={`/video/${index}.mp4`}
                     width={playerSize.width}
                     height={playerSize.height}
-                    wrapper={wrappers[index]}
+                    wrapper={wrappers[idx]}
                     muted
                     loop
                   />
