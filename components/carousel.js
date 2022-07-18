@@ -216,7 +216,7 @@ export default function MainCarousel() {
         >
           <Carousel
             className="video-carousel"
-            interval={80000}
+            interval={8000}
             showArrows={false}
             showStatus={false}
             showThumbs={false}
@@ -225,9 +225,9 @@ export default function MainCarousel() {
             onChange={onSlideChanged}
             renderArrowPrev={renderPrev}
             renderArrowNext={renderNext}
+            autoPlay={isPlayerReady}
             infiniteLoop
             emulateTouch
-            autoPlay
           >
             {videoData.map(({ link }, index) => (
               <Link key={index} href={link} passHref>
