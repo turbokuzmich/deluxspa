@@ -222,7 +222,8 @@ export default function MainCarousel() {
         >
           <Carousel
             className="video-carousel"
-            interval={8000}
+            transitionTime={800}
+            interval={12000}
             showArrows={false}
             showStatus={false}
             showThumbs={false}
