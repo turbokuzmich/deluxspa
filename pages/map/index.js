@@ -20,7 +20,7 @@ export default function DeluxSpaMap() {
 
     map.current = new maps.Map(mapsContainerRef.current, {
       center: [55.76, 37.64],
-      zoom: 11,
+      zoom: 5,
       controls: ["routeButtonControl"],
     });
 
