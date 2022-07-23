@@ -65,6 +65,9 @@ const videoData = [
   },
 ];
 
+const getNextSlideIndex = (currentIndex) =>
+  (currentIndex + 1) % videoData.length;
+
 const getNeighborCatalogItems = memoize((index) => {
   const prevIndex = (index + videoData.length - 1) % videoData.length;
   const nextIndex = (index + 1) % videoData.length;
@@ -178,6 +181,10 @@ export default function MainCarousel() {
     [slideIndex, nextItem]
   );
 
+  const onEnded = useCallback(() => {
+    setSlideIndex(getNextSlideIndex(slideIndex));
+  }, [slideIndex, setSlideIndex]);
+
   useEffect(() => setCanShowCarousel(true), [setCanShowCarousel]);
 
   useEffect(() => {
@@ -222,8 +229,8 @@ export default function MainCarousel() {
         >
           <Carousel
             className="video-carousel"
-            transitionTime={800}
-            interval={12000}
+            autoPlay={false}
+            transitionTime={1200}
             showArrows={false}
             showStatus={false}
             showThumbs={false}
@@ -232,8 +239,6 @@ export default function MainCarousel() {
             onChange={onSlideChanged}
             renderArrowPrev={renderPrev}
             renderArrowNext={renderNext}
-            autoPlay={isPlayerReady}
-            infiniteLoop
             emulateTouch
           >
             {videoData.map(({ itemId, link, index }, idx) => (
@@ -247,6 +252,7 @@ export default function MainCarousel() {
                   }}
                 >
                   <Player
+                    onEnded={onEnded}
                     onReady={idx === 0 ? onPlayerReady : undefined}
                     playing={idx === slideIndex}
                     url={`/video/${index}.mp4`}
@@ -254,7 +260,6 @@ export default function MainCarousel() {
                     height={playerSize.height}
                     wrapper={wrappers[idx]}
                     muted
-                    loop
                   />
                 </A>
               </Link>
