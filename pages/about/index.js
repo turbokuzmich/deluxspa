@@ -5,6 +5,17 @@ import Layout from "../../components/layout";
 import A from "@mui/material/Link";
 import Link from "next/link";
 
+              // <Typography paragraph>
+              //   ООО «Демидов Люкс СПА» в{" "}
+              //   <Link href="https://i.moscow/company/1862605" passHref>
+              //     <A target="_blank">Московском инновационном кластере</A>
+              //   </Link>{" "}
+              //   и{" "}
+              //   <Link href="https://catalog.moscow-export.com/industrie/ooo-demidov-lyuks-spa/" passHref>
+              //     <A target="_blank">Московском экспортном центре</A>
+              //   </Link>
+              //   .
+              // </Typography>
 export default function About() {
   return (
     <Layout>
@@ -46,17 +57,6 @@ export default function About() {
                 ООО «Демидов Люкс СПА» является участником внешнеэкономической
                 деятельности с 2020 года, представляя на зарубежных рынках
                 продукцию высокого качества.
-              </Typography>
-              <Typography paragraph>
-                ООО «Демидов Люкс СПА» в{" "}
-                <Link href="https://i.moscow/company/1862605" passHref>
-                  <A target="_blank">Московском инновационном кластере</A>
-                </Link>{" "}
-                и{" "}
-                <Link href="https://catalog.moscow-export.com/industrie/ooo-demidov-lyuks-spa/" passHref>
-                  <A target="_blank">Московском экспортном центре</A>
-                </Link>
-                .
               </Typography>
             </Box>
             <Box
