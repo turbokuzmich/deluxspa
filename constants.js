@@ -1029,4 +1029,22 @@ export const map = [
     workingTimeText: "понедельник-пятница с 10 до 18 часов",
     urls: ["https://kosmetikprofi.ru/"],
   },
+  {
+    title: "ООО «Бьюти-Онлайн»",
+    fullAddress:
+      "Москва, Волгоградский пр-т, д. 32, стр. 8 (ТЦ Техно), 3й этаж, комн. 23",
+    coordinates: [37.689615, 55.723309],
+    phones: [
+      {
+        number: "+7 (495) 790-92-11",
+        type: "phone",
+      },
+      {
+        number: "+7 (903) 790-92-11",
+        type: "phone",
+      },
+    ],
+    workingTimeText: "понедельник-пятница с 10 до 18",
+    urls: ["https://www.beauty-online.ru/"],
+  },
 ];

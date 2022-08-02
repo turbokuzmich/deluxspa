@@ -21,7 +21,6 @@ export default function DeluxSpaMap() {
     map.current = new maps.Map(mapsContainerRef.current, {
       center: [55.76, 37.64],
       zoom: 5,
-      controls: ["routeButtonControl"],
     });
 
     const clusterer = new maps.Clusterer({
@@ -48,6 +47,10 @@ export default function DeluxSpaMap() {
 
     clusterer.add(retailersPlacemarks);
     map.current.geoObjects.add(clusterer);
+
+    map.current.setBounds(clusterer.getBounds(), {
+      checkZoomRange: true,
+    });
   }, []);
 
   const onApiLoaded = useCallback(() => {
