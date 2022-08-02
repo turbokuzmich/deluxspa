@@ -116,7 +116,13 @@ function renderRetailerBalloonBody({
   phones,
 }) {
   const urlsString = urls
-    .map((url) => `<a href="${url}" target="_blank">${url}</a>`)
+    .map((url) => {
+      if (typeof url === "string") {
+        return `<a href="${url}" target="_blank">${url}</a>`;
+      }
+
+      return `<a href="mailto:${url.url}">${url.url}</a>`;
+    })
     .join("<br />");
 
   const phonesString = phones
@@ -126,5 +132,14 @@ function renderRetailerBalloonBody({
     )
     .join("<br />");
 
-  return `<strong>${fullAddress}</strong><br />Время работы: ${workingTimeText}<br /><br />${phonesString}<br /><br />${urlsString}`;
+  const parts = [`<strong>${fullAddress}</strong><br />`];
+
+  if (workingTimeText) {
+    parts.push(`Время работы: ${workingTimeText}<br /><br />`);
+  }
+
+  parts.push(`${phonesString}<br /><br />`);
+  parts.push(urlsString);
+
+  return parts.join("");
 }

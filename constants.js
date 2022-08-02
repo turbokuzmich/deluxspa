@@ -1076,4 +1076,21 @@ export const map = [
     workingTimeText: "понедельник-пятница с 10 до 18",
     urls: ["https://www.beauty-online.ru/"],
   },
+  {
+    title: "ООО «СПА Косметикс»",
+    fullAddress: "Казань, улица Бондаренко, 26, кабинет 302",
+    coordinates: [49.105552, 55.82042],
+    phones: [
+      {
+        number: "+7 (987) 290-78-99 ",
+        type: "phone",
+      },
+    ],
+    urls: [
+      {
+        url: "spakazan@ya.ru",
+        type: "email",
+      },
+    ],
+  },
 ];
