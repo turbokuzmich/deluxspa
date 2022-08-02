@@ -53,7 +53,7 @@ export default function About() {
                   <A target="_blank">Московском инновационном кластере</A>
                 </Link>{" "}
                 и{" "}
-                <Link href="https://moscow-export.com/" passHref>
+                <Link href="https://catalog.moscow-export.com/industrie/ooo-demidov-lyuks-spa/" passHref>
                   <A target="_blank">Московском экспортном центре</A>
                 </Link>
                 .
