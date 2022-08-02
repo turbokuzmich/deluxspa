@@ -327,13 +327,14 @@ function Composition({ item }) {
     return;
   }
 
+  // {compositionItems[id].brief ? (
   return (
     <>
       <Typography variant="h6">Состав</Typography>
       <Typography component="ul" paragraph>
         {composition.map((id) => (
           <Typography key={id} component="li">
-            {compositionItems[id].brief ? (
+            {false ? (
               <Tooltip
                 title={compositionItems[id].brief}
                 placement="right"

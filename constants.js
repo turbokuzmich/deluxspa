@@ -33,6 +33,7 @@ export const mainMenu = [
   {
     title: "Ингредиенты",
     link: "/ingredients",
+    hidden: true,
   },
 ];
 
@@ -197,6 +198,7 @@ export const oil120Items = [
     price: 350,
     volume: 120,
     composition: ["maize_oil", "wheat_oil", "vitamin_e"],
+    image: "/images/items/bio_120.jpg",
     consumption: {
       common: "20–30 мл",
       back: "10–15 мл",
