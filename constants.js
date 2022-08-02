@@ -405,6 +405,7 @@ export const oil120Items = [
     brief: "масло для роста волос и блеска",
     price: 590,
     volume: 120,
+    image: "/images/items/patchouli_mint_120.jpg",
     composition: [
       "almond_oil",
       "wheat_oil",
