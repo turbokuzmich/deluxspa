@@ -21,6 +21,7 @@ export default function DeluxSpaMap() {
     map.current = new maps.Map(mapsContainerRef.current, {
       center: [55.76, 37.64],
       zoom: 5,
+      controls: ["smallMapDefaultSet"],
     });
 
     const clusterer = new maps.Clusterer({
