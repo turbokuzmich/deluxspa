@@ -31,7 +31,7 @@ export default function Item({ id }) {
             height: "2px",
             position: "absolute",
             transition: "left .2s ease-out, right .2s ease-out",
-            backgroundColor: "background.paper",
+            backgroundColor: "custom.eco",
           },
           "& .title::before": {
             left: "50%",

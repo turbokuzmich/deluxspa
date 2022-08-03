@@ -78,7 +78,7 @@ function HoverSubmenuItem({ id, title, selected }) {
             position: "absolute",
             bottom: 0,
             height: "2px",
-            backgroundColor: "text.primary",
+            backgroundColor: "custom.eco",
             transition: "left .2s ease-out, right .2s ease-out",
             bottom: 27,
             left: "50%",
