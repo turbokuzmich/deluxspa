@@ -9,7 +9,7 @@ import Link from "next/link";
 import Player from "react-player/file";
 import * as Color from "color";
 import { Carousel } from "react-responsive-carousel";
-import { getItemById } from "../helpers/catalog";
+import { getItemById } from "../lib/helpers/catalog";
 import memoize from "lodash/memoize";
 import debounce from "lodash/debounce";
 import {

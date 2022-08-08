@@ -13,9 +13,11 @@ import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
 import { useTheme } from "@emotion/react";
 import { useCallback, useState, useMemo } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Header() {
   const { pathname, push } = useRouter();
+  const { data: session } = useSession();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -183,6 +185,11 @@ export default function Header() {
               );
             })}
         </Box>
+        {session ? (
+          <button onClick={() => signOut()}>{session.user.email}</button>
+        ) : (
+          <button onClick={() => signIn()}>sign in</button>
+        )}
       </Container>
     </Box>
   );

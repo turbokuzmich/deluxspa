@@ -19,7 +19,7 @@ import {
   getItemById,
   getItemCategoriesById,
   getItemAuxiliaryItemsById,
-} from "../../../helpers/catalog";
+} from "../../../lib/helpers/catalog";
 
 export default function Item() {
   const {

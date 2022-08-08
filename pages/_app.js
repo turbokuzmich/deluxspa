@@ -1,3 +1,4 @@
+import { SessionProvider } from "next-auth/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import * as Color from "color";
 import { ecoColor, auxColors } from "../constants";
@@ -78,12 +79,14 @@ const theme = responsiveFontSizes(
   })
 );
 
-function DeluxSpaApp({ Component, pageProps }) {
+function DeluxSpaApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <SessionProvider session={session}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </SessionProvider>
   );
 }
 

@@ -5,7 +5,7 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import * as Color from "color";
-import { getCategoriesWithItems } from "../helpers/catalog";
+import { getCategoriesWithItems } from "../lib/helpers/catalog";
 import { useTheme } from "@mui/material/styles";
 
 const gridConfig = [

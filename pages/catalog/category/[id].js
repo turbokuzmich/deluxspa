@@ -10,7 +10,7 @@ import {
   getCategoryById,
   getCategoryColorById,
   getCategoryParentById,
-} from "../../../helpers/catalog";
+} from "../../../lib/helpers/catalog";
 
 export default function CategoryView() {
   const {
