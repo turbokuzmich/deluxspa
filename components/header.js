@@ -6,8 +6,11 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
@@ -36,6 +39,9 @@ export default function Header() {
     [setAnchorEl]
   );
 
+  const handleLogIn = useCallback(() => signIn(), []);
+  const handleLogOut = useCallback(() => signOut(), []);
+
   const ecoColor = useMemo(
     () => Color(eco).lighten(0.4).hex().toString(),
     [eco]
@@ -62,16 +68,12 @@ export default function Header() {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: {
-            xs: "space-between",
-            md: "flex-start",
-          },
           pt: 1,
           pb: 1,
         }}
       >
         <Link href="/" passHref>
-          <A sx={{ position: "relative" }}>
+          <A sx={{ position: "relative", flexShrink: 0 }}>
             <Logo
               sx={{
                 width: {
@@ -185,11 +187,28 @@ export default function Header() {
               );
             })}
         </Box>
-        {session ? (
-          <button onClick={() => signOut()}>{session.user.email}</button>
-        ) : (
-          <button onClick={() => signIn()}>sign in</button>
-        )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            flexGrow: 1,
+            gap: 1,
+          }}
+        >
+          {session ? (
+            <>
+              <Typography>{session.user.email}</Typography>
+              <IconButton onClick={handleLogOut}>
+                <LogoutIcon />
+              </IconButton>
+            </>
+          ) : (
+            <IconButton onClick={handleLogIn}>
+              <LoginIcon />
+            </IconButton>
+          )}
+        </Box>
       </Container>
     </Box>
   );
