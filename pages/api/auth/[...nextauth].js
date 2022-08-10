@@ -21,10 +21,7 @@ export default NextAuth({
           pass: process.env.EMAIL_PASS,
         },
       },
-      async sendVerificationRequest({ identifier, url, expires, provider }) {
-        // console.log(identifier);
-        // console.log(url);
-        // console.log(expires);
+      async sendVerificationRequest({ identifier, url, provider }) {
         const transport = nodemailer.createTransport(provider.server);
 
         const result = await transport.sendMail({
@@ -150,7 +147,7 @@ function html(url) {
                       </tr>
                       <tr>
                         <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                          <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;">Для авторизации на сайте DeluxSPA, пожалуйста, пройдите по <a href="${url}" target="_blank">ссылке</a>.</div>
+                          <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;">Для авторизации на сайте DeluxSPA, пожалуйста, пройдите по <a href="${url}" target="_blank">ссылке</a> (действует в течение суток).</div>
                         </td>
                       </tr>
                     </tbody>

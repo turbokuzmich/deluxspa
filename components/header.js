@@ -8,9 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CircularProgress from "@mui/material/CircularProgress";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
@@ -20,7 +21,6 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Header() {
   const { pathname, push } = useRouter();
-  const { data: session } = useSession();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -38,9 +38,6 @@ export default function Header() {
     },
     [setAnchorEl]
   );
-
-  const handleLogIn = useCallback(() => signIn(), []);
-  const handleLogOut = useCallback(() => signOut(), []);
 
   const ecoColor = useMemo(
     () => Color(eco).lighten(0.4).hex().toString(),
@@ -193,23 +190,41 @@ export default function Header() {
             justifyContent: "flex-end",
             alignItems: "center",
             flexGrow: 1,
-            gap: 1,
           }}
         >
-          {session ? (
-            <>
-              <Typography>{session.user.email}</Typography>
-              <IconButton onClick={handleLogOut}>
-                <LogoutIcon />
-              </IconButton>
-            </>
-          ) : (
-            <IconButton onClick={handleLogIn}>
-              <LoginIcon />
-            </IconButton>
-          )}
+          <Auth />
         </Box>
       </Container>
     </Box>
+  );
+}
+
+function Auth() {
+  const { data, status } = useSession();
+
+  const handleLogIn = useCallback(() => signIn(), []);
+  const handleLogOut = useCallback(() => signOut(), []);
+
+  if (status === "loading") {
+    return <CircularProgress size={20} />;
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <IconButton onClick={handleLogIn}>
+        <LoginIcon />
+      </IconButton>
+    );
+  }
+
+  return (
+    <>
+      <IconButton>
+        <AccountCircleIcon />
+      </IconButton>
+      <IconButton onClick={handleLogOut}>
+        <LogoutIcon />
+      </IconButton>
+    </>
   );
 }
