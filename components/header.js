@@ -6,18 +6,14 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import LoginIcon from "@mui/icons-material/Login";
-import LogoutIcon from "@mui/icons-material/Logout";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CircularProgress from "@mui/material/CircularProgress";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Auth from "./auth";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
 import { useTheme } from "@emotion/react";
 import { useCallback, useState, useMemo } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Header() {
   const { pathname, push } = useRouter();
@@ -196,35 +192,5 @@ export default function Header() {
         </Box>
       </Container>
     </Box>
-  );
-}
-
-function Auth() {
-  const { data, status } = useSession();
-
-  const handleLogIn = useCallback(() => signIn(), []);
-  const handleLogOut = useCallback(() => signOut(), []);
-
-  if (status === "loading") {
-    return <CircularProgress size={20} />;
-  }
-
-  if (status === "unauthenticated") {
-    return (
-      <IconButton onClick={handleLogIn}>
-        <LoginIcon />
-      </IconButton>
-    );
-  }
-
-  return (
-    <>
-      <IconButton>
-        <AccountCircleIcon />
-      </IconButton>
-      <IconButton onClick={handleLogOut}>
-        <LogoutIcon />
-      </IconButton>
-    </>
   );
 }
