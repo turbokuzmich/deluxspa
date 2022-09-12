@@ -1,0 +1,30 @@
+<mjml>
+  <mj-body background-color="#fbf7f0">
+    <mj-section background-color="#ffffff" padding="0">
+      <mj-column>
+        <mj-image alt="Демидов Люкс СПА" href="https://deluxspa.ru" src="https://deluxspa.ru/images/logo.png" width="100px" href="https://deluxspa.ru"></mj-image>
+        <mj-divider border-color="#eedcba"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-text align="center" font-size="22px" color="#5e5343" font-weight="100" text-transform="uppercase">Авторизация на сайте</mj-text>
+        <mj-text align="center" color="#5e5343" font-size="16px" line-height="24px">Для авторизации на сайте DeluxSPA, пожалуйста, пройдите по <a href="" target="_blank" style="text-decoration: underline; color: #5e5343">ссылке</a> (действует в течение суток).</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#2b2a28">
+      <mj-column>
+        <mj-text align="center" font-size="20px" line-height="28px" font-weight="200">
+          <a href="tel:+74956659015" style="text-decoration: none; color: #ffffff">+7 (495) 665 9015</a>
+          <br />
+          <a href="tel:+79263853751" style="text-decoration: none; color: #ffffff">+7 926 385 3751</a>
+        </mj-text>
+        <mj-text align="center" font-size="16px" line-height="28px">
+          <a href="mailto:office@deluxspa.ru" style="text-decoration: none; color: #ffffff">office@deluxspa.ru</a><br />
+          <a href="https://deluxspa.ru" style="text-decoration: none; color: #ffffff">https://deluxspa.ru</a>
+        </mj-text>
+        <mj-text align="center" color="#ffffff" padding-top="32px">ООО «Демидов Люкс СПА»</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

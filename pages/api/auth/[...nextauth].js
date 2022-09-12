@@ -1,13 +1,19 @@
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
-import adapter from "../../../lib/adapters/strapi";
+import adapter from "../../../lib/backend/adapters/strapi";
 import nodemailer from "nodemailer";
-import signUp from "../../../lib/letters/signup";
+import signUp from "../../../lib/backend/letters/signup";
+import omit from "lodash/omit";
 
-export default NextAuth({
+export const authOptions = {
   adapter: adapter,
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    session({ session }) {
+      return { ...session, user: omit(session.user, "image") };
+    },
   },
   providers: [
     EmailProvider({
@@ -41,4 +47,6 @@ export default NextAuth({
       },
     }),
   ],
-});
+};
+
+export default NextAuth(authOptions);

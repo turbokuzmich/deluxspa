@@ -2,6 +2,7 @@ import { SessionProvider } from "next-auth/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import * as Color from "color";
 import { ecoColor, auxColors } from "../constants";
+import reduxWrapper from "../store";
 import {
   createTheme,
   ThemeProvider,
@@ -90,4 +91,4 @@ function DeluxSpaApp({ Component, pageProps: { session, ...pageProps } }) {
   );
 }
 
-export default DeluxSpaApp;
+export default reduxWrapper.withRedux(DeluxSpaApp);

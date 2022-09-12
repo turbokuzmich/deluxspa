@@ -1,0 +1,49 @@
+<mjml>
+  <mj-body background-color="#fbf7f0">
+    <mj-section background-color="#ffffff" padding="0">
+      <mj-column>
+        <mj-image alt="Демидов Люкс СПА" href="https://deluxspa.ru" src="https://deluxspa.ru/images/logo.png" width="100px" href="https://deluxspa.ru"></mj-image>
+        <mj-divider border-color="#eedcba"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-text align="center" font-size="16px" line-height="20px" color="#5e5343" font-weight="600" text-transform="uppercase" padding-bottom="40px">Коммерческое предложение по уходовой&nbsp;косметике</mj-text>
+        <mj-text color="#5e5343" font-size="18px" line-height="24px">Добрый день, Илья!</mj-text>
+        <mj-text color="#5e5343" font-size="18px" line-height="24px">Направляем прайс и каталоги нашей продукции (переход по кнопкам ниже).</mj-text>
+        <mj-text color="#5e5343" font-size="18px" line-height="24px">Также изготавливаем продукцию по СТМ.
+        </mj-text>
+        <mj-text color="#5e5343" font-size="18px" line-height="24px"><strong>Скидка на закупку:</strong><br />30% — от 10 тысяч рублей;<br />50% — от 50 тысяч рублей.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#2b2a28" padding-bottom="0">
+      <mj-column>
+        <mj-button background-color="#ffffff" color="#5e5343" font-size="22px" width="100%" href="https://disk.yandex.ru/i/1QRkQLQmVr6RBQ">Прайс</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#2b2a28" padding-top="0">
+      <mj-column>
+        <mj-button background-color="#ffffff" color="#5e5343" font-size="18px" width="100%" href="https://neon-beard.ru/assets/files/catalog.pdf">Neon Beard</mj-button>
+      </mj-column>
+      <mj-column>
+        <mj-button background-color="#ffffff" color="#5e5343" font-size="18px" width="100%" href="https://sporthit.online/assets/prices.xlsx">SportHIT</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-text color="#5e5343" font-size="18px" padding-bottom="0"><strong>Контакты</strong></mj-text>
+        <mj-text font-size="16px" line-height="24px" font-weight="200" padding-bottom="0">
+          <a href="tel:+74956659015" style="text-decoration: none; color: #5e5343">+7 (995) 999 2075</a><br />
+          <a href="mailto:supl.biz@deluxspa.ru" style="text-decoration: none; color: #5e5343">supl.biz@deluxspa.ru</a>
+        </mj-text>
+        <mj-text font-size="16px" line-height="24px" font-weight="200">
+          <a href="https://deluxspa.ru" style="text-decoration: none; color: #5e5343">https://deluxspa.ru</a><br />
+          <a href="https://sporthit.online" style="text-decoration: none; color: #5e5343">https://sporthit.online</a><br />
+          <a href="https://neon-beard.ru" style="text-decoration: none; color: #5e5343">https://neon-beard.ru</a>
+        </mj-text>
+        <mj-divider border-color="#eedcba"></mj-divider>
+        <mj-text align="center" font-size="12px" line-height="18px" font-weight="200" color="#5e5343" padding-bottom="0">ООО «Демидов Люкс СПА»</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

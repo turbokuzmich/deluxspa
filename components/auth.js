@@ -3,17 +3,22 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
 import LoginIcon from "@mui/icons-material/Login";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CircularProgress from "@mui/material/CircularProgress";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Link from "next/link";
+import { getCartItemsCount } from "../store/slices/cart";
 import { TextField } from "formik-mui";
 import { Formik, Form, Field, useFormikContext } from "formik";
 import { useCallback, useEffect, useState } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
+import { useSelector } from "react-redux";
 
 const initialValues = {
   email: "",
@@ -137,12 +142,30 @@ export function SubmitButton() {
   );
 }
 
+export function CartLink() {
+  const cartItemsCount = useSelector(getCartItemsCount);
+
+  return cartItemsCount ? (
+    <Link href="/cart" passHref>
+      <IconButton component="a">
+        <Badge badgeContent={cartItemsCount} color="success">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
+    </Link>
+  ) : (
+    <Link href="/cart" passHref>
+      <IconButton component="a">
+        <ShoppingCartIcon />
+      </IconButton>
+    </Link>
+  );
+}
+
 export default function Auth() {
-  const { data, status } = useSession();
+  const { status } = useSession();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleLogOut = useCallback(() => signOut(), []);
 
   const handleLogIn = useCallback(
     () => setIsDialogOpen(true),
@@ -165,15 +188,19 @@ export default function Auth() {
         <IconButton onClick={handleLogIn}>
           <LoginIcon />
         </IconButton>
+        <CartLink />
       </>
     );
   }
 
   return (
     <>
-      <IconButton>
-        <PermIdentityIcon />
-      </IconButton>
+      <Link href="/personal" passHref>
+        <IconButton component="a">
+          <PermIdentityIcon />
+        </IconButton>
+      </Link>
+      <CartLink />
     </>
   );
 }

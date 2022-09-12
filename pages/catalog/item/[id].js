@@ -8,6 +8,7 @@ import Image from "../../../components/image";
 import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
+import QuantityInput from "../../../components/quantity";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Number from "../../../components/number";
 import A from "@mui/material/Link";
@@ -15,11 +16,14 @@ import Link from "next/link";
 import get from "lodash/get";
 import Price from "../../../components/price";
 import { compositionItems, consumptionTitles } from "../../../constants";
+import { isChangingItem } from "../../../store/slices/cart";
+import cartSlice from "../../../store/slices/cart";
 import {
   getItemById,
   getItemCategoriesById,
   getItemAuxiliaryItemsById,
 } from "../../../lib/helpers/catalog";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Item() {
   const {
@@ -27,10 +31,19 @@ export default function Item() {
     query: { id },
   } = useRouter();
 
+  const dispatch = useDispatch();
+
+  const [quantity, setQuantity] = useState(1);
+  const isChanging = useSelector(isChangingItem(id));
+
   const item = useMemo(() => getItemById(id), [id]);
   const categories = useMemo(() => getItemCategoriesById(id).slice(0, 3), [id]);
 
   const onGoToMap = useCallback(() => push(`/map`), []);
+
+  const onBuy = useCallback(() => {
+    dispatch(cartSlice.actions.changeItem({ id, qty: quantity, append: true }));
+  }, [dispatch, id, quantity]);
 
   return (
     <Layout>
@@ -106,7 +119,21 @@ export default function Item() {
                   <Typography variant="h4">
                     <Price sum={item.price} />
                   </Typography>
-                  <Tooltip
+                  <QuantityInput
+                    onChange={setQuantity}
+                    isChanging={isChanging}
+                  />
+                  <Button
+                    disabled={isChanging}
+                    size="large"
+                    color="success"
+                    startIcon={<ShoppingCartIcon />}
+                    variant="contained"
+                    onClick={onBuy}
+                  >
+                    Купить
+                  </Button>
+                  {/*<Tooltip
                     title="Узнайте, где ближайших магазин"
                     placement="right"
                     arrow
@@ -119,7 +146,7 @@ export default function Item() {
                     >
                       Где можно купить?
                     </Button>
-                  </Tooltip>
+                  </Tooltip>*/}
                 </Typography>
                 <Categories categories={categories} />
                 <Consumption item={item} />
