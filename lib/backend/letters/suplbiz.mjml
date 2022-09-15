@@ -1,48 +1,60 @@
 <mjml>
   <mj-body background-color="#fbf7f0">
-    <mj-section background-color="#ffffff" padding="0">
-      <mj-column>
-        <mj-image alt="Демидов Люкс СПА" href="https://deluxspa.ru" src="https://deluxspa.ru/images/logo.png" width="100px" href="https://deluxspa.ru"></mj-image>
-        <mj-divider border-color="#eedcba"></mj-divider>
+    <mj-section background-color="#ffffff" full-width="full-width">
+      <mj-column width="33.33333333333333%" vertical-align="middle">
+        <mj-image src="https://deluxspa.ru/images/logo.png" alt="ООО «Демидов Люкс СПА»" href="https://deluxspa.ru" padding-bottom="0px" padding-top="10px" width="100px"></mj-image>
       </mj-column>
     </mj-section>
-    <mj-section background-color="#ffffff">
+    <mj-section background-url="http://191n.mj.am/img/191n/1t/h0.jpg" background-size="cover" full-width="full-width" background-repeat="no-repeat">
+      <mj-column width="100%" vertical-align="middle">
+        <mj-text align="center" font-size="14px" color="#45474e" padding-bottom="10px" padding-top="45px"><span style="font-size: 30px; line-height: 30px;">Коммерческое предложение<br />по уходовой&nbsp;косметике</span><br /></mj-text>
+        <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://mjml.io" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" padding-bottom="45px" padding-top="10px" font-size="16px">СКАЧАТЬ КАТАЛОГ</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" full-width="full-width">
       <mj-column>
-        <mj-text align="center" font-size="16px" line-height="20px" color="#5e5343" font-weight="600" text-transform="uppercase" padding-bottom="40px">Коммерческое предложение по уходовой&nbsp;косметике</mj-text>
-        <mj-text color="#5e5343" font-size="18px" line-height="24px">Добрый день, Илья!</mj-text>
-        <mj-text color="#5e5343" font-size="18px" line-height="24px">Направляем прайс и каталоги нашей продукции (переход по кнопкам ниже).</mj-text>
-        <mj-text color="#5e5343" font-size="18px" line-height="24px">Также изготавливаем продукцию по СТМ.
+        <mj-text font-size="16px" align="center" color="#5e5343" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" padding-bottom="0">Оптовые продажи мужской, женской и профессиональной косметики.</mj-text>
+        <mj-text font-size="16px" align="center" color="#5e5343" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" padding-bottom="0">Изготовление косметической продукции под Вашим собственным брендом (при заказе от 30 000 ₽).</mj-text>
+        <mj-text font-size="16px" align="center" color="#5e5343" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" padding-bottom="0"><strong>От 10 000 ₽ — 30%. От 50 000 ₽ — 50%.</strong></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" full-width="full-width" padding-bottom="0">
+      <mj-column >
+        <mj-button align="center" background-color="#927a57" color="#ffffff" border-radius="24px" href="https://mjml.io" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">NEON BEARD</mj-button>
+      </mj-column>
+      <mj-column>
+        <mj-button align="center" background-color="#927a57" color="#fff" border-radius="24px" href="https://mjml.io" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">Sport HIT</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" full-width="full-width" padding-top="0">
+      <mj-column vertical-align="top">
+        <mj-button align="center" background-color="#927a57" color="#fff" border-radius="24px" href="https://mjml.io" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">DeluxSPA</mj-button>
+      </mj-column>
+      <mj-column vertical-align="top">
+        <mj-button align="center" background-color="#927a57" color="#fff" border-radius="24px" href="https://mjml.io" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">L&amp;B</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#eedcba" full-width="full-width" padding-bottom="0">
+      <mj-column width="100%" vertical-align="middle">
+        <mj-text align="center" color="#000000" font-size="20px" padding-bottom="10px">Контакты</mj-text>
+        <mj-divider border-color="#fff" border-style="solid" border-width="1px" padding-left="100px" padding-right="100px" padding-top="10px"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top="10px" background-color="#eedcba" full-width="full-width">
+      <mj-column>
+        <mj-text align="right" color="#000000" font-size="16px" line-height="20px" padding-bottom="20px">
+          <a href="tel:+79252353751" style="text-decoration: none; color: #5e5343">+7 (925) 235-37-51</a><br /><a href="tel:+79263853751" style="text-decoration: none; color: #5e5343">+7 (926) 385-37-51</a>
         </mj-text>
-        <mj-text color="#5e5343" font-size="18px" line-height="24px"><strong>Скидка на закупку:</strong><br />30% — от 10 тысяч рублей;<br />50% — от 50 тысяч рублей.</mj-text>
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="#2b2a28" padding-bottom="0">
-      <mj-column>
-        <mj-button background-color="#ffffff" color="#5e5343" font-size="22px" width="100%" href="https://disk.yandex.ru/i/1QRkQLQmVr6RBQ">Прайс</mj-button>
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="#2b2a28" padding-top="0">
-      <mj-column>
-        <mj-button background-color="#ffffff" color="#5e5343" font-size="18px" width="100%" href="https://neon-beard.ru/assets/files/catalog.pdf">Neon Beard</mj-button>
       </mj-column>
       <mj-column>
-        <mj-button background-color="#ffffff" color="#5e5343" font-size="18px" width="100%" href="https://sporthit.online/assets/prices.xlsx">SportHIT</mj-button>
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="#ffffff">
-      <mj-column>
-        <mj-text color="#5e5343" font-size="18px" padding-bottom="0"><strong>Контакты</strong></mj-text>
-        <mj-text font-size="16px" line-height="24px" font-weight="200" padding-bottom="0">
-          <a href="tel:+74956659015" style="text-decoration: none; color: #5e5343">+7 (995) 999 2075</a><br />
-          <a href="mailto:supl.biz@deluxspa.ru" style="text-decoration: none; color: #5e5343">supl.biz@deluxspa.ru</a>
+        <mj-text align="left" color="#000000" font-size="16px" line-height="20px" padding-bottom="20px">
+          <a href="mailto:office@deluxspa.ru" style="text-decoration: none; color: #5e5343">office@deluxspa.ru</a><br /><a href="mailto:supl.biz@deluxspa.ru" style="text-decoration: none; color: #5e5343">supl.biz@deluxspa.ru</a>
         </mj-text>
-        <mj-text font-size="16px" line-height="24px" font-weight="200">
-          <a href="https://deluxspa.ru" style="text-decoration: none; color: #5e5343">https://deluxspa.ru</a><br />
-          <a href="https://sporthit.online" style="text-decoration: none; color: #5e5343">https://sporthit.online</a><br />
-          <a href="https://neon-beard.ru" style="text-decoration: none; color: #5e5343">https://neon-beard.ru</a>
-        </mj-text>
-        <mj-divider border-color="#eedcba"></mj-divider>
-        <mj-text align="center" font-size="12px" line-height="18px" font-weight="200" color="#5e5343" padding-bottom="0">ООО «Демидов Люкс СПА»</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" full-width="full-width">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text align="center" color="#45474e" font-size="12px" line-height="16px" padding-bottom="25px" padding-top="25px"><span style="font-weight: bold; font-size: 14px;">ООО «Демидов Люкс СПА»</span><br /><br />Производственная компания<br />ИНН 7751525117<br />ОГРН 5147746230297</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
