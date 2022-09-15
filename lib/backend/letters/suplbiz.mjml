@@ -8,7 +8,7 @@
     </mj-section>
     <mj-section background-url="https://deluxspa.ru/images/letter-bg.jpg" background-size="cover" full-width="full-width" background-repeat="no-repeat" background-position="50% 100%">
       <mj-column width="100%" vertical-align="middle">
-        <mj-text align="center" font-size="14px" color="#45474e" padding-bottom="10px" padding-top="45px"><span style="font-size: 30px; line-height: 30px;">Коммерческое предложение<br />по уходовой&nbsp;косметике</span><br /></mj-text>
+        <mj-text align="center" font-size="14px" color="#45474e" padding-bottom="10px" padding-top="45px"><span style="font-size: 30px; line-height: 30px;">Коммерческое предложение<br />по уходовой&nbsp;косметике</span></mj-text>
         <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://deluxspa.ru/files/price.retail.xlsx" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" padding-bottom="45px" padding-top="10px" font-size="16px">СКАЧАТЬ КАТАЛОГ</mj-button>
       </mj-column>
     </mj-section>
@@ -28,12 +28,17 @@
         <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://sporthit.online" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">Sport HIT</mj-button>
       </mj-column>
     </mj-section>
-    <mj-section background-color="#ffffff" full-width="full-width" padding-top="0">
+    <mj-section background-color="#ffffff" full-width="full-width" padding-top="0" padding-bottom="0">
       <mj-column vertical-align="top">
         <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://deluxspa.ru" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">DeluxSPA</mj-button>
       </mj-column>
       <mj-column vertical-align="top">
         <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://landb.shop/" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">L&amp;B</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" full-width="full-width" padding-top="0">
+      <mj-column vertical-align="top">
+        <mj-button width="50%" align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://deluxspa.supl.biz/" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" width="100%">Мы на Supl.biz</mj-button>
       </mj-column>
     </mj-section>
     <mj-section background-color="#eedcba" full-width="full-width" padding-bottom="0">
