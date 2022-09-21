@@ -12,7 +12,7 @@
     <mj-section background-url="https://deluxspa.ru/images/letter-bg.jpg" background-size="cover" full-width="full-width" background-repeat="no-repeat" background-position="50% 100%">
       <mj-column width="100%" vertical-align="middle">
         <mj-text align="center" font-size="14px" color="#45474e" padding-bottom="10px" padding-top="45px" font-family="Roboto, sans-serif"><span style="font-size: 30px; line-height: 30px;">Коммерческое предложение<br />по уходовой&nbsp;косметике</span></mj-text>
-        <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://deluxspa.ru/files/price.retail.xlsx" font-family="Roboto, sans-serif" padding-bottom="45px" padding-top="10px" font-size="16px">СКАЧАТЬ КАТАЛОГ</mj-button>
+        <mj-button align="center" background-color="rgba(105, 85, 48, 0.4)" color="#fff" border-radius="24px" href="{triggerlink:12665}" font-family="Roboto, sans-serif" padding-bottom="45px" padding-top="10px" font-size="16px">СКАЧАТЬ КАТАЛОГ</mj-button>
       </mj-column>
     </mj-section>
     <mj-section background-color="#ffffff" full-width="full-width">
@@ -25,23 +25,23 @@
     </mj-section>
     <mj-section background-color="#ffffff" full-width="full-width" padding-bottom="0">
       <mj-column>
-        <mj-button align="center" background-color="#009534" color="#ffffff" border-radius="24px" href="https://neon-beard.ru"  font-family="Roboto, sans-serif" font-size="15px" width="100%">NEON BEARD</mj-button>
+        <mj-button align="center" background-color="#908166" color="#ffffff" border-radius="24px" href="{triggerlink:12674}"  font-family="Roboto, sans-serif" font-size="15px" width="100%">NEON BEARD</mj-button>
       </mj-column>
       <mj-column>
-        <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://sporthit.online"  font-family="Roboto, sans-serif" font-size="15px" width="100%">Sport HIT</mj-button>
+        <mj-button align="center" background-color="#908166" color="#fff" border-radius="24px" href="{triggerlink:12675}"  font-family="Roboto, sans-serif" font-size="15px" width="100%">Sport HIT</mj-button>
       </mj-column>
     </mj-section>
     <mj-section background-color="#ffffff" full-width="full-width" padding-top="0" padding-bottom="0">
       <mj-column vertical-align="top">
-        <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://deluxspa.ru"  font-family="Roboto, sans-serif" font-size="15px" width="100%">DeluxSPA</mj-button>
+        <mj-button align="center" background-color="#908166" color="#fff" border-radius="24px" href="{triggerlink:12676}"  font-family="Roboto, sans-serif" font-size="15px" width="100%">DeluxSPA</mj-button>
       </mj-column>
       <mj-column vertical-align="top">
-        <mj-button align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://landb.shop/"  font-family="Roboto, sans-serif" font-size="15px" width="100%">L&amp;B</mj-button>
+        <mj-button align="center" background-color="#908166" color="#fff" border-radius="24px" href="{triggerlink:12677}"  font-family="Roboto, sans-serif" font-size="15px" width="100%">L&amp;B</mj-button>
       </mj-column>
     </mj-section>
     <mj-section background-color="#ffffff" full-width="full-width" padding-top="0">
       <mj-column vertical-align="top">
-        <mj-button width="50%" align="center" background-color="#009534" color="#fff" border-radius="24px" href="https://deluxspa.supl.biz/"  font-family="Roboto, sans-serif" font-size="15px" width="100%">Мы на Supl.biz</mj-button>
+        <mj-button width="50%" align="center" background-color="#908166" color="#fff" border-radius="24px" href="{triggerlink:12678}"  font-family="Roboto, sans-serif" font-size="15px" width="100%">Мы на Supl.biz</mj-button>
       </mj-column>
     </mj-section>
     <mj-section background-color="#eedcba" full-width="full-width" padding-bottom="0">
