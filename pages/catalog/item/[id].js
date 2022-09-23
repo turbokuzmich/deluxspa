@@ -164,6 +164,8 @@ function Auxiliary({ item }) {
                   flexGrow: 0,
                   flexShrink: 0,
                   display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <Image src={item.image} sx={{ maxWidth: "100%" }} />

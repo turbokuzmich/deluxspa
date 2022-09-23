@@ -4,6 +4,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Script from "next/script";
 import Layout from "../../components/layout";
+import A from "@mui/material/Link";
 import { map as retailers } from "../../constants";
 import { useTheme } from "@mui/material/styles";
 
@@ -96,6 +97,19 @@ export default function DeluxSpaMap() {
             paragraph
           >
             Где купить
+          </Typography>
+          <Typography paragraph>
+            Нашу продукцию вы можете приобрести, позвонив нам по телефону
+          </Typography>
+          <Typography variant="h5" paragraph>
+            <A href="tel:+74956659015">+7 (495) 665 9015</A>
+          </Typography>
+          <Typography paragraph>или написав на</Typography>
+          <Typography variant="h5" paragraph>
+            <A href="mailto:office@deluxspa.ru">office@deluxspa.ru</A>
+          </Typography>
+          <Typography paragraph>
+            а также в одном из магазинов наших партнеров.
           </Typography>
           <Box
             ref={mapsContainerRef}
