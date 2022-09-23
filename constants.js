@@ -1005,7 +1005,7 @@ export const categoriesDispayedOnPane = [
 export const map = [
   {
     title: "Арт Гармония",
-    fullAddress: "Москва, Большая Садовая улица, 3, стр. 1",
+    fullAddress: "Екатеринбург, ул. Шаумяна 83б, оф. 132",
     coordinates: [60.577045, 56.811578],
     phones: [
       {
@@ -1023,6 +1023,24 @@ export const map = [
     ],
     workingTimeText: "ежедневно, 10:00–22:00",
     urls: ["http://www.artestetic66.ru/"],
+  },
+  {
+    title: "Делюкс СПА",
+    fullAddress:
+      "Москва, пос. Московский, д. Картмазово, Центральная улица, 48А",
+    coordinates: [37.398198, 55.615141],
+    phones: [
+      {
+        number: "+7 (495) 665-90-15",
+        type: "phone",
+      },
+      {
+        number: "+7 (926) 385-37-51",
+        type: "phone",
+      },
+    ],
+    workingTimeText: "пн–пт, 09:00–18:00",
+    urls: ["https://deluxspa.ru"],
   },
   {
     title: "Косметик Профи",
