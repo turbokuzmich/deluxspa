@@ -6,23 +6,11 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Layout from "../../components/layout";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import Image from "../../components/image";
 
-// <Typography paragraph>
-//   ООО «Демидов Люкс СПА» в{" "}
-//   <Link href="https://i.moscow/company/1862605" passHref>
-//     <A target="_blank">Московском инновационном кластере</A>
-//   </Link>{" "}
-//   и{" "}
-//   <Link href="https://catalog.moscow-export.com/industrie/ooo-demidov-lyuks-spa/" passHref>
-//     <A target="_blank">Московском экспортном центре</A>
-//   </Link>
-//   .
-// </Typography>
 export default function About() {
   return (
     <Layout>

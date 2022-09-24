@@ -1,6 +1,6 @@
 import cartSlice from "../slices/cart";
 import api from "../../lib/frontend/api";
-import { all, call, put, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
 
 export function* fetchCartSaga() {
   const { data } = yield call([api, api.get], "/cart");
@@ -20,8 +20,14 @@ export function* changeItemSaga({ payload }) {
   } catch (_) {}
 }
 
+export function* checkoutSaga() {
+  yield call([api, api.post], "/cart/checkout");
+  yield put(cartSlice.actions.checkoutComplete());
+}
+
 export default function* rootSaga() {
   yield all([
+    takeLeading(cartSlice.actions.checkout, checkoutSaga),
     takeLatest(cartSlice.actions.fetch, fetchCartSaga),
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
   ]);
