@@ -9,11 +9,11 @@ const sequelize = new Sequelize(
   process.env.NODE_ENV === "production"
     ? {
         dialect: "mysql",
-        host: "rc1a-xwf5j4au4lvqqp3b.mdb.yandexcloud.net",
+        host: process.env.MYSQL_HOST,
         port: 3306,
-        user: "turbokuzmich",
-        password: "",
-        database: "deluxspa",
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASS,
+        database: process.env.MYSQL_DB,
         ssl: {
           ca: fs.readFileSync("~/.mysql/root.crt"),
         },

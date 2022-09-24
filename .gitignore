@@ -39,3 +39,6 @@ yarn-error.log*
 
 # dev sqlite
 site.db
+
+# amocrm oauth token cache
+token.json
