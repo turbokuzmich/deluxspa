@@ -1,6 +1,6 @@
-import cartSlice, { getCartItems } from "../slices/cart";
+import cartSlice from "../slices/cart";
 import api from "../../lib/frontend/api";
-import { all, delay, call, put, select, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 
 export function* fetchCartSaga() {
   const { data } = yield call([api, api.get], "/cart");
@@ -8,11 +8,16 @@ export function* fetchCartSaga() {
   yield put(cartSlice.actions.fetchComplete(data));
 }
 
-export function* changeItemSaga({ payload: { id } }) {
-  const items = yield select(getCartItems);
+export function* changeItemSaga({ payload }) {
+  const { id } = payload;
 
-  yield delay(2000);
-  yield put(cartSlice.actions.changeItemComplete({ id, items }));
+  try {
+    const {
+      data: { items },
+    } = yield call([api, api.post], "/cart", payload);
+
+    yield put(cartSlice.actions.changeItemComplete({ id, items }));
+  } catch (_) {}
 }
 
 export default function* rootSaga() {
