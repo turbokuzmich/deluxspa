@@ -25,9 +25,9 @@ export default async function checkout(req, res) {
   }
 
   // FIXME что-то можно и параллельно запустить
-  const { items, subtotal, letterHtml } = await processCart(user);
+  const { items, subtotal, letterHtml, noteHtml } = await processCart(user);
   const amoUserId = await findOrCreateAmoUser(user);
-  const leadId = await createLead(letterHtml, subtotal, amoUserId);
+  const leadId = await createLead(letterHtml, noteHtml, subtotal, amoUserId);
 
   await createOrderAndCleanCart(items, leadId, user);
 
@@ -36,6 +36,8 @@ export default async function checkout(req, res) {
 
 async function processCart(user) {
   const items = await user.getCartItems();
+
+  // все эти рассчеты сделать за одну проходку
   const quantity = items.reduce(
     (overall, { quantity }) => overall + quantity,
     0
@@ -45,11 +47,16 @@ async function processCart(user) {
       subtotal + getItemById(item_id).price * quantity,
     0
   );
+  const orderItems = items.map((item) => {
+    const { title, brief, volume, price } = getItemById(item.item_id);
+    return `${brief} «${title}» (${volume} мл.) — ${item.quantity} x ${price}₽`;
+  });
 
   return {
     items,
     subtotal,
     letterHtml: `<p><strong>Позиций: ${quantity},<br />Подытог: ${subtotal}₽</strong></p>`,
+    noteHtml: ["В заказе:", ...orderItems, `Итого: ${subtotal}₽`].join("\n"),
   };
 }
 
@@ -69,11 +76,12 @@ async function findOrCreateAmoUser(user) {
   return id;
 }
 
-async function createLead(letterHtml, subtotal, amoUserId) {
+async function createLead(letterHtml, noteHtml, subtotal, amoUserId) {
   const [{ id }] = await amocrm.leads.create([
     {
-      name: "Сделка из интернет-магазина DeluxSPA",
+      name: "Заказ в интернет-магазине DeluxSPA",
       pipeline_id: 5831023, // FIXME в константы
+      responsible_user_id: 8542888, // FIXME пока это будет Каролина
       price: subtotal,
       custom_fields_values: [
         {
@@ -87,6 +95,16 @@ async function createLead(letterHtml, subtotal, amoUserId) {
       ],
       _embedded: {
         contacts: [{ id: amoUserId }],
+        tags: [{ id: 276681 }],
+      },
+    },
+  ]);
+
+  await amocrm.request.post(`/api/v4/leads/${id}/notes`, [
+    {
+      note_type: "common",
+      params: {
+        text: noteHtml,
       },
     },
   ]);
@@ -102,10 +120,12 @@ async function createOrderAndCleanCart(items, leadId, user) {
   await order.setUser(user);
 
   const orderItemsData = items.map((item) => {
-    const { title, price } = getItemById(item.item_id);
+    const { title, brief, volume, price } = getItemById(item.item_id);
 
     return {
       title,
+      brief,
+      volume,
       price,
       item_id: item.item_id,
       quantity: item.quantity,

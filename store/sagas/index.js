@@ -1,4 +1,5 @@
 import cartSlice from "../slices/cart";
+import ordersSlice from "../slices/orders";
 import api from "../../lib/frontend/api";
 import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
 
@@ -25,9 +26,15 @@ export function* checkoutSaga() {
   yield put(cartSlice.actions.checkoutComplete());
 }
 
+export function* fetchOrders() {
+  const { data: orders } = yield call([api, api.get], "/orders");
+  yield put(ordersSlice.actions.fetchOrdersComplete(orders));
+}
+
 export default function* rootSaga() {
   yield all([
     takeLeading(cartSlice.actions.checkout, checkoutSaga),
+    takeLatest(ordersSlice.actions.fetchOrders, fetchOrders),
     takeLatest(cartSlice.actions.fetch, fetchCartSaga),
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
   ]);
