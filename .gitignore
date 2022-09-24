@@ -35,3 +35,7 @@ yarn-error.log*
 
 # video files
 /public/video
+
+
+# dev sqlite
+site.db

@@ -1,19 +1,37 @@
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
-import adapter from "../../../lib/backend/adapters/strapi";
 import nodemailer from "nodemailer";
 import signUp from "../../../lib/backend/letters/signup";
-import omit from "lodash/omit";
+import SequelizeAdapter from "@next-auth/sequelize-adapter";
+import { Sequelize } from "sequelize";
+
+const sequelize = new Sequelize(
+  process.env.NODE_ENV === "production"
+    ? {
+        dialect: "mysql",
+        host: "rc1a-xwf5j4au4lvqqp3b.mdb.yandexcloud.net",
+        port: 3306,
+        user: "turbokuzmich",
+        password: "",
+        database: "deluxspa",
+        ssl: {
+          ca: fs.readFileSync("~/.mysql/root.crt"),
+        },
+      }
+    : {
+        dialect: "sqlite",
+        storage: "./site.db",
+      }
+);
+
+if (process.env.NODE_ENV !== "production") {
+  sequelize.sync();
+}
 
 export const authOptions = {
-  adapter: adapter,
+  adapter: SequelizeAdapter(sequelize),
   session: {
     strategy: "jwt",
-  },
-  callbacks: {
-    session({ session }) {
-      return { ...session, user: omit(session.user, "image") };
-    },
   },
   providers: [
     EmailProvider({

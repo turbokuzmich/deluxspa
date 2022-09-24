@@ -7,7 +7,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import { signOut } from "next-auth/react";
 import { useCallback } from "react";
 
-export default function Personal({ user: { email } }) {
+export default function Personal({ email }) {
   const handleLogout = useCallback(() => signOut(), []);
 
   return (
@@ -40,9 +40,11 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const { user } = session;
+  const {
+    user: { email },
+  } = session;
 
   return {
-    props: { user },
+    props: { email },
   };
 }
