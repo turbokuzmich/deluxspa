@@ -45,6 +45,13 @@ export default function Personal({ email }) {
                   {format(new Date(order.createdAt), "dd.MM.yyyy H:mm")} на
                   сумму <Price sum={order.price} />. Статус — {order.status}.
                 </Typography>
+                {order.payLink ? (
+                  <Typography sx={{ pl: 2 }} paragraph>
+                    <Link target="_blank" href={order.payLink}>
+                      Ссылка на оплату
+                    </Link>
+                  </Typography>
+                ) : null}
                 <Typography sx={{ pl: 2 }} paragraph>
                   Ваш заказ обслуживает {order.responsible.name} (
                   <Link

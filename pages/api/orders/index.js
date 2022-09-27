@@ -9,6 +9,7 @@ import omit from "lodash/omit";
 import groupBy from "lodash/groupBy";
 import uniq from "lodash/uniq";
 import pick from "lodash/pick";
+import get from "lodash/get";
 
 // FIXME нужен какой-то кэш на все эти списки
 
@@ -72,11 +73,13 @@ async function getOrders(user, statuses) {
 
   return leads.map((lead) => {
     const dbOrder = ordersFromBBByLeadId[lead.id];
+    const payLink = getPayLink(lead);
     const orderItems = dbOrder.OrderItems.map((item) =>
       omit(item.toJSON(), ["OrderId", "createdAt", "id", "updatedAt"])
     );
 
     return {
+      payLink,
       id: lead.id,
       name: `Заказ №${lead.id}`,
       price: lead.price,
@@ -135,4 +138,22 @@ function prepareEvents(eventsPage, statuses) {
     }),
     property("entity_id")
   );
+}
+
+function getPayLink(lead) {
+  // FIXME статус «Счет выставлен»; айдишник записать в константы
+  if (lead.status_id !== 51036133) {
+    return null;
+  }
+
+  // FIXME поле «Ссылка на оплату»; айдишник записать в константы
+  const payLinkField = lead.custom_fields_values.find(
+    ({ field_id }) => field_id === 1167115
+  );
+
+  if (!payLinkField) {
+    return null;
+  }
+
+  return get(payLinkField, "values.0.value", "");
 }
