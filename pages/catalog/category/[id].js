@@ -1,10 +1,10 @@
 import get from "lodash/get";
 import { useMemo } from "react";
-import * as Color from "color";
 import Layout from "../../../components/layout";
 import Items from "../../../components/items";
 import Submenu from "../../../components/submenu";
 import Category from "../../../components/category";
+import generativeBackground from "../../../helpers/background";
 import { useRouter } from "next/router";
 import {
   getCategoryById,
@@ -29,7 +29,7 @@ export default function CategoryView() {
           <Category
             {...category}
             sx={{
-              backgroundColor: color,
+              background: generativeBackground(color),
               position: "relative",
               category: {
                 pt: "80px",
@@ -40,7 +40,7 @@ export default function CategoryView() {
                 selected={id}
                 parentSelected={get(parent, "id")}
                 sx={{
-                  backgroundColor: Color(color).alpha(0.8).rgb().toString(),
+                  backgroundColor: "transparent",
                   position: "absolute",
                   width: "100%",
                   zIndex: 1,

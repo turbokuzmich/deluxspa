@@ -12,11 +12,12 @@ const categoryStyleOverride = {
     backgroundSize: "24%",
   },
   face_massage_oil: {
-    backgroundSize: "28%",
+    backgroundPosition: "100% 0%",
+    backgroundSize: "contain",
   },
   hair_massage_oil: {
-    backgroundSize: "28%",
-    backgroundPosition: "86% 100%",
+    backgroundPosition: "100% 0%",
+    backgroundSize: "contain",
   },
   scrub_for_face: {
     backgroundSize: "contain",
