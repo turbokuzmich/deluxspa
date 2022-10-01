@@ -5,6 +5,9 @@ import Container from "@mui/material/Container";
 import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
 import Image from "../../../components/image";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -18,6 +21,7 @@ import { compositionItems, consumptionTitles } from "../../../constants";
 import {
   getItemById,
   getItemCategoriesById,
+  getItemFirstPreviewImage,
   getItemAuxiliaryItemsById,
 } from "../../../helpers/catalog";
 
@@ -30,7 +34,16 @@ export default function Item() {
   const item = useMemo(() => getItemById(id), [id]);
   const categories = useMemo(() => getItemCategoriesById(id).slice(0, 3), [id]);
 
+  const [variantIndex, setVariantIndex] = useState(0);
+  const variant = item
+    ? item.variants.byId[item.variants.list[variantIndex]]
+    : {};
+
   const onGoToMap = useCallback(() => push(`/map`), []);
+  const onChangeVolume = useCallback(
+    (_, value) => setVariantIndex(item.variants.list.indexOf(value)),
+    [item, setVariantIndex]
+  );
 
   return (
     <Layout>
@@ -40,93 +53,99 @@ export default function Item() {
           <Container
             sx={{
               mb: 4,
+              gap: {
+                md: 6,
+              },
+              display: "flex",
+              flexDirection: {
+                xs: "column",
+                md: "row",
+              },
             }}
           >
             <Box
               sx={{
-                gap: {
-                  md: 6,
+                width: {
+                  md: "50%",
                 },
+                flexShrink: 0,
+                flexGrow: 0,
+                pt: 4,
                 display: "flex",
-                flexDirection: {
-                  xs: "column",
-                  md: "row",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                fontSize: "120px",
+              }}
+            >
+              <Image src={variant.image} sx={{ maxWidth: "100%" }} />
+            </Box>
+            <Box
+              sx={{
+                width: {
+                  md: "50%",
+                },
+                flexShrink: 0,
+                flexGrow: 0,
+                pt: {
+                  xs: 2,
+                  md: 4,
                 },
               }}
             >
-              <Box
+              <Typography
+                variant="h4"
+                sx={{ textTransform: "uppercase" }}
+                paragraph
+              >
+                {item.title}
+              </Typography>
+              <Typography variant="h6">{item.brief}</Typography>
+              <RadioGroup
+                name="volume"
+                onChange={onChangeVolume}
+                value={variant.volume}
                 sx={{
-                  width: {
-                    md: "50%",
-                  },
-                  flexShrink: 0,
-                  flexGrow: 0,
-                  pt: 4,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                  fontSize: "120px",
+                  mb: 1,
                 }}
               >
-                <Image src={item.image} sx={{ maxWidth: "100%" }} />
-              </Box>
-              <Box
-                sx={{
-                  width: {
-                    md: "50%",
-                  },
-                  flexShrink: 0,
-                  flexGrow: 0,
-                  pt: {
-                    xs: 2,
-                    md: 4,
-                  },
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  sx={{ textTransform: "uppercase" }}
-                  paragraph
+                {item.variants.list.map((variant) => {
+                  const { price, volume } = item.variants.byId[variant];
+
+                  return (
+                    <FormControlLabel
+                      key={variant}
+                      value={volume}
+                      control={<Radio />}
+                      label={
+                        <span>
+                          <Number value={volume} /> мл. — <Price sum={price} />
+                        </span>
+                      }
+                    />
+                  );
+                })}
+              </RadioGroup>
+              <Typography paragraph>
+                <Tooltip
+                  title="Узнайте, где ближайших магазин"
+                  placement="right"
+                  arrow
                 >
-                  {item.title}
-                </Typography>
-                <Typography variant="h6">{item.brief}</Typography>
-                <Typography paragraph>
-                  Объем — <Number value={item.volume} /> мл.
-                </Typography>
-                <Typography
-                  component="div"
-                  paragraph
-                  sx={{
-                    gap: 2,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h4">
-                    <Price sum={item.price} />
-                  </Typography>
-                  <Tooltip
-                    title="Узнайте, где ближайших магазин"
-                    placement="right"
-                    arrow
+                  <Button
+                    onClick={onGoToMap}
+                    startIcon={<ShoppingCartIcon />}
+                    variant="outlined"
+                    size="large"
                   >
-                    <Button
-                      onClick={onGoToMap}
-                      startIcon={<ShoppingCartIcon />}
-                      variant="outlined"
-                      size="large"
-                    >
-                      Где можно купить?
-                    </Button>
-                  </Tooltip>
-                </Typography>
-                <Categories categories={categories} />
-                <Consumption item={item} />
-                <Composition item={item} />
-                <Description item={item} />
-                <Auxiliary item={item} />
-              </Box>
+                    Где можно купить?
+                  </Button>
+                </Tooltip>
+              </Typography>
+              <Categories categories={categories} />
+              <Consumption item={item} />
+              <Composition item={item} />
+              <Description item={item} />
+              <Auxiliary item={item} />
             </Box>
           </Container>
         ) : null}
@@ -168,7 +187,10 @@ function Auxiliary({ item }) {
                   justifyContent: "center",
                 }}
               >
-                <Image src={item.image} sx={{ maxWidth: "100%" }} />
+                <Image
+                  src={getItemFirstPreviewImage(item.id)}
+                  sx={{ maxWidth: "100%" }}
+                />
               </Box>
               <Box
                 sx={{

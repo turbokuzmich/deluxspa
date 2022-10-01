@@ -36,32 +36,32 @@ const videoData = [
   {
     index: 4,
     itemId: "oil_bio",
-    link: "/catalog/item/oil_bio_1000",
+    link: "/catalog/item/oil_bio",
   },
   {
     index: 6,
     itemId: "oil_mint_breeze",
-    link: "/catalog/item/oil_mint_breeze_1000",
+    link: "/catalog/item/oil_mint_breeze",
   },
   {
     index: 2,
     itemId: "oil_lemongrass",
-    link: "/catalog/item/oil_lemongrass_1000",
+    link: "/catalog/item/oil_lemongrass",
   },
   {
     index: 3,
     itemId: "oil_extra_slim",
-    link: "/catalog/item/oil_extra_slim_1000",
+    link: "/catalog/item/oil_extra_slim",
   },
   {
     index: 5,
     itemId: "oil_lime_cinnamon",
-    link: "/catalog/item/oil_lime_cinnamon_1000",
+    link: "/catalog/item/oil_lime_cinnamon",
   },
   {
     index: 1,
     itemId: "oil_lemon_pepper",
-    link: "/catalog/item/oil_lemon_pepper_1000",
+    link: "/catalog/item/oil_lemon_pepper",
   },
 ];
 

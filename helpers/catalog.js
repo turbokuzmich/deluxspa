@@ -91,3 +91,12 @@ export const getItemAuxiliaryItemsById = memoize((itemId) =>
 export const getItemsByCompositionId = memoize((compositionId) =>
   catalogItems.filter(({ composition }) => composition.includes(compositionId))
 );
+
+export const getItemFirstPreviewImage = memoize((itemId) => {
+  const { variants } = getItemById(itemId);
+  const index = variants.list.findIndex((id) =>
+    Boolean(variants.byId[id].image)
+  );
+
+  return index > -1 ? variants.byId[variants.list[index]].image : null;
+});

@@ -7,9 +7,13 @@ import Image from "./image";
 import Number from "./number";
 import { catalogItems } from "../constants";
 import Price from "./price";
+import { getItemFirstPreviewImage } from "../helpers/catalog";
 
 export default function Item({ id }) {
   const item = useMemo(() => catalogItems.find((item) => item.id === id), []);
+  if (!item) {
+    console.log(id);
+  }
 
   return (
     <Link href={`/catalog/item/${item.id}`} passHref>
@@ -82,7 +86,7 @@ export default function Item({ id }) {
         >
           <Image
             className="image"
-            src={item.image}
+            src={getItemFirstPreviewImage(item.id)}
             sx={{
               maxWidth: "100%",
               maxHeight: "100%",
@@ -114,10 +118,17 @@ export default function Item({ id }) {
             color="text.primary"
             sx={{ fontWeight: "bold" }}
           >
-            <Price sum={item.price} />
+            {item.variants.list.length > 1 ? "от " : null}
+            <Price sum={item.variants.byId[item.variants.list[0]].price} />
           </Typography>
           <Typography variant="subtitle2">
-            <Number value={item.volume} /> мл.
+            {item.variants.list.map((volume, index) => (
+              <span key={volume}>
+                <Number value={volume} />
+                {index < item.variants.list.length - 1 ? " / " : null}
+              </span>
+            ))}{" "}
+            мл.
           </Typography>
         </Box>
       </A>
