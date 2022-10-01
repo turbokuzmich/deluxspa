@@ -28,6 +28,22 @@ export const getCalculationStatus = createSelector(
   getDelivery,
   property("calculationStatus")
 );
+export const getDeliveryPoints = createSelector(
+  getDelivery,
+  property("deliveryPoints")
+);
+export const getDeliveryPointsStatus = createSelector(
+  getDelivery,
+  property("deliveryPointsStatus")
+);
+export const getDeliveryPoint = createSelector(
+  getDelivery,
+  property("deliveryPoint")
+);
+export const isDialogVisible = createSelector(
+  getDelivery,
+  property("isDialogVisible")
+);
 
 export default createSlice({
   name: "delivery",
@@ -45,6 +61,10 @@ export default createSlice({
     sum: null,
     min: null,
     max: null,
+    isDialogVisible: false, // диалог выбора ПВЗ
+    deliveryPoint: null,
+    deliveryPoints: [],
+    deliveryPointsStatus: "initial", // fetching | failed | ok
   },
 
   reducers: {
@@ -81,6 +101,21 @@ export default createSlice({
       state.sum = sum;
       state.min = min;
       state.max = max;
+    },
+    showDialog(state) {
+      state.isDialogVisible = true;
+    },
+    hideDialog(state) {
+      state.isDialogVisible = false;
+    },
+    setDeliveryPointsStatus(state, { payload }) {
+      state.deliveryPointsStatus = payload;
+    },
+    setDeliveryPoints(state, { payload }) {
+      state.deliveryPoints = payload;
+    },
+    setDeliveryPoint(state, { payload }) {
+      state.deliveryPoint = payload;
     },
   },
 });

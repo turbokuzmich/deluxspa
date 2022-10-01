@@ -14,8 +14,10 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Price from "../../components/price";
+import DeliveryPointsDialog from "../../components/deliverypoints";
 import delivery, {
   getDeliveryType,
+  getDeliveryPoint,
   getDeliveryAddress,
   getGeocodingStatus,
   getCalculationStatus,
@@ -27,6 +29,7 @@ export default function Delivery() {
   const dispatch = useDispatch();
 
   const type = useSelector(getDeliveryType);
+  const point = useSelector(getDeliveryPoint);
   const address = useSelector(getDeliveryAddress);
   const suggestions = useSelector(getDeliverySuggestions);
   const geocodingStatus = useSelector(getGeocodingStatus);
@@ -59,6 +62,11 @@ export default function Delivery() {
     []
   );
 
+  const onShowDialog = useCallback(
+    () => dispatch(delivery.actions.showDialog()),
+    []
+  );
+
   const isOptionEqualToValue = useCallback(
     ({ value }, address) => value === address,
     []
@@ -67,6 +75,7 @@ export default function Delivery() {
   return (
     <>
       <MapLoader onReady={onMapsReady} />
+      <DeliveryPointsDialog />
       <Layout>
         <>
           <Container>
@@ -124,8 +133,28 @@ export default function Delivery() {
                       label="Заберу из постамата"
                     />
                   </RadioGroup>
+                  {type === "store" ? (
+                    <>
+                      {point ? (
+                        <Typography paragraph>
+                          Выбран ПВЗ «{point.name}» (
+                          {point.location.address_full})
+                        </Typography>
+                      ) : null}
+                      <Typography paragraph>
+                        <Button
+                          color="warning"
+                          variant="contained"
+                          onClick={onShowDialog}
+                        >
+                          {point ? "Поменять ПВЗ" : "Выбрать ближайших ПВЗ"}
+                        </Button>
+                      </Typography>
+                    </>
+                  ) : null}
                   <Button
                     sx={{ mb: 2 }}
+                    color="primary"
                     variant="contained"
                     onClick={onCalculate}
                     disabled={calculationStatus === "calculating"}

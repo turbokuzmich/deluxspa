@@ -11,6 +11,8 @@ import {
   all,
   call,
   put,
+  take,
+  spawn,
   select,
   takeLatest,
   takeLeading,
@@ -103,6 +105,17 @@ export function* calculateDelivery() {
   yield put(deliverySlice.actions.setCalculationResult({ sum, min, max }));
 }
 
+export function* fetchDeliveryPoints() {
+  yield take(deliverySlice.actions.showDialog);
+
+  yield put(deliverySlice.actions.setDeliveryPointsStatus("fetching"));
+
+  const { data } = yield call([api, api.get], "/delivery/points");
+
+  yield put(deliverySlice.actions.setDeliveryPoints(data));
+  yield put(deliverySlice.actions.setDeliveryPointsStatus("ok"));
+}
+
 export default function* rootSaga() {
   yield all([
     takeLeading(cartSlice.actions.checkout, checkoutSaga),
@@ -113,6 +126,9 @@ export default function* rootSaga() {
     takeLatest(deliverySlice.actions.setAddress, geocodeAddress),
     takeLatest(deliverySlice.actions.calculate, calculateDelivery),
   ]);
+
+  // load delivery points on first modal open
+  yield spawn(fetchDeliveryPoints);
 
   // load cart items on start
   yield put(cartSlice.actions.fetch());
