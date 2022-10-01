@@ -3,6 +3,7 @@ import { createWrapper } from "next-redux-wrapper";
 import createSagaMiddleware from "redux-saga";
 import cartSlice from "./slices/cart";
 import ordersSlice from "./slices/orders";
+import deliverySlice from "./slices/delivery";
 import rootSaga from "./sagas";
 import { isServer } from "../lib/helpers/features";
 
@@ -11,6 +12,7 @@ function makeStore() {
     reducer: {
       [cartSlice.name]: cartSlice.reducer,
       [ordersSlice.name]: ordersSlice.reducer,
+      [deliverySlice.name]: deliverySlice.reducer,
     },
   };
 

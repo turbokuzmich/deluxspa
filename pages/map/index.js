@@ -2,8 +2,8 @@ import { useEffect, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Script from "next/script";
 import Layout from "../../components/layout";
+import MapLoader from "../../components/maploader";
 import { map as retailers } from "../../constants";
 import { useTheme } from "@mui/material/styles";
 
@@ -54,10 +54,6 @@ export default function DeluxSpaMap() {
     });
   }, []);
 
-  const onApiLoaded = useCallback(() => {
-    ymaps.ready(onApiReady);
-  }, []);
-
   useEffect(() => {
     if (typeof ymaps !== "undefined" && !map.current) {
       ymaps.ready(onApiReady);
@@ -72,11 +68,7 @@ export default function DeluxSpaMap() {
 
   return (
     <>
-      <Script
-        src="https://api-maps.yandex.ru/2.1/?apikey=cd000b7d-9831-4a12-8fcc-4d94421d4585&amp;lang=ru_RU"
-        strategy="afterInteractive"
-        onLoad={onApiLoaded}
-      />
+      <MapLoader onReady={onApiReady} />
       <Layout>
         <Container
           sx={{
