@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import nodemailer from "nodemailer";
-import signUp from "../../../lib/backend/letters/signup";
 import sequelize from "../../../lib/backend/sequelize";
 import SequelizeAdapter from "@next-auth/sequelize-adapter";
 import { User } from "../../../lib/backend/sequelize";
+import renderEmail from "../../../lib/backend/letters/render";
 
 export const authOptions = {
   adapter: SequelizeAdapter(sequelize, {
@@ -35,7 +35,7 @@ export const authOptions = {
           sender: process.env.EMAIL_SENDER,
           subject: `Авторизация на сайте DeluxSPA`,
           text: `Для авторизации на сайте DeluxSPA, пожалуйста, перейдите по ссылке ${url}`,
-          html: signUp(url),
+          html: renderEmail("signup", { url }),
         });
 
         const failed = result.rejected.concat(result.pending).filter(Boolean);

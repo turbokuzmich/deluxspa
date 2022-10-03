@@ -1,8 +1,56 @@
 <mjml>
+  <mj-head>
+    <mj-style inline="inline">
+      #outlook a {
+        padding: 0;
+      }
+
+      table,
+      td {
+        border-collapse: collapse;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+
+      img {
+        border: 0;
+        height: auto;
+        line-height: 100%;
+        outline: none;
+        text-decoration: none;
+        -ms-interpolation-mode: bicubic;
+      }
+
+      p {
+        display: block;
+        margin: 13px 0;
+      }
+
+      table.mj-full-width-mobile {
+        width: 100% !important;
+      }
+
+      td.mj-full-width-mobile {
+        width: auto !important;
+      }
+    </mj-style>
+  </mj-head>
   <mj-body background-color="#F3F3F3">
-    <mj-section>
+    <mj-section padding-bottom="0" background-color="#ffffff">
+      <mj-column vertical-align="middle" width="150px" padding-right="0">
+        <mj-image src="https://deluxspa.ru/images/logo.png" alt="ООО «Демидов Люкс СПА»" href="https://deluxspa.ru" padding-bottom="10px" padding-top="10px" />
+      </mj-column>
+      <mj-column vertical-align="middle" width="260px">
+        <mj-text padding-bottom="0" font-family="Roboto, sans-serif" font-size="18px" line-height="22px">DeluxSPA —<br />профессиональный путь<br />к красоте</mj-text>
+      </mj-column>
+      <mj-column vertical-align="middle" width="190px">
+        <mj-text font-family="Roboto, sans-serif" font-size="16px" font-weight="bold" padding-bottom="10px"><a href="tel:74956659015" style="color:#5e5343">+7 (495) 665 9015</a></mj-text>
+        <mj-text font-family="Roboto, sans-serif" font-size="14px" padding-bottom="0"><a href="mailto:office@deluxspa.ru" style="color:#5e5343">office@deluxspa.ru</a></mj-text>
+        <mj-text font-family="Roboto, sans-serif" font-size="14px" padding-bottom="0"><a href="https://deluxspa.ru" style="color:#5e5343" target="_blank">https://deluxspa.ru</a></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top="0">
       <mj-column background-color="#ffffff">
-        <mj-image src="https://deluxspa.ru/images/logo.png" alt="ООО «Демидов Люкс СПА»" href="https://deluxspa.ru" padding-bottom="10px" padding-top="10px" width="100px" />
         <mj-divider border-width="1px" border-color="lightgrey" />
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Здравствуйте. Вы сделали заказ в интернет-магазине&nbsp;«Демидов&nbsp;Люкс&nbsp;СПА». Сумма заказа без учета доставки — 5 555 ₽. Мы свяжемся с вами в ближайшее время для уточнения деталей доставки.</mj-text>
         <mj-divider border-width="1px" border-color="lightgrey" />
@@ -34,16 +82,17 @@
         </mj-table>
       </mj-column>
     </mj-section>
-    <mj-section padding-top="0">
-      <mj-column background-color="#ffffff">
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по ссылке <a href="https://deluxspa.ru/order/">https://deluxspa.ru/order/</a>.</mj-text>
+    <mj-section padding-top="0" padding-bottom="20px">
+      <mj-column background-color="#ffffff" padding-top="10px" padding-bottom="10px">
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по ссылке <a href="https://deluxspa.ru/order/" target="_blank" style="color:#5e5343">https://deluxspa.ru/order/</a>.</mj-text>
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">По любым вопросам вы можете связаться с менеджером, обрабатывающим ваш заказ.</mj-text>
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Куртеев Дмитрий Андреевич<br /><a href="">+7 926 795-3097</a><br /><a href="">kurteev.d@yandex.ru</a></mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Куртеев Дмитрий Андреевич<br /><a href="" style="color:#5e5343">+7 926 795-3097</a><br /><a href="" style="color:#5e5343">kurteev.d@yandex.ru</a></mj-text>
       </mj-column>
     </mj-section>
-    <mj-section background-color="#ffffff">
-      <mj-column vertical-align="middle">
-        <mj-text align="center" color="#45474e" font-size="12px" line-height="16px" padding-bottom="0" padding-top="0" font-family="Roboto, sans-serif"><span style="font-weight: bold; font-size: 14px;">ООО «Демидов Люкс СПА»</span><br /><br />Производственная компания<br />ИНН 7751525117<br />ОГРН 5147746230297</mj-text>
+    <mj-section padding-top="0">
+      <mj-column>
+        <mj-text align="center" color="#45474e" font-size="12px" line-height="16px" padding-bottom="10px" padding-top="0" font-family="Roboto, sans-serif"><span style="font-weight: bold; font-size: 14px;">ООО «Демидов Люкс СПА»</span></mj-text>
+        <mj-text align="center" color="#45474e" font-size="12px" line-height="16px" padding-bottom="0" padding-top="0" font-family="Roboto, sans-serif">Производственная компания<br />ИНН 7751525117<br />ОГРН 5147746230297</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
