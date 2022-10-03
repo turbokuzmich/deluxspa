@@ -4,6 +4,9 @@ import { getItemById } from "../../../lib/helpers/catalog";
 import sequelize from "../../../lib/backend/sequelize";
 import amocrm from "../../../lib/backend/amo";
 import property from "lodash/property";
+import decline from "../../../lib/helpers/declension";
+import render from "../../../lib/backend/letters/render";
+import { format } from "../../../lib/helpers/numeral";
 
 export default async function checkout(req, res) {
   if (req.method !== "POST") {
@@ -23,40 +26,68 @@ export default async function checkout(req, res) {
   if (user === null) {
     return res.status(401).json({});
   }
+  try {
+    const [{ items, subtotal, quantity, itemsData, noteHtml }, amoUserId] =
+      await Promise.all([processCart(user), findOrCreateAmoUser(user)]);
 
-  // FIXME что-то можно и параллельно запустить
-  const { items, subtotal, letterHtml, noteHtml } = await processCart(user);
-  const amoUserId = await findOrCreateAmoUser(user);
-  const leadId = await createLead(letterHtml, noteHtml, subtotal, amoUserId);
+    const leadId = await createLead(
+      quantity,
+      itemsData,
+      noteHtml,
+      subtotal,
+      amoUserId
+    );
 
-  await createOrderAndCleanCart(items, leadId, user);
+    await createOrderAndCleanCart(items, leadId, user);
 
-  res.status(200).json({ orderId: leadId });
+    res.status(200).json({ orderId: leadId });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({});
+  }
 }
 
 async function processCart(user) {
   const items = await user.getCartItems();
 
-  // все эти рассчеты сделать за одну проходку
-  const quantity = items.reduce(
-    (overall, { quantity }) => overall + quantity,
-    0
+  const { noteItems, subtotal, quantity, itemsData } = items.reduce(
+    (result, item) => {
+      const { title, brief, volume, price } = getItemById(item.item_id);
+
+      result.quantity += item.quantity;
+      result.subtotal += price * item.quantity;
+
+      result.noteItems.push(
+        `${brief} «${title}» (${format(volume)} мл) — ${format(
+          item.quantity
+        )} x ${format(price)}₽`
+      );
+
+      result.itemsData.push({
+        brief,
+        title,
+        volume: {
+          value: format(volume),
+          unit: "мл",
+        },
+        quantity: format(item.quantity),
+        price: format(price),
+        total: format(price * item.quantity),
+      });
+
+      return result;
+    },
+    { noteItems: [], subtotal: 0, quantity: 0, itemsData: [] }
   );
-  const subtotal = items.reduce(
-    (subtotal, { item_id, quantity }) =>
-      subtotal + getItemById(item_id).price * quantity,
-    0
-  );
-  const orderItems = items.map((item) => {
-    const { title, brief, volume, price } = getItemById(item.item_id);
-    return `${brief} «${title}» (${volume} мл.) — ${item.quantity} x ${price}₽`;
-  });
 
   return {
     items,
+    quantity,
     subtotal,
-    letterHtml: `<p><strong>Позиций: ${quantity},<br />Подытог: ${subtotal}₽</strong></p>`,
-    noteHtml: ["В заказе:", ...orderItems, `Итого: ${subtotal}₽`].join("\n"),
+    itemsData,
+    noteHtml: ["В заказе:", ...noteItems, `Итого: ${format(subtotal)}₽`].join(
+      "\n"
+    ),
   };
 }
 
@@ -76,7 +107,27 @@ async function findOrCreateAmoUser(user) {
   return id;
 }
 
-async function createLead(letterHtml, noteHtml, subtotal, amoUserId) {
+async function createLead(quantity, itemsData, noteHtml, subtotal, amoUserId) {
+  const letterHtml = await render("new_order", {
+    order: {
+      size: quantity,
+      subtotal: format(subtotal),
+      text: {
+        positions: decline(quantity, ["позиция", "позиции", "позиций"]),
+      },
+      items: itemsData,
+    },
+    // FIXME нужно как-то устанавливать ответственного
+    responsible: {
+      name: "Каролина",
+      email: "office@deluxspa.ru",
+      phone: {
+        text: "+7 (495) 665 9015",
+        value: "74956659015",
+      },
+    },
+  });
+
   const [{ id }] = await amocrm.leads.create([
     {
       name: "Заказ в интернет-магазине DeluxSPA",
@@ -85,7 +136,7 @@ async function createLead(letterHtml, noteHtml, subtotal, amoUserId) {
       price: subtotal,
       custom_fields_values: [
         {
-          field_id: 1167053, // FIXME в константы
+          field_id: 1167443, // FIXME в константы
           values: [
             {
               value: letterHtml,

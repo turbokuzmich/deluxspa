@@ -54,7 +54,7 @@
     <mj-section padding-top="0">
       <mj-column background-color="#ffffff">
         <mj-divider border-width="1px" border-color="lightgrey" />
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Здравствуйте. Вы сделали заказ в <span style="white-space:nowrap">интернет-магазине</span>&nbsp;«Демидов&nbsp;Люкс&nbsp;СПА». Сумма заказа без учета доставки — <%= data.order.subtotal %>&nbsp;₽. Мы свяжемся с вами в ближайшее время для уточнения деталей доставки.</mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Здравствуйте. Вы сделали заказ в <span style="white-space:nowrap">интернет-магазине</span>&nbsp;«Демидов&nbsp;Люкс&nbsp;СПА». В заказе <%= data.order.size %> <%= data.order.text.positions %> на сумму без учета доставки — <%= data.order.subtotal %>&nbsp;₽. Мы свяжемся с вами в ближайшее время для уточнения деталей доставки.</mj-text>
         <mj-divider border-width="1px" border-color="lightgrey" />
         <mj-table>
           <tr>
@@ -75,14 +75,14 @@
             <td style="padding: 0 15px 10px 0; font-size: 14px"></td>
             <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"></td>
             <td style="padding: 0 0 10px 15px; text-align: right; font-size: 16px; vertical-align: top; font-weight: bold">Итого</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top;font-size: 16px; font-weight: bold"><%= data.order.subtotal %></td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top;font-size: 16px; font-weight: bold; white-space: nowrap"><%= data.order.subtotal %> ₽</td>
           </tr>
         </mj-table>
       </mj-column>
     </mj-section>
     <mj-section padding-top="0" padding-bottom="20px">
       <mj-column background-color="#ffffff" padding-top="10px" padding-bottom="10px">
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по <a href="https://deluxspa.ru/order/<%= data.order.id %>" target="_blank" style="color:#5e5343">ссылке</a>.</mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по <a href="https://deluxspa.ru/orders/" target="_blank" style="color:#5e5343">ссылке</a>.</mj-text>
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">По любым вопросам вы можете связаться с менеджером, обрабатывающим ваш заказ.</mj-text>
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px"><%= data.responsible.name %><br /><a href="tel:<%= data.responsible.phone.value %>" style="color:#5e5343"><%= data.responsible.phone.text %></a><br /><a href="mailto:<%= data.responsible.email %>" style="color:#5e5343"><%= data.responsible.email %></a></mj-text>
       </mj-column>
