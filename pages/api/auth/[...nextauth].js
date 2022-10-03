@@ -31,11 +31,10 @@ export const authOptions = {
 
         const result = await transport.sendMail({
           to: identifier,
-          from: provider.from,
-          sender: process.env.EMAIL_SENDER,
-          subject: `Авторизация на сайте DeluxSPA`,
+          from: process.env.EMAIL_SENDER,
+          subject: "Авторизация на сайте DeluxSPA",
           text: `Для авторизации на сайте DeluxSPA, пожалуйста, перейдите по ссылке ${url}`,
-          html: renderEmail("signup", { url }),
+          html: await renderEmail("signup", { url }),
         });
 
         const failed = result.rejected.concat(result.pending).filter(Boolean);

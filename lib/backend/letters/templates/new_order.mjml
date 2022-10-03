@@ -36,6 +36,8 @@
     </mj-style>
   </mj-head>
   <mj-body background-color="#F3F3F3">
+    <mj-section>
+    </mj-section>
     <mj-section padding-bottom="0" background-color="#ffffff">
       <mj-column vertical-align="middle" width="150px" padding-right="0">
         <mj-image src="https://deluxspa.ru/images/logo.png" alt="ООО «Демидов Люкс СПА»" href="https://deluxspa.ru" padding-bottom="10px" padding-top="10px" />
@@ -52,7 +54,7 @@
     <mj-section padding-top="0">
       <mj-column background-color="#ffffff">
         <mj-divider border-width="1px" border-color="lightgrey" />
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Здравствуйте. Вы сделали заказ в интернет-магазине&nbsp;«Демидов&nbsp;Люкс&nbsp;СПА». Сумма заказа без учета доставки — 5 555 ₽. Мы свяжемся с вами в ближайшее время для уточнения деталей доставки.</mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Здравствуйте. Вы сделали заказ в <span style="white-space:nowrap">интернет-магазине</span>&nbsp;«Демидов&nbsp;Люкс&nbsp;СПА». Сумма заказа без учета доставки — <%= data.order.subtotal %>&nbsp;₽. Мы свяжемся с вами в ближайшее время для уточнения деталей доставки.</mj-text>
         <mj-divider border-width="1px" border-color="lightgrey" />
         <mj-table>
           <tr>
@@ -61,32 +63,28 @@
             <th style="text-align: left; padding: 0 0 15px 15px; white-space: nowrap; font-family: Roboto, sans-serif; font-size: 16px">Цена, ₽</th>
             <th style="text-align: left; padding: 0 0 15px 15px; white-space: nowrap; font-family: Roboto, sans-serif; font-size: 16px">Сумма, ₽</th>
           </tr>
+          <% data.order.items.forEach(function(item) { %>
           <tr>
-            <td style="padding: 0 15px 10px 0; font-size: 14px">Масло для массажа и ухода за телом «Мятный бриз» (120 мл.)</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top">1</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top">350</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top">350</td>
+            <td style="padding: 0 15px 10px 0; font-size: 14px"><%= item.brief %> <span style="white-space:nowrap">«<%= item.title %>»</span> (<%= item.volume.value %>&nbsp;<%= item.volume.unit %>)</td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"><%= item.quantity %></td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"><%= item.price %></td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"><%= item.total %></td>
           </tr>
-          <tr>
-            <td style="padding: 0 15px 10px 0; font-size: 14px">Масло для массажа и ухода за телом «Солнечный апельсин» (120 мл.)</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top">2</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top">450</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top">900</td>
-          </tr>
+          <% }); %>
           <tr>
             <td style="padding: 0 15px 10px 0; font-size: 14px"></td>
             <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"></td>
             <td style="padding: 0 0 10px 15px; text-align: right; font-size: 16px; vertical-align: top; font-weight: bold">Итого</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top;font-size: 16px; font-weight: bold">1 250</td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top;font-size: 16px; font-weight: bold"><%= data.order.subtotal %></td>
           </tr>
         </mj-table>
       </mj-column>
     </mj-section>
     <mj-section padding-top="0" padding-bottom="20px">
       <mj-column background-color="#ffffff" padding-top="10px" padding-bottom="10px">
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по ссылке <a href="https://deluxspa.ru/order/" target="_blank" style="color:#5e5343">https://deluxspa.ru/order/</a>.</mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по <a href="https://deluxspa.ru/order/<%= data.order.id %>" target="_blank" style="color:#5e5343">ссылке</a>.</mj-text>
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">По любым вопросам вы можете связаться с менеджером, обрабатывающим ваш заказ.</mj-text>
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Куртеев Дмитрий Андреевич<br /><a href="" style="color:#5e5343">+7 926 795-3097</a><br /><a href="" style="color:#5e5343">kurteev.d@yandex.ru</a></mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px"><%= data.responsible.name %><br /><a href="tel:<%= data.responsible.phone.value %>" style="color:#5e5343"><%= data.responsible.phone.text %></a><br /><a href="mailto:<%= data.responsible.email %>" style="color:#5e5343"><%= data.responsible.email %></a></mj-text>
       </mj-column>
     </mj-section>
     <mj-section padding-top="0">

@@ -54,7 +54,7 @@
     <mj-section padding-top="0">
       <mj-column background-color="#ffffff" padding-bottom="10px">
         <mj-divider border-width="1px" border-color="lightgrey" />
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Для авторизации на сайте перейдите по <a href="<%= url %>" target="_blank" style="color:#5e5343">ссылке</a> (ссылка действительна в течение суток).</mj-text>
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Для авторизации на сайте перейдите по <a href="<%= data.url %>" target="_blank" style="color:#5e5343">ссылке</a> (ссылка действительна в течение суток).</mj-text>
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Если вы не собирались авторизоваться на сайте, либо письмо пришло к вам по ошибке, пожалуйста, просто проигнорируйте его.</mj-text>
       </mj-column>
     </mj-section>
