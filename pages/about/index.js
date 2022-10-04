@@ -11,6 +11,9 @@ import Layout from "../../components/layout";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import Image from "../../components/image";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 // <Typography paragraph>
 //   ООО «Демидов Люкс СПА» в{" "}
@@ -24,6 +27,9 @@ import Image from "../../components/image";
 //   .
 // </Typography>
 export default function About() {
+  const { locale } = useRouter();
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <>
@@ -63,21 +69,10 @@ export default function About() {
                 DeluxSPA
               </Typography>
               <Typography variant="h5" paragraph>
-                Профессиональный путь к красоте
+                {t("about-page-title")}
               </Typography>
               <Typography variant="subtitle1" paragraph>
-                Здравствуйте. Спасибо, что посетили наш сайт. Мы&nbsp;заботимся
-                о&nbsp;наших клиентах и&nbsp;всегда рады предложить продукцию
-                самого высокого качества по&nbsp;приятным, умеренным ценам.
-                Компания ООО &laquo;Демидов Люкс СПА&raquo; основана
-                в&nbsp;октябре 2014 года и&nbsp;внесена в&nbsp;международный
-                каталог Московского Экспортного Центра (МЭЦ). Качество продукции
-                и&nbsp;отзывы профессионалов являются приоритетом в&nbsp;нашей
-                работе. Производство и&nbsp;офисы расположены в&nbsp;городе
-                Москва и&nbsp;ближайшем Подмосковье, а&nbsp;нашу
-                продукцию&nbsp;Вы можете приобрести у&nbsp;наших партнёров, или
-                обратившись напрямую к&nbsp;нам. Всегда открыты
-                к&nbsp;предложениям и&nbsp;сотрудничеству. Пишите нам на&nbsp;
+                {t("about-page-text")}{" "}
                 <Link href="mailto:office@deluxspa.ru" passHref>
                   <A>office@deluxspa.ru</A>
                 </Link>
@@ -85,13 +80,13 @@ export default function About() {
                 <Link href="https://wa.me/79263853751" passHref>
                   <A>WhatsApp</A>
                 </Link>{" "}
-                или{" "}
+                {t("about-page-or")}{" "}
                 <Link href="https://t.me/neon_beard" passHref>
                   <A>Telegram</A>
                 </Link>
-                , а&nbsp;также звоните{" "}
-                <Link href="tel:+74956659015">
-                  <A>напрямую</A>
+                , {t("about-page-call")}{" "}
+                <Link href="tel:+74956659015" passHref>
+                  <A>{t("about-page-directly")}</A>
                 </Link>
                 .
               </Typography>
@@ -99,7 +94,7 @@ export default function About() {
             <Box
               sx={{
                 pt: {
-                  md: 8,
+                  md: locale === "ru" ? 8 : 4,
                 },
                 pb: {
                   xs: 4,
@@ -116,53 +111,53 @@ export default function About() {
                 sx={{ textTransform: "uppercase" }}
                 paragraph
               >
-                Реквизиты
+                {t("bank-requisites")}
               </Typography>
               <Typography variant="h6" paragraph>
-                ООО «Демидов Люкс СПА»
+                {t("company-full-name")}
               </Typography>
               <TableContainer>
                 <Table size="small">
                   <TableBody>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        р/c
+                        {t("payment-account")}
                       </TableCell>
                       <TableCell align="right">40702810200000000401</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        Кор/с
+                        {t("correspondent-account")}
                       </TableCell>
                       <TableCell align="right">30101810200000000700</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        БИК
+                        {t("bik")}
                       </TableCell>
                       <TableCell align="right">044525700</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        ИНН
+                        {t("inn")}
                       </TableCell>
                       <TableCell align="right">7751525117</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        КПП
+                        {t("kpp")}
                       </TableCell>
                       <TableCell align="right">775001001</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        ОКПО
+                        {t("okpo")}
                       </TableCell>
                       <TableCell align="right">42943661</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        ОГРН
+                        {t("ogrn")}
                       </TableCell>
                       <TableCell align="right">5147746230297</TableCell>
                     </TableRow>
@@ -175,4 +170,12 @@ export default function About() {
       </>
     </Layout>
   );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

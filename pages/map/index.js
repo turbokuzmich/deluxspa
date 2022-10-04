@@ -7,9 +7,12 @@ import Layout from "../../components/layout";
 import A from "@mui/material/Link";
 import { map as retailers } from "../../constants";
 import { useTheme } from "@mui/material/styles";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export default function DeluxSpaMap() {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const mapsContainerRef = useRef();
   const map = useRef();
@@ -96,21 +99,17 @@ export default function DeluxSpaMap() {
             sx={{ textTransform: "uppercase" }}
             paragraph
           >
-            Где купить
+            {t("menu-map")}
           </Typography>
-          <Typography paragraph>
-            Нашу продукцию вы можете приобрести, позвонив нам по телефону
-          </Typography>
+          <Typography paragraph>{t("map-call")}</Typography>
           <Typography variant="h5" paragraph>
             <A href="tel:+74956659015">+7 (495) 665 9015</A>
           </Typography>
-          <Typography paragraph>или написав на</Typography>
+          <Typography paragraph>{t("map-email")}</Typography>
           <Typography variant="h5" paragraph>
             <A href="mailto:office@deluxspa.ru">office@deluxspa.ru</A>
           </Typography>
-          <Typography paragraph>
-            а также в одном из магазинов наших партнеров.
-          </Typography>
+          <Typography paragraph>{t("map-partner")}</Typography>
           <Box
             ref={mapsContainerRef}
             sx={{
@@ -156,4 +155,12 @@ function renderRetailerBalloonBody({
   parts.push(urlsString);
 
   return parts.join("");
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

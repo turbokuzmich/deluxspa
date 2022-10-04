@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import * as Color from "color";
 import { getCategoriesWithItems } from "../helpers/catalog";
 import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "next-i18next";
 
 const gridConfig = [
   (theme) => ({
@@ -87,6 +88,7 @@ const gridConfig = [
 ];
 
 export default function CategoriesPane() {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const backgroundColors = useMemo(() =>
@@ -107,7 +109,7 @@ export default function CategoriesPane() {
         }}
         paragraph
       >
-        ваше время — бесценно!
+        {t("priceless-time")}
       </Typography>
       <Box
         sx={(theme) => ({

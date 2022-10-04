@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import LocalShipping from "@mui/icons-material/LocalShipping";
 import Card from "@mui/icons-material/CardMembership";
 import Verified from "@mui/icons-material/Verified";
+import { useTranslation } from "next-i18next";
 
 const iconProps = {
   fontSize: "inherit",
@@ -17,21 +18,23 @@ const advantages = [
   {
     id: "global",
     icon: <Verified {...iconProps} />,
-    title: "Высокое качество",
+    title: "advantages-high-quality",
   },
   {
     id: "shipping",
     icon: <LocalShipping {...iconProps} />,
-    title: "Доставка по РФ и СНГ",
+    title: "advantages-delivery",
   },
   {
     id: "warranty",
     icon: <Card {...iconProps} />,
-    title: "Продукция сертифицирована",
+    title: "advantages-certified",
   },
 ];
 
 export default function Advantages() {
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ pb: 2, pt: 2, backgroundColor: "common.white" }}>
       <Container>
@@ -59,7 +62,7 @@ export default function Advantages() {
               {icon}
               <Box sx={{ ml: 1 }}>
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                  {title}
+                  {t(title)}
                 </Typography>
               </Box>
             </Grid>

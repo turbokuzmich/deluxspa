@@ -18,26 +18,23 @@ import Link from "next/link";
 import get from "lodash/get";
 import Price from "../../../components/price";
 import { compositionItems, consumptionTitles } from "../../../constants";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   getItemById,
   getItemCategoriesById,
   getItemFirstPreviewImage,
-  getItemAuxiliaryItemsById,
+  getItemAuxiliaryItemsIdsById,
 } from "../../../helpers/catalog";
 
-export default function Item() {
-  const {
-    push,
-    query: { id },
-  } = useRouter();
+export default function Item({ id, auxiliaryIds }) {
+  const { push } = useRouter();
 
   const item = useMemo(() => getItemById(id), [id]);
   const categories = useMemo(() => getItemCategoriesById(id).slice(0, 3), [id]);
+  const auxiliary = useMemo(() => auxiliaryIds.map(getItemById), [id]);
 
   const [variantIndex, setVariantIndex] = useState(0);
-  const variant = item
-    ? item.variants.byId[item.variants.list[variantIndex]]
-    : {};
+  const variant = item.variants.byId[item.variants.list[variantIndex]];
 
   const onGoToMap = useCallback(() => push(`/map`), []);
   const onChangeVolume = useCallback(
@@ -49,114 +46,108 @@ export default function Item() {
     <Layout>
       <>
         <Submenu />
-        {item ? (
-          <Container
+        <Container
+          sx={{
+            mb: 4,
+            gap: {
+              md: 6,
+            },
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
+          }}
+        >
+          <Box
             sx={{
-              mb: 4,
-              gap: {
-                md: 6,
+              width: {
+                md: "50%",
               },
+              flexShrink: 0,
+              flexGrow: 0,
+              pt: 4,
               display: "flex",
-              flexDirection: {
-                xs: "column",
-                md: "row",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              fontSize: "120px",
+            }}
+          >
+            <Image src={variant.image} sx={{ maxWidth: "100%" }} />
+          </Box>
+          <Box
+            sx={{
+              width: {
+                md: "50%",
+              },
+              flexShrink: 0,
+              flexGrow: 0,
+              pt: {
+                xs: 2,
+                md: 4,
               },
             }}
           >
-            <Box
+            <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
+              {item.title}
+            </Typography>
+            <Typography variant="h6" paragraph>
+              {item.brief}
+            </Typography>
+            <RadioGroup
+              name="volume"
+              onChange={onChangeVolume}
+              value={variant.volume}
               sx={{
-                width: {
-                  md: "50%",
-                },
-                flexShrink: 0,
-                flexGrow: 0,
-                pt: 4,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-                fontSize: "120px",
+                mb: 1,
               }}
             >
-              <Image src={variant.image} sx={{ maxWidth: "100%" }} />
-            </Box>
-            <Box
-              sx={{
-                width: {
-                  md: "50%",
-                },
-                flexShrink: 0,
-                flexGrow: 0,
-                pt: {
-                  xs: 2,
-                  md: 4,
-                },
-              }}
-            >
-              <Typography
-                variant="h4"
-                sx={{ textTransform: "uppercase" }}
-                paragraph
-              >
-                {item.title}
-              </Typography>
-              <Typography variant="h6">{item.brief}</Typography>
-              <RadioGroup
-                name="volume"
-                onChange={onChangeVolume}
-                value={variant.volume}
-                sx={{
-                  mb: 1,
-                }}
-              >
-                {item.variants.list.map((variant) => {
-                  const { price, volume } = item.variants.byId[variant];
+              {item.variants.list.map((variant) => {
+                const { price, volume } = item.variants.byId[variant];
 
-                  return (
-                    <FormControlLabel
-                      key={variant}
-                      value={volume}
-                      control={<Radio />}
-                      label={
-                        <span>
-                          <Number value={volume} /> мл. — <Price sum={price} />
-                        </span>
-                      }
-                    />
-                  );
-                })}
-              </RadioGroup>
-              <Typography paragraph>
-                <Tooltip
-                  title="Узнайте, где ближайших магазин"
-                  placement="right"
-                  arrow
+                return (
+                  <FormControlLabel
+                    key={variant}
+                    value={volume}
+                    control={<Radio />}
+                    label={
+                      <span>
+                        <Number value={volume} /> мл. — <Price sum={price} />
+                      </span>
+                    }
+                  />
+                );
+              })}
+            </RadioGroup>
+            <Typography paragraph>
+              <Tooltip
+                title="Узнайте, где ближайших магазин"
+                placement="right"
+                arrow
+              >
+                <Button
+                  onClick={onGoToMap}
+                  startIcon={<ShoppingCartIcon />}
+                  variant="outlined"
+                  size="large"
                 >
-                  <Button
-                    onClick={onGoToMap}
-                    startIcon={<ShoppingCartIcon />}
-                    variant="outlined"
-                    size="large"
-                  >
-                    Где можно купить?
-                  </Button>
-                </Tooltip>
-              </Typography>
-              <Categories categories={categories} />
-              <Consumption item={item} />
-              <Composition item={item} />
-              <Description item={item} />
-              <Auxiliary item={item} />
-            </Box>
-          </Container>
-        ) : null}
+                  Где можно купить?
+                </Button>
+              </Tooltip>
+            </Typography>
+            <Categories categories={categories} />
+            <Consumption item={item} />
+            <Composition item={item} />
+            <Description item={item} />
+            <Auxiliary auxiliary={auxiliary} />
+          </Box>
+        </Container>
       </>
     </Layout>
   );
 }
 
-function Auxiliary({ item }) {
-  const auxiliary = useMemo(() => getItemAuxiliaryItemsById(item.id), [item]);
-
+function Auxiliary({ auxiliary }) {
   return (
     <>
       <Typography variant="h6">Похожие товары</Typography>
@@ -376,4 +367,14 @@ function Composition({ item }) {
       </Typography>
     </>
   );
+}
+
+export async function getServerSideProps({ locale, params: { id } }) {
+  return {
+    props: {
+      id,
+      auxiliaryIds: getItemAuxiliaryItemsIdsById(id),
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

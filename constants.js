@@ -14,24 +14,24 @@ export const auxColors = [
 
 export const mainMenu = [
   {
-    title: "О нас",
+    title: "menu-about",
     link: "/about",
   },
   {
-    title: "Продукция",
+    title: "menu-catalog",
     link: "/catalog",
   },
   {
-    title: "Акции",
+    title: "menu-promo",
     link: "/promo",
     hidden: true,
   },
   {
-    title: "Где купить",
+    title: "menu-map",
     link: "/map",
   },
   {
-    title: "Ингредиенты",
+    title: "menu-ingredients",
     link: "/ingredients",
     hidden: true,
   },

@@ -3,6 +3,7 @@ import Layout from "../components/layout";
 import Carousel from "../components/carousel";
 import CategoriesPane from "../components/categories";
 import Advantages from "../components/advantages";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 // import Brands from "../components/brands";
 
 export default function Home() {
@@ -15,3 +16,11 @@ export default function Home() {
   );
 }
 // <Brands />
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

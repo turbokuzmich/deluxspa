@@ -5,8 +5,11 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
+import { useTranslation } from "next-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -58,12 +61,9 @@ export default function Footer() {
               },
             }}
           >
-            Продукция из&nbsp;лучших компонентов по&nbsp;привлекательной
-            стоимости.
+            {t("footer-text-top")}
           </Typography>
-          <Typography>
-            Delux SPA&nbsp;&mdash; лучшее от&nbsp;природы.
-          </Typography>
+          <Typography>{t("footer-text-bottom")}</Typography>
         </Box>
         <Box
           sx={{
@@ -77,12 +77,12 @@ export default function Footer() {
         >
           <Typography>
             <Link href="/promo" passHref>
-              <A data-variant="footer">Акции</A>
+              <A data-variant="footer">{t("menu-promo")}</A>
             </Link>
           </Typography>
           <Typography>
             <Link href="/cooperation" passHref>
-              <A data-variant="footer">Сотрудничество</A>
+              <A data-variant="footer">{t("menu-cooperation")}</A>
             </Link>
           </Typography>
         </Box>
@@ -99,12 +99,12 @@ export default function Footer() {
         >
           <Typography paragraph>
             <Link href="/promo" passHref>
-              <A data-variant="footer">Акции</A>
+              <A data-variant="footer">{t("menu-promo")}</A>
             </Link>
           </Typography>
           <Typography paragraph>
             <Link href="/cooperation" passHref>
-              <A data-variant="footer">Сотрудничество</A>
+              <A data-variant="footer">{t("menu-cooperation")}</A>
             </Link>
           </Typography>
         </Box>

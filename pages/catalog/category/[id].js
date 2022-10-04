@@ -5,18 +5,14 @@ import Items from "../../../components/items";
 import Submenu from "../../../components/submenu";
 import Category from "../../../components/category";
 import generativeBackground from "../../../helpers/background";
-import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   getCategoryById,
   getCategoryColorById,
   getCategoryParentById,
 } from "../../../helpers/catalog";
 
-export default function CategoryView() {
-  const {
-    query: { id },
-  } = useRouter();
-
+export default function CategoryView({ id }) {
   const category = useMemo(() => getCategoryById(id), [id]);
   const parent = useMemo(() => getCategoryParentById(id), [id]);
   const color = useMemo(() => getCategoryColorById(id), [id]);
@@ -24,34 +20,39 @@ export default function CategoryView() {
 
   return (
     <Layout>
-      {id ? (
-        <>
-          <Category
-            {...category}
+      <Category
+        {...category}
+        sx={{
+          background: generativeBackground(color),
+          position: "relative",
+          category: {
+            pt: "80px",
+          },
+        }}
+        addonBefore={
+          <Submenu
+            selected={id}
+            parentSelected={get(parent, "id")}
             sx={{
-              background: generativeBackground(color),
-              position: "relative",
-              category: {
-                pt: "80px",
-              },
+              backgroundColor: "transparent",
+              position: "absolute",
+              width: "100%",
+              zIndex: 1,
+              top: 0,
             }}
-            addonBefore={
-              <Submenu
-                selected={id}
-                parentSelected={get(parent, "id")}
-                sx={{
-                  backgroundColor: "transparent",
-                  position: "absolute",
-                  width: "100%",
-                  zIndex: 1,
-                  top: 0,
-                }}
-              />
-            }
           />
-          <Items items={items} />
-        </>
-      ) : null}
+        }
+      />
+      <Items items={items} />
     </Layout>
   );
+}
+
+export async function getServerSideProps({ locale, params: { id } }) {
+  return {
+    props: {
+      id,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

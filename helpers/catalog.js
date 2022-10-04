@@ -1,6 +1,7 @@
 import _ from "lodash";
 import get from "lodash/get";
 import memoize from "lodash/memoize";
+import property from "lodash/property";
 import { auxColors, catalogTree, catalogItems } from "../constants";
 
 export const getCategoriesWithItems = memoize(() => {
@@ -80,11 +81,12 @@ export const getItemCategoriesById = memoize((id) =>
 
 // FIXME для каждого товара нужно выбрать сопутствующий и
 // дописать в constants; сейчас рандомно выбирается 2 товара
-export const getItemAuxiliaryItemsById = memoize((itemId) =>
+export const getItemAuxiliaryItemsIdsById = memoize((itemId) =>
   _(catalogItems)
     .filter(({ id }) => id !== itemId)
     .shuffle()
     .take(2)
+    .map(property("id"))
     .value()
 );
 

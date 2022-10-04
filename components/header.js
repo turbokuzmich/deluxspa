@@ -8,13 +8,16 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import LangSwitcher from "./langswitcher";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
 import { useTheme } from "@emotion/react";
 import { useCallback, useState, useMemo } from "react";
+import { useTranslation } from "next-i18next";
 
 export default function Header() {
+  const { t } = useTranslation();
   const { pathname, push } = useRouter();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -177,11 +180,23 @@ export default function Header() {
               return (
                 <Link key={link} href={link} passHref>
                   <A variant="h6" underline="none" sx={styles}>
-                    {title}
+                    {t(title)}
                   </A>
                 </Link>
               );
             })}
+        </Box>
+        <Box
+          sx={{
+            flexGrow: 1,
+            justifyContent: "flex-end",
+            display: {
+              xs: "none",
+              md: "flex",
+            },
+          }}
+        >
+          <LangSwitcher />
         </Box>
       </Container>
     </Box>
