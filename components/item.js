@@ -7,13 +7,12 @@ import Image from "./image";
 import Number from "./number";
 import { catalogItems } from "../constants";
 import Price from "./price";
+import { useTranslation } from "next-i18next";
 import { getItemFirstPreviewImage } from "../helpers/catalog";
 
 export default function Item({ id }) {
+  const { t } = useTranslation();
   const item = useMemo(() => catalogItems.find((item) => item.id === id), []);
-  if (!item) {
-    console.log(id);
-  }
 
   return (
     <Link href={`/catalog/item/${item.id}`} passHref>
@@ -104,7 +103,7 @@ export default function Item({ id }) {
         >
           {item.title}
         </Typography>
-        <Typography variant="subtitle2">{item.brief}</Typography>
+        <Typography variant="subtitle2">{t(item.brief)}</Typography>
         <Box
           sx={{
             mt: 2,
@@ -128,7 +127,7 @@ export default function Item({ id }) {
                 {index < item.variants.list.length - 1 ? " / " : null}
               </span>
             ))}{" "}
-            мл.
+            {t("catalog-unit-ml")}
           </Typography>
         </Box>
       </A>

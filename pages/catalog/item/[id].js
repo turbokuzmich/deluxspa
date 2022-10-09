@@ -1,4 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
+import { useTranslation } from "next-i18next";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -27,6 +28,7 @@ import {
 } from "../../../helpers/catalog";
 
 export default function Item({ id, auxiliaryIds }) {
+  const { t } = useTranslation();
   const { push } = useRouter();
 
   const item = useMemo(() => getItemById(id), [id]);
@@ -92,7 +94,7 @@ export default function Item({ id, auxiliaryIds }) {
               {item.title}
             </Typography>
             <Typography variant="h6" paragraph>
-              {item.brief}
+              {t(item.brief)}
             </Typography>
             <RadioGroup
               name="volume"
@@ -283,6 +285,8 @@ function Description({ item }) {
 }
 
 function Categories({ categories = [] }) {
+  const { t } = useTranslation();
+
   if (categories.length === 0) {
     return null;
   }
@@ -290,13 +294,15 @@ function Categories({ categories = [] }) {
   return (
     <>
       <Typography variant="h6">
-        {categories.length === 1 ? "Категория товара" : "Категории товара"}
+        {categories.length === 1
+          ? t("catalog-category")
+          : t("catalog-categories")}
       </Typography>
       <Typography component="ul" paragraph>
         {categories.map((category) => (
           <Typography key={category.id} component="li">
             <Link href={`/catalog/category/${category.id}`} passHref>
-              <A>{category.title}</A>
+              <A>{t(category.title)}</A>
             </Link>
           </Typography>
         ))}
@@ -306,17 +312,19 @@ function Categories({ categories = [] }) {
 }
 
 function Consumption({ item: { consumption } }) {
+  const { t } = useTranslation();
+
   if (!consumption) {
     return null;
   }
 
   return (
     <>
-      <Typography variant="h6">Расход на процедуру</Typography>
+      <Typography variant="h6">{t("catalog-cost-per-procedure")}</Typography>
       <Typography component="ul" paragraph>
         {["common", "back"].map((id) => (
           <Typography key={id} component="li">
-            {consumptionTitles[id]}: {consumption[id]}
+            {t(consumptionTitles[id])}: {consumption[id]}
           </Typography>
         ))}
       </Typography>
@@ -325,6 +333,7 @@ function Consumption({ item: { consumption } }) {
 }
 
 function Composition({ item }) {
+  const { t } = useTranslation();
   const composition = get(item, "composition", []);
 
   const { push } = useRouter();
@@ -345,7 +354,7 @@ function Composition({ item }) {
   // {compositionItems[id].brief ? (
   return (
     <>
-      <Typography variant="h6">Состав</Typography>
+      <Typography variant="h6">{t("catalog-composition")}</Typography>
       <Typography component="ul" paragraph>
         {composition.map((id) => (
           <Typography key={id} component="li">

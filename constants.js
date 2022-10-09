@@ -168,15 +168,15 @@ export const compositionItemsGridOrder = [
 ];
 
 export const consumptionTitles = {
-  common: "общий массаж всего тела",
-  back: "массаж спины",
+  common: "consumption-common",
+  back: "consumption-back",
 };
 
 const oils = [
   {
     id: "oil_mint_breeze",
     title: "Мятный бриз",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "wheat_oil", "mint_oil"],
     consumption: {
       common: "20–30 мл",
@@ -211,7 +211,7 @@ const oils = [
   {
     id: "oil_bio",
     title: "Биологическое",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "wheat_oil", "vitamin_e"],
     consumption: {
       common: "20–30 мл",
@@ -247,7 +247,7 @@ const oils = [
   {
     id: "oil_lemongrass",
     title: "Лемонграсс",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "wheat_oil", "vitamin_e", "lemongrass_oil"],
     consumption: {
       common: "20–30 мл",
@@ -283,7 +283,7 @@ const oils = [
   {
     id: "oil_bubble_gum",
     title: "Баббл гам",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
     consumption: {
       common: "20–25 мл",
@@ -319,7 +319,7 @@ const oils = [
   {
     id: "oil_extra_slim",
     title: "Экстра слим",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: [
       "almond_oil",
       "maize_oil",
@@ -358,7 +358,7 @@ const oils = [
   {
     id: "oil_lemon_cake",
     title: "Лимонный кекс",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
     consumption: {
       common: "20–25 мл",
@@ -426,7 +426,7 @@ const oils = [
   {
     id: "solar_orange",
     title: "Солнечный апельсин",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "almond_oil", "wheat_oil", "essential_oil"],
     description: [
       "Сладкий, с&nbsp;терпкой нотой, удивительный аромат налитых солнцем апельсинов, подарит незабываемое удовольствие, перенесёт в&nbsp;цветущие, фруктовые сады и&nbsp;напомнит о&nbsp;лете.",
@@ -451,7 +451,7 @@ const oils = [
   {
     id: "kenyan_coffee",
     title: "Кенийский кофе",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "co2_extract", "arabica_coffee"],
     description: [
       "Кенийская саванна на&nbsp;закате солнца, танец пламени костра и&nbsp;пение цикад очень чутко дополняется ароматом лучшего кенийского кофе, заботливо обжаренного на&nbsp;открытом огне. В&nbsp;аромате &laquo;Кенийский кофе&raquo; раскрываются яркие ноты натурального кофе, пробуждающие энергию, дарящие радость от&nbsp;изысканного аромата. Уникальный аромат не&nbsp;оставит равнодушным истинных ценителей и&nbsp;гурманов.",
@@ -470,7 +470,7 @@ const oils = [
   {
     id: "mantra",
     title: "Мантра",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "wheat_oil"],
     description: [
       "Глубокий теплый аромат обволакивает ваше сознание, очищает&nbsp;ум, расслабляет, успокаивает. Пряный древесно-цветочный букет cтимулирует ясность ума, усиливает способность сосредоточиться на&nbsp;деталях. Обладает противовоспалительным действием, терапевтический эффект.&nbsp;100% натуральные эфирные масла и&nbsp;экстракты растений.",
@@ -489,7 +489,7 @@ const oils = [
   {
     id: "citrus_freshness",
     title: "Цитрусовая свежесть",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "essential_oil"],
     description: [
       "Яркий коктейльный аромат литсеи кубебы, Лайма и&nbsp;пикантной корицы раскрывается в&nbsp;свежести цитрусов и&nbsp;специях Азии, искрясь шипучими брызгами и&nbsp;ароматом колы. В&nbsp;меру сладкий, свежий и&nbsp;пикантный аромат понравится всем без исключения. Поднять настроение не&nbsp;так уж&nbsp;и&nbsp;сложно. Цитрусовая Свежесть&nbsp;&mdash; свежее удовольствие!",
@@ -508,7 +508,7 @@ const oils = [
   {
     id: "orange_cinnamon",
     title: "Апельсин и корица",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "essential_oil"],
     description: [
       "Сочный апельсин и&nbsp;пряная корица&nbsp;&mdash; яркое сочетание ароматов, которое поможет снять усталость и&nbsp;улучшить настроение. Классическое, но&nbsp;редкое сочетание в&nbsp;эфиромасличных букетах. Отлично подходит для работы в&nbsp;антицеллюлитных и&nbsp;слим-программах.",
@@ -527,7 +527,7 @@ const oils = [
   {
     id: "extra_slim_ultimate",
     title: "Экстра слим алтимейт",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: [
       "almond_oil",
       "wheat_oil",
@@ -651,7 +651,7 @@ const oils = [
   {
     id: "oil_lime_cinnamon",
     title: "Лайм и корица",
-    brief: "масло для массажа и ухода за телом",
+    brief: "catalog-brief-massage-body-oil",
     composition: [],
     description: [
       "Сочный и&nbsp;пряный аромат лайма и&nbsp;пикантной корицы, настоящий коктейль из&nbsp;цитрусов и&nbsp;специй Азии. В&nbsp;меру сладкий, свежий и&nbsp;пикантный аромат, понравится всем без исключения. Цитрусовая свежесть&nbsp;&mdash; свежее удовольствие!",

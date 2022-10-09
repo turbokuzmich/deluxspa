@@ -54,5 +54,15 @@
   "catalog-category-oil-aromatherapy": "Essential oil",
   "catalog-category-oil-aromatherapy-description": "Organic essential oils for aromacology and the preparation of their own essential oil cocktails, as well as for the creation of craft and selective perfumes. Selected varietal oils from well-known manufacturers of high-quality and natural esters.",
   "catalog-category-home-aromatherapy": "For home",
-  "catalog-category-home-aromatherapy-description": "Aura and sensorics in balanced essential oil aroma cocktails, diffusers, sprays for rooms and laundry will create a unique handwriting and become a distinctive feature of your salon, as well as fill your home with harmony."
+  "catalog-category-home-aromatherapy-description": "Aura and sensorics in balanced essential oil aroma cocktails, diffusers, sprays for rooms and laundry will create a unique handwriting and become a distinctive feature of your salon, as well as fill your home with harmony.",
+
+  "catalog-brief-massage-body-oil": "massage oil for body",
+  "catalog-unit-ml": "ml",
+  "catalog-category": "Catalog category",
+  "catalog-categories": "Catalog categories",
+  "catalog-cost-per-procedure": "Cost per procedure",
+  "catalog-composition": "Composition",
+
+  "consumption-common": "body massage",
+  "consumption-back": "back massage"
 }
