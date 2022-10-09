@@ -9,6 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useTranslation } from "next-i18next";
 import { catalogTree } from "../constants";
 import { getCategoryById } from "../helpers/catalog";
 import { isTouch as detectTouch } from "../helpers/features";
@@ -47,6 +48,7 @@ function HoverSubmenu({ parentSelected, sx = {} }) {
 }
 
 function HoverSubmenuItem({ id, title, selected }) {
+  const { t } = useTranslation();
   const { push } = useRouter();
 
   const popupState = usePopupState({
@@ -99,7 +101,7 @@ function HoverSubmenuItem({ id, title, selected }) {
         }}
         {...bindHover(popupState)}
       >
-        {title}
+        {t(title)}
       </Typography>
       <HoverMenu {...bindMenu(popupState)}>
         {getCategoryById(id).categories.map((category) => (
@@ -109,7 +111,7 @@ function HoverSubmenuItem({ id, title, selected }) {
             onClick={onCategory}
             sx={{ textTransform: "uppercase", minWidth: 300 }}
           >
-            {category.title}
+            {t(category.title)}
           </MenuItem>
         ))}
       </HoverMenu>
@@ -119,6 +121,7 @@ function HoverSubmenuItem({ id, title, selected }) {
 
 function TouchSubmenu({ selected = "", sx = {} }) {
   const { push } = useRouter();
+  const { t } = useTranslation();
 
   const onCategory = useCallback(
     (event) => {
@@ -136,7 +139,7 @@ function TouchSubmenu({ selected = "", sx = {} }) {
           <ListSubheader key={category.id}>{category.title}</ListSubheader>,
           ...category.categories.map((category) => (
             <MenuItem key={category.id} value={category.id}>
-              {category.title}
+              {t(category.title)}
             </MenuItem>
           )),
         ],
@@ -156,9 +159,7 @@ function TouchSubmenu({ selected = "", sx = {} }) {
     >
       <Container>
         <FormControl variant="standard" fullWidth>
-          <InputLabel id="submenu-label">
-            Выберите категорию продукции
-          </InputLabel>
+          <InputLabel id="submenu-label">{t("choose-category")}</InputLabel>
           <Select
             labelId="submenu-label"
             value={selected}

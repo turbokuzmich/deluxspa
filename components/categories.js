@@ -212,7 +212,7 @@ export default function CategoriesPane() {
                       textTransform: "uppercase",
                     }}
                   >
-                    {category.title}
+                    {t(category.title)}
                   </Typography>
                 </Box>
               </A>

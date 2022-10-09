@@ -2,6 +2,7 @@ import get from "lodash/get";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from "next-i18next";
 
 const defaultSx = {
   category: {},
@@ -43,6 +44,7 @@ export default function Category({
   description,
   sx = defaultSx,
 }) {
+  const { t } = useTranslation();
   const { category: categorySx, ...containerSx } = sx;
 
   return (
@@ -94,7 +96,7 @@ export default function Category({
             }}
             paragraph
           >
-            {title}
+            {t(title)}
           </Typography>
           {description
             ? description.map((line, index) => (
@@ -102,7 +104,7 @@ export default function Category({
                   key={index}
                   variant="h6"
                   paragraph={index < description.length - 1}
-                  dangerouslySetInnerHTML={{ __html: line }}
+                  dangerouslySetInnerHTML={{ __html: t(line) }}
                 />
               ))
             : null}

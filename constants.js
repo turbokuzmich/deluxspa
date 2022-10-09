@@ -899,17 +899,15 @@ export const catalogItems = [...oils, ...bodyScrubs];
 export const catalogTree = [
   {
     id: "massage_oil",
-    title: "Массажные масла",
+    title: "catalog-category-massage-oil",
     type: "category",
     categories: [
       {
         id: "body_massage_oil",
-        title: "Масла для тела и массажа",
+        title: "catalog-category-body-massage-oil",
         parent: "massage_oil",
         image: "/images/categories/body_massage_oil.png",
-        description: [
-          "Органолептические свойства и&nbsp;структура наших масел приятно удивят профессионалов и&nbsp;эстетов органических уходов и&nbsp;профессиональных практиков массажа и&nbsp;SPA. Созданные профессиональными аромакологами, эликсиры без сомнения найдут отклик у&nbsp;профессилналов и&nbsp;сделают вашу работу полезнее и&nbsp;ароматнее.",
-        ],
+        description: ["catalog-category-body-massage-oil-description"],
         type: "category",
         items: [
           "oil_mint_breeze",
@@ -930,23 +928,19 @@ export const catalogTree = [
       },
       {
         id: "face_massage_oil",
-        title: "Масла для лица",
+        title: "catalog-category-face-massage-oil",
         parent: "massage_oil",
         image: "/images/categories/face_massage_oil.png",
-        description: [
-          "Превосходное скольжение, отличная впитываемость и&nbsp;отсутствие плёнки на&nbsp;поверхности кожи при использовании ультра-лёгких питательных масел для лица. Профессиональные продукты Delux SPA подойдут, как для проведения процедур массажа, так и&nbsp;ухода за&nbsp;кожей лица. Уникальные рецептуры для красоты и&nbsp;молодости.",
-        ],
+        description: ["catalog-category-face-massage-oil-description"],
         type: "category",
         items: ["lavender", "floral", "evening_primrose"],
       },
       {
         id: "hair_massage_oil",
-        title: "Масла для роста волос и блеска",
+        title: "catalog-category-hair-massage-oil",
         parent: "massage_oil",
         image: "/images/categories/hair_massage_oil.png",
-        description: [
-          "Для здорового внешнего вида волосы нуждаются в&nbsp;постоянном питании и&nbsp;уходе. Для решения данных задач появилась серия средств на&nbsp;основе масел жожоба и&nbsp;ультралёгких растительных и&nbsp;эфирных масел для курсового, переодического и&nbsp;ежедневного применения. Потрясающий вид и&nbsp;отличное состояние ваших волос уже после первых применений масел для волос от&nbsp;Delux SPA.",
-        ],
+        description: ["catalog-category-hair-massage-oil-description"],
         type: "category",
         items: ["oil_lemon_pepper", "patchouli_mint"],
       },
@@ -954,7 +948,7 @@ export const catalogTree = [
   },
   {
     id: "scrub",
-    title: "Скрабы",
+    title: "catalog-category-scrub",
     description: [
       "Линейка натуральных солевых и&nbsp;кофейных органических скрабов с&nbsp;жожоба и&nbsp;эфирными маслами для превосходного ухода за&nbsp;телом и&nbsp;подготовки проведения уходовых SPA-процедур превосходного результата&nbsp;&mdash; показатель высокого уровня заботы о&nbsp;ваших коиентах.",
       "Правильно подобранная дисперсия частиц, питательные масла и&nbsp;натуральные растительные экстракты&nbsp;&mdash; всё&nbsp;то, что вы&nbsp;искали для лучших результатов.",
@@ -963,24 +957,22 @@ export const catalogTree = [
     categories: [
       {
         id: "scrub_for_face",
-        title: "Скрабы для лица",
+        title: "catalog-category-face-scrub",
         parent: "scrub",
         image: "/images/categories/scrub_for_face.png",
         description: [
-          "Наше лицо, как и&nbsp;наше тело, для того, чтобы выглядеть молодо и&nbsp;ухожено, требует регулярного очищения от&nbsp;ороговевших частиц кожи и&nbsp;загрязнений.",
-          "Органический скраб для лица обладает мелкодисперсной структурой и&nbsp;пластичностью, что делает процедуру эксфолиации удобной и&nbsp;экономичной: достаточно лишь щепотки пасты и&nbsp;40&nbsp;секунд для тщательнлй и&nbsp;аккуратной профедуры скрабирования для сияния и&nbsp;здоровья кожи.",
+          "catalog-category-face-scrub-description-1",
+          "catalog-category-face-scrub-description-2",
         ],
         type: "category",
         items: [],
       },
       {
         id: "scrub_for_body",
-        title: "Скрабы для тела",
+        title: "catalog-category-body-scrub",
         parent: "scrub",
         image: "/images/categories/scrub_for_body.png",
-        description: [
-          "Потрясающая серия солевых и&nbsp;кофейных скрабов различной дисперсности для ухода за&nbsp;телом и&nbsp;подготовки к&nbsp;SPA-процедурам. Широкий спектр действия: от&nbsp;питания до&nbsp;детоксикации, борьбы с&nbsp;лишним весом и&nbsp;восстановления после стрессов и&nbsp;тяжёлых нагрузок.",
-        ],
+        description: ["catalog-category-body-scrub-description"],
         type: "category",
         items: bodyScrubsIds,
       },
@@ -988,28 +980,24 @@ export const catalogTree = [
   },
   {
     id: "aromatherapy",
-    title: "Ароматерапия",
+    title: "catalog-category-aromatherapy",
     type: "category",
     categories: [
       {
         id: "essential_oil",
-        title: "Эфирные масла",
-        parent: "aromatherapy",
+        title: "catalog-category-oil-aromatherapy",
+        parent: "catalog-category-oil-aromatherapy",
         image: "/images/categories/essential_oil.png",
-        description: [
-          "Органические эфирные масла для аромакологии и&nbsp;приготовления собственных эфиромасличных коктейлей, а&nbsp;также для создания крафтовой и&nbsp;селективной парфюмерии. Отобранные сортовые масла от&nbsp;известных производителей качественных и&nbsp;натуральных эфиров.",
-        ],
+        description: ["catalog-category-oil-aromatherapy-description"],
         type: "category",
         items: [],
       },
       {
         id: "aromatherapy_for_home",
-        title: "Ароматерапия для дома",
+        title: "catalog-category-home-aromatherapy",
         parent: "aromatherapy",
         image: "/images/categories/aromatherapy_for_home.png",
-        description: [
-          "Аура и&nbsp;сенсорика в&nbsp;сбалансированных эфиромасличных арома-коктейлях, диффузорах, спреях для помещений и&nbsp;белья создаст неповторимый почерк и&nbsp;станет отличительной особенностью вашего салона, а&nbsp;также наполнит гармонией ваш дом.",
-        ],
+        description: ["catalog-category-home-aromatherapy-description"],
         type: "category",
         items: [],
       },
