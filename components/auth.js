@@ -37,7 +37,7 @@ export function AuthDialog({ open, handleClose }) {
   const onClose = useCallback(() => handleClose(), [handleClose]);
 
   const onSubmit = useCallback(async ({ email }) => {
-    const { ok } = await signIn("email", {
+    const { ok } = await signIn("queue", {
       email,
       redirect: false,
     });

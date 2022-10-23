@@ -38,6 +38,11 @@ async function getOrders(user, statuses) {
   const ordersFromDB = await user.getOrders({
     include: sequelize.models.OrderItem,
   });
+
+  if (ordersFromDB.length === 0) {
+    return [];
+  }
+
   const leadsIds = ordersFromDB.map(property("amoLeadId"));
   const ordersFromBBByLeadId = fromPairs(
     ordersFromDB.map((order) => [order.amoLeadId, order])
