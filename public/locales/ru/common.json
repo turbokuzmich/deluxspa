@@ -58,6 +58,9 @@
 
   "catalog-brief-massage-body-oil": "масло для массажа и ухода за телом",
   "catalog-unit-ml": "мл",
+  "catalog-unit-l": "л",
+  "catalog-unit-g": "г",
+  "catalog-unit-kg": "кг",
   "catalog-category": "Категория продукции",
   "catalog-categories": "Категории продукции",
   "catalog-cost-per-procedure": "Расход на процедуру",

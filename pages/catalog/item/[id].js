@@ -22,6 +22,7 @@ import { compositionItems, consumptionTitles } from "../../../constants";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   getItemById,
+  formatCapacity,
   getItemCategoriesById,
   getItemFirstPreviewImage,
   getItemAuxiliaryItemsIdsById,
@@ -105,7 +106,9 @@ export default function Item({ id, auxiliaryIds }) {
               }}
             >
               {item.variants.list.map((variant) => {
+                const { unit } = item;
                 const { price, volume } = item.variants.byId[variant];
+                const [capacity, unitKey] = formatCapacity(volume, unit);
 
                 return (
                   <FormControlLabel
@@ -114,7 +117,8 @@ export default function Item({ id, auxiliaryIds }) {
                     control={<Radio />}
                     label={
                       <span>
-                        <Number value={volume} /> мл. — <Price sum={price} />
+                        <Number value={capacity} /> {t(unitKey)} —{" "}
+                        <Price sum={price} />
                       </span>
                     }
                   />

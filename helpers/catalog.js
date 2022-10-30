@@ -2,7 +2,7 @@ import _ from "lodash";
 import get from "lodash/get";
 import memoize from "lodash/memoize";
 import property from "lodash/property";
-import { auxColors, catalogTree, catalogItems } from "../constants";
+import { auxColors, catalogTree, catalogItems, capacities } from "../constants";
 
 export const getCategoriesWithItems = memoize(() => {
   return catalogTree.reduce(
@@ -102,3 +102,11 @@ export const getItemFirstPreviewImage = memoize((itemId) => {
 
   return index > -1 ? variants.byId[variants.list[index]].image : null;
 });
+
+export const formatCapacity = (capacity, unit) => {
+  const capacityAsNumber = parseInt(capacity);
+
+  return capacityAsNumber < 1000
+    ? [capacityAsNumber, capacities[unit][0]]
+    : [capacityAsNumber / 1000, capacities[unit][1]];
+};

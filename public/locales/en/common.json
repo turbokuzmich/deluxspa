@@ -58,6 +58,9 @@
 
   "catalog-brief-massage-body-oil": "massage oil for body",
   "catalog-unit-ml": "ml",
+  "catalog-unit-l": "l",
+  "catalog-unit-g": "g",
+  "catalog-unit-kg": "kg",
   "catalog-category": "Catalog category",
   "catalog-categories": "Catalog categories",
   "catalog-cost-per-procedure": "Cost per procedure",

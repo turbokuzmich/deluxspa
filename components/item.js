@@ -5,10 +5,12 @@ import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import Image from "./image";
 import Number from "./number";
-import { catalogItems } from "../constants";
+import { catalogItems, capacities } from "../constants";
 import Price from "./price";
 import { useTranslation } from "next-i18next";
-import { getItemFirstPreviewImage } from "../helpers/catalog";
+import { getItemFirstPreviewImage, formatCapacity } from "../helpers/catalog";
+import first from "lodash/first";
+import last from "lodash/last";
 
 export default function Item({ id }) {
   const { t } = useTranslation();
@@ -121,16 +123,39 @@ export default function Item({ id }) {
             <Price sum={item.variants.byId[item.variants.list[0]].price} />
           </Typography>
           <Typography align="right" variant="subtitle2">
-            {item.variants.list.map((volume, index) => (
-              <span key={volume}>
-                <Number value={volume} />
-                {index < item.variants.list.length - 1 ? " / " : null}
-              </span>
-            ))}{" "}
-            {t("catalog-unit-ml")}
+            <Capacity item={item} />
           </Typography>
         </Box>
       </A>
     </Link>
+  );
+}
+
+function Capacity({ item }) {
+  const { t } = useTranslation();
+
+  const [firstCapacity, firstUnit] = formatCapacity(
+    first(item.variants.list),
+    item.unit
+  );
+
+  if (item.variants.list.length === 1) {
+    return (
+      <>
+        <Number value={firstCapacity} /> {t(firstUnit)}
+      </>
+    );
+  }
+
+  const [lastCapacity, lastUnit] = formatCapacity(
+    last(item.variants.list),
+    item.unit
+  );
+
+  return (
+    <>
+      <Number value={firstCapacity} /> {t(firstUnit)} –{" "}
+      <Number value={lastCapacity} /> {t(lastUnit)}
+    </>
   );
 }
