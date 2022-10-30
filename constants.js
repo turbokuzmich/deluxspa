@@ -33,7 +33,6 @@ export const mainMenu = [
   {
     title: "menu-ingredients",
     link: "/ingredients",
-    hidden: true,
   },
 ];
 
