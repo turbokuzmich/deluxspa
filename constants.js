@@ -1072,6 +1072,20 @@ export const map = [
     urls: ["https://kosmetikprofi.ru/"],
   },
   {
+    title: "ООО «Демидов Люкс СПА»",
+    fullAddress:
+      "Москва, поселение Московский, деревня Картмазово, Центральная улица, 48А",
+    coordinates: [37.398198, 55.615141],
+    phones: [
+      {
+        number: "+7 (495) 665-90-15",
+        type: "phone",
+      },
+    ],
+    workingTimeText: "понедельник-пятница с 10 до 18 часов",
+    urls: ["https://deluxspa.ru"],
+  },
+  /*{
     title: "ООО «Бьюти-Онлайн»",
     fullAddress:
       "Москва, Волгоградский пр-т, д. 32, стр. 8 (ТЦ Техно), 3й этаж, комн. 23",
@@ -1088,8 +1102,7 @@ export const map = [
     ],
     workingTimeText: "понедельник-пятница с 10 до 18",
     urls: ["https://www.beauty-online.ru/"],
-  },
-  {
+  }*/ {
     title: "ООО «СПА Косметикс»",
     fullAddress: "Казань, улица Бондаренко, 26, кабинет 302",
     coordinates: [49.105552, 55.82042],
