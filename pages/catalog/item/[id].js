@@ -154,6 +154,8 @@ export default function Item({ id, auxiliaryIds }) {
 }
 
 function Auxiliary({ auxiliary }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Typography variant="h6">Похожие товары</Typography>
@@ -213,7 +215,7 @@ function Auxiliary({ auxiliary }) {
                     flexShrink: 0,
                   }}
                 >
-                  {item.brief}
+                  {t(item.brief)}
                 </Typography>
                 <Typography
                   variant="h6"
