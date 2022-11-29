@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import Box from "@mui/material/Box";
 import Layout from "../../components/layout";
 import Typography from "@mui/material/Typography";
@@ -151,11 +150,7 @@ function Content({ id, title, brief, description }) {
   );
 }
 
-export default function Ingredient() {
-  const {
-    query: { id },
-  } = useRouter();
-
+export default function Ingredient({ id }) {
   const ingredient = compositionItems[id];
 
   return (
@@ -178,4 +173,12 @@ export default function Ingredient() {
       </Container>
     </Layout>
   );
+}
+
+export async function getServerSideProps({ params: { id } }) {
+  return {
+    props: {
+      id,
+    },
+  };
 }

@@ -364,7 +364,7 @@ function Composition({ item }) {
       <Typography component="ul" paragraph>
         {composition.map((id) => (
           <Typography key={id} component="li">
-            {false ? (
+            {compositionItems[id].brief ? (
               <Tooltip
                 title={compositionItems[id].brief}
                 placement="right"

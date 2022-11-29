@@ -91,7 +91,9 @@ export const getItemAuxiliaryItemsIdsById = memoize((itemId) =>
 );
 
 export const getItemsByCompositionId = memoize((compositionId) =>
-  catalogItems.filter(({ composition }) => composition.includes(compositionId))
+  catalogItems.filter(({ composition = [] }) =>
+    composition.includes(compositionId)
+  )
 );
 
 export const getItemFirstPreviewImage = memoize((itemId) => {
