@@ -10,23 +10,24 @@ const defaultSx = {
 
 const categoryStyleOverride = {
   body_massage_oil: {
+    backgroundPosition: "80% 70%",
     backgroundSize: "24%",
   },
   face_massage_oil: {
-    backgroundPosition: "100% 0%",
-    backgroundSize: "contain",
+    backgroundPosition: "80% 71%",
+    backgroundSize: "27%",
   },
   hair_massage_oil: {
-    backgroundPosition: "100% 0%",
-    backgroundSize: "contain",
+    backgroundPosition: "80% 71%",
+    backgroundSize: "27%",
   },
   scrub_for_face: {
-    backgroundSize: "contain",
     backgroundPosition: "100% 100%",
+    backgroundSize: "contain",
   },
   scrub_for_body: {
+    backgroundPosition: "80% 86%",
     backgroundSize: "28%",
-    backgroundPosition: "80% -76%",
   },
   essential_oil: {
     backgroundPosition: "80% 74%",
