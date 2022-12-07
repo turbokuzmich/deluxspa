@@ -2,6 +2,7 @@ import identity from "lodash/identity";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { deliveryCompanies } from "../../constants";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -15,34 +16,46 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Price from "../../components/price";
 import DeliveryPointsDialog from "../../components/deliverypoints";
+import CircularProgress from "@mui/material/CircularProgress";
 import delivery, {
+  getDeliveryCity,
   getDeliveryType,
   getDeliveryPoint,
   getDeliveryAddress,
+  getDeliveryCityName,
   getGeocodingStatus,
   getCalculationStatus,
-  getDeliverySuggestions,
+  getDeliveryCitySuggestions,
   getDeliveryCalculationResult,
+  getDeliveryAddressSuggestions,
 } from "../../store/slices/delivery";
 
 export default function Delivery() {
   const dispatch = useDispatch();
 
+  const city = useSelector(getDeliveryCity);
   const type = useSelector(getDeliveryType);
   const point = useSelector(getDeliveryPoint);
   const address = useSelector(getDeliveryAddress);
-  const suggestions = useSelector(getDeliverySuggestions);
+  const cityName = useSelector(getDeliveryCityName);
   const geocodingStatus = useSelector(getGeocodingStatus);
   const calculationStatus = useSelector(getCalculationStatus);
   const calculationResult = useSelector(getDeliveryCalculationResult);
+  const addressSuggestions = useSelector(getDeliveryAddressSuggestions);
+  const citySuggestions = useSelector(getDeliveryCitySuggestions);
 
   const onMapsReady = useCallback(
     () => dispatch(delivery.actions.apiLoaded()),
     []
   );
 
-  const onInputChange = useCallback(
-    (_, newInput) => dispatch(delivery.actions.changeInput(newInput)),
+  const onAddressInputChange = useCallback(
+    (_, newInput) => dispatch(delivery.actions.changeAddressInput(newInput)),
+    []
+  );
+
+  const onCityInputChange = useCallback(
+    (_, newInput) => dispatch(delivery.actions.changeCityInput(newInput)),
     []
   );
 
@@ -52,13 +65,12 @@ export default function Delivery() {
     []
   );
 
+  const onCitySelected = useCallback((_, option) => {
+    dispatch(delivery.actions.setCity(option ? option : null));
+  }, []);
+
   const onTypeChange = useCallback(
     (_, newType) => dispatch(delivery.actions.setType(newType)),
-    []
-  );
-
-  const onCalculate = useCallback(
-    () => dispatch(delivery.actions.calculate()),
     []
   );
 
@@ -91,77 +103,95 @@ export default function Delivery() {
               >
                 калькулятор доставки
               </Typography>
-              <Autocomplete
-                disablePortal
-                autoComplete
-                value={address}
-                options={suggestions}
-                filterOptions={identity}
-                onInputChange={onInputChange}
-                onChange={onAddressSelected}
-                isOptionEqualToValue={isOptionEqualToValue}
-                sx={{ mb: 2 }}
-                renderOption={(props, option) => (
-                  <li {...props}>{option.label}</li>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Укажите адрес доставки"
-                    fullWidth
-                  />
-                )}
-              />
-              {geocodingStatus === "ok" ? (
-                <>
-                  <Typography variant="h5" paragraph>
-                    Выберите способ получения
-                  </Typography>
-                  <RadioGroup
-                    onChange={onTypeChange}
-                    value={type}
-                    sx={{ mb: 2 }}
-                  >
-                    <FormControlLabel
-                      value="home"
-                      control={<Radio />}
-                      label="Привезти домой"
+              <Typography variant="h5" paragraph>
+                Выберите способ получения
+              </Typography>
+              <RadioGroup onChange={onTypeChange} value={type} sx={{ mb: 2 }}>
+                <FormControlLabel
+                  value="store"
+                  control={<Radio />}
+                  label="В постамат (СДЭК, Pickpoint)"
+                />
+                <FormControlLabel
+                  value="home"
+                  control={<Radio />}
+                  label="В руки (только СДЭК)"
+                />
+              </RadioGroup>
+
+              {type === "home" ? (
+                <Autocomplete
+                  disablePortal
+                  autoComplete
+                  value={address}
+                  filterOptions={identity}
+                  onInputChange={onAddressInputChange}
+                  onChange={onAddressSelected}
+                  options={addressSuggestions}
+                  isOptionEqualToValue={isOptionEqualToValue}
+                  sx={{ mb: 2 }}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.value}>
+                      {option.label}
+                    </li>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Укажите адрес доставки"
+                      fullWidth
                     />
-                    <FormControlLabel
-                      value="store"
-                      control={<Radio />}
-                      label="Заберу из постамата"
+                  )}
+                />
+              ) : null}
+
+              {type === "store" ? (
+                <Autocomplete
+                  disablePortal
+                  autoComplete
+                  value={cityName}
+                  filterOptions={identity}
+                  onInputChange={onCityInputChange}
+                  onChange={onCitySelected}
+                  options={citySuggestions}
+                  isOptionEqualToValue={isOptionEqualToValue}
+                  sx={{ mb: 2 }}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.value}>
+                      {option.label}
+                    </li>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Укажите город доставки"
+                      fullWidth
                     />
-                  </RadioGroup>
-                  {type === "store" ? (
-                    <>
-                      {point ? (
-                        <Typography paragraph>
-                          Выбран ПВЗ «{point.name}» (
-                          {point.location.address_full})
-                        </Typography>
-                      ) : null}
-                      <Typography paragraph>
-                        <Button
-                          color="warning"
-                          variant="contained"
-                          onClick={onShowDialog}
-                        >
-                          {point ? "Поменять ПВЗ" : "Выбрать ближайших ПВЗ"}
-                        </Button>
-                      </Typography>
-                    </>
-                  ) : null}
+                  )}
+                />
+              ) : null}
+              {type === "store" && city ? (
+                <Typography paragraph>
                   <Button
-                    sx={{ mb: 2 }}
-                    color="primary"
+                    color="warning"
                     variant="contained"
-                    onClick={onCalculate}
                     disabled={calculationStatus === "calculating"}
+                    onClick={onShowDialog}
                   >
-                    Рассчитать
+                    {point ? "Поменять ПВЗ" : "Выбрать ближайших ПВЗ"}
                   </Button>
+                </Typography>
+              ) : null}
+              {type === "store" && point ? (
+                <>
+                  <Typography paragraph>
+                    Выбран ПВЗ компании {deliveryCompanies[point.type].name} «
+                    {point.name}» ({point.address})
+                  </Typography>
                 </>
+              ) : null}
+              {calculationStatus === "calculating" ? (
+                <CircularProgress size={20} />
               ) : null}
               {calculationStatus === "ok" ? (
                 <>

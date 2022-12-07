@@ -24,7 +24,7 @@ export default function BoxBerry() {
   const onBoxberryOpen = useCallback(() => {
     boxberry.open(
       "boxberryCallback",
-      "1$BlnaQq8xtErb_CztdD4Bfv5XuFB5CfSk",
+      "1$BlnaQq8xtErb_CztdD4Bfv5XuFB5CfSk", // FIXME удолить и воспользоваться .local.env
       "",
       "",
       1000,

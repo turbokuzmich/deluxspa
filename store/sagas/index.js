@@ -1,18 +1,24 @@
+import { getSession } from "next-auth/react";
 import get from "lodash/get";
 import api from "../../lib/frontend/api";
 import cartSlice from "../slices/cart";
 import ordersSlice from "../slices/orders";
 import deliverySlice, {
+  getDeliveryCity,
   getDeliveryType,
+  getDeliveryPoint,
   getDeliveryAddress,
   getDeliveryCoordinates,
+  getDeliveryPointsStatus,
 } from "../slices/delivery";
 import {
   all,
   call,
   put,
+  race,
   take,
   spawn,
+  cancel,
   select,
   takeLatest,
   takeLeading,
@@ -20,9 +26,13 @@ import {
 } from "redux-saga/effects";
 
 export function* fetchCartSaga() {
-  const { data } = yield call([api, api.get], "/cart");
+  const session = yield call(getSession);
 
-  yield put(cartSlice.actions.fetchComplete(data));
+  if (session !== null) {
+    const { data } = yield call([api, api.get], "/cart");
+
+    yield put(cartSlice.actions.fetchComplete(data));
+  }
 }
 
 export function* changeItemSaga({ payload }) {
@@ -49,14 +59,42 @@ export function* fetchOrders() {
 
 export function* fetchAddressSuggestions({ payload: input }) {
   if (input.length === 0) {
-    return yield put(deliverySlice.actions.setSuggestions([]));
+    return yield put(deliverySlice.actions.setAddressSuggestions([]));
   }
 
-  const suggestions = yield call([ymaps, ymaps.suggest], input);
+  const addressSuggestions = yield call([ymaps, ymaps.suggest], input);
 
   yield put(
-    deliverySlice.actions.setSuggestions(
-      suggestions.map(({ displayName: label, value }) => ({ label, value }))
+    deliverySlice.actions.setAddressSuggestions(
+      addressSuggestions.map(({ displayName: label, value }) => ({
+        label,
+        value,
+      }))
+    )
+  );
+}
+
+export function* fetchCitySuggestions({ payload: input }) {
+  if (input.length === 0) {
+    return yield put(deliverySlice.actions.setCitySuggestions([]));
+  }
+
+  const { data: citySuggestions } = yield call(
+    [api, api.get],
+    "/delivery/cities",
+    {
+      params: { city: input },
+    }
+  );
+
+  yield put(
+    deliverySlice.actions.setCitySuggestions(
+      citySuggestions.map(({ id, name, region, latitude, longitude }) => ({
+        value: id,
+        label: `${name} (${region})`,
+        latitude,
+        longitude,
+      }))
     )
   );
 }
@@ -89,14 +127,35 @@ export function* geocodeAddress() {
 
 export function* calculateDelivery() {
   const type = yield select(getDeliveryType);
+  const deliveryPoint = yield select(getDeliveryPoint);
+
+  if (type === "store" && !deliveryPoint) {
+    // FIXME поругаться
+  }
+
   const address = yield select(getDeliveryAddress);
   const coordinates = yield select(getDeliveryCoordinates);
 
-  const response = yield call([api, api.post], "/delivery/calculate", {
+  const baseParams = {
     type,
     address,
     coordinates,
-  });
+  };
+
+  const calculationParams =
+    type === "store"
+      ? {
+          ...baseParams,
+          company: deliveryPoint.type,
+          point_id: deliveryPoint.externalId,
+        }
+      : baseParams;
+
+  const response = yield call(
+    [api, api.post],
+    "/delivery/calculate",
+    calculationParams
+  );
 
   const sum = get(response, "data.total_sum", null);
   const min = get(response, "data.period_min", null);
@@ -105,15 +164,43 @@ export function* calculateDelivery() {
   yield put(deliverySlice.actions.setCalculationResult({ sum, min, max }));
 }
 
-export function* fetchDeliveryPoints() {
-  yield take(deliverySlice.actions.showDialog);
-
+function* fetchDeliveryPoints() {
   yield put(deliverySlice.actions.setDeliveryPointsStatus("fetching"));
 
-  const { data } = yield call([api, api.get], "/delivery/points");
+  const { value } = yield select(getDeliveryCity);
+  const { data } = yield call([api, api.get], "/delivery/points", {
+    params: { city: value },
+  });
 
   yield put(deliverySlice.actions.setDeliveryPoints(data));
   yield put(deliverySlice.actions.setDeliveryPointsStatus("ok"));
+}
+
+export function* watchDeliveryPoints() {
+  let task = null;
+
+  while (true) {
+    const { open, city } = yield race({
+      open: take(deliverySlice.actions.showDialog),
+      city: take(deliverySlice.actions.setCity),
+    });
+
+    if (city) {
+      if (task && task.isRunning()) {
+        yield cancel(task);
+      }
+
+      continue;
+    }
+
+    if (open) {
+      const status = yield select(getDeliveryPointsStatus);
+
+      if (!task || status === "initial") {
+        task = yield spawn(fetchDeliveryPoints);
+      }
+    }
+  }
 }
 
 export default function* rootSaga() {
@@ -122,13 +209,18 @@ export default function* rootSaga() {
     takeLatest(ordersSlice.actions.fetchOrders, fetchOrders),
     takeLatest(cartSlice.actions.fetch, fetchCartSaga),
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
-    debounce(300, deliverySlice.actions.changeInput, fetchAddressSuggestions),
+    debounce(
+      300,
+      deliverySlice.actions.changeAddressInput,
+      fetchAddressSuggestions
+    ),
+    debounce(300, deliverySlice.actions.changeCityInput, fetchCitySuggestions),
     takeLatest(deliverySlice.actions.setAddress, geocodeAddress),
-    takeLatest(deliverySlice.actions.calculate, calculateDelivery),
+    takeLatest(deliverySlice.actions.setDeliveryPoint, calculateDelivery),
   ]);
 
   // load delivery points on first modal open
-  yield spawn(fetchDeliveryPoints);
+  yield spawn(watchDeliveryPoints);
 
   // load cart items on start
   yield put(cartSlice.actions.fetch());

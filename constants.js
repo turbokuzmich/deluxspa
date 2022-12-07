@@ -1106,3 +1106,14 @@ export const map = [
     urls: [],
   },
 ];
+
+export const deliveryCompanies = {
+  cdek: {
+    name: "СДЭК",
+    color: "#00B33C",
+  },
+  pickpoint: {
+    name: "Pickpoint",
+    color: "#3b3b3b",
+  },
+};

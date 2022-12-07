@@ -1,0 +1,153 @@
+<mjml>
+  <mj-head>
+    <mj-style inline="inline">
+      #outlook a {
+      padding: 0;
+      }
+
+      table,
+      td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+      }
+
+      img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+      }
+
+      p {
+      display: block;
+      margin: 13px 0;
+      }
+
+      table.mj-full-width-mobile {
+      width: 100% !important;
+      }
+
+      td.mj-full-width-mobile {
+      width: auto !important;
+      }
+      .hero-background {
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url(https://deluxspa.ru/images/about.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: 50% 100%;
+      }
+      .brand-background {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      }
+      .brand-neon {
+      background-image: linear-gradient(to right, rgba(0, 46, 104, 0.4), rgba(0, 0, 0, 0.4)), url(https://cdn.shopify.com/s/files/1/0260/4810/2497/t/6/assets/6f0ab3fb5eff--Classico-Barbershop-1-3ad924.jpg?v=1641914358);
+      }
+      .brand-sporthit {
+      background-image: linear-gradient(to right, rgba(0, 71, 110, 0.4), rgba(0, 71, 110, 0.2)), url(http://cdn.cnn.com/cnnnext/dam/assets/161107153758-atlas-mountain-ski-1.jpg);
+      }
+      .brand-yoko {
+      background-image: linear-gradient(to right, rgba(110, 0, 110, 0.3), rgba(110, 0, 110, 0.2)), url(https://img1.goodfon.ru/wallpaper/nbig/f/b8/woman-red-hair-happy-young-smile-portrait-beautiful-smiling.jpg);
+      }
+			.footer {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, rgba(203, 160, 77, 0.6) 0, rgba(238, 220, 186, 1) 10%, rgba(238, 220, 186, 0));
+      }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#fbf7f0">
+    <mj-section background-color="#ffffff">
+      <mj-column vertical-align="middle">
+        <mj-image src="https://deluxspa.ru/images/logo.png" alt="ООО «Демидов Люкс СПА»" href="https://deluxspa.ru/en" padding-bottom="0px" padding-top="10px" width="150px"></mj-image>
+        <mj-text align="center" padding-bottom="10px" color="#5e5343" text-transform="uppercase" font-family="Roboto, sans-serif">best from nature</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section css-class="hero-background">
+      <mj-column vertical-align="middle">
+        <mj-text align="center" font-size="30px" line-height="40px" color="#fff" padding-bottom="20px" padding-top="45px" font-family="Roboto, sans-serif" font-weight="100" text-transform="uppercase">Premium-quality cosmetics<br />under your brand</mj-text>
+        <mj-button align="center" background-color="transparent" border="solid 1px #fff" color="#fff" border-radius="24px" href="{triggerlink:12665}" font-family="Roboto, sans-serif" padding-bottom="45px" padding-top="10px" font-size="18px" line-height="30px" text-transform="uppercase" css-class="hero-button">learn more</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding-bottom="0">
+      <mj-column>
+        <mj-text font-size="20px" line-height="32px" align="center" color="#5e5343" font-family="Roboto, sans-serif" font-style="italic" padding-top="20px" padding-bottom="30px">Demidov Lux SPA LLC offers manufacturing cosmetics with high amounts of natural organic components for both men and women under your brand. Our technologists will develop unique formulation according to your request.</mj-text>
+        <mj-divider border-width="1px" border-color="rgba(105, 85, 48, 0.4)" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding-top="10px" padding-bottom="0">
+      <mj-column>
+        <mj-text font-size="30px" line-height="40px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-top="10px" padding-bottom="10px" text-transform="uppercase">why us</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+      <mj-column>
+        <mj-text font-size="22px" line-height="26px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Experience</mj-text>
+        <mj-text font-size="16px" line-height="22px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Extensive expertise in cosmetology</mj-text>
+      </mj-column>
+      <mj-column>
+        <mj-text font-size="22px" line-height="26px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">People</mj-text>
+        <mj-text font-size="16px" line-height="22px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Only highly&nbsp;qualified technologists</mj-text>
+      </mj-column>
+      <mj-column>
+        <mj-text font-size="22px" line-height="26px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Business</mj-text>
+        <mj-text font-size="16px" line-height="22px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Successful cosmetology brands</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-divider border-width="1px" border-color="rgba(105, 85, 48, 0.4)" />
+        <mj-text font-size="30px" line-height="40px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-top="30px" padding-bottom="0" text-transform="uppercase">our brands</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section css-class="brand-background brand-neon" padding-top="0" padding-bottom="0">
+      <mj-column padding-left="30px" padding-right="30px">
+        <mj-text font-size="30px" line-height="40px" color="#fff" font-family="Roboto, sans-serif" padding-top="40px" padding-bottom="0" text-transform="uppercase">NEON BEARD</mj-text>
+        <mj-text font-size="20px" line-height="32px" color="#fff" font-weight="100" font-family="Roboto, sans-serif" padding-top="20px" padding-bottom="20px">The brand was launched in 2018 and produces must-have cosmetics for modern men – cleansing gels, facial scrubs, hyaluronic creams and plastic oils.</mj-text>
+        <mj-button align="left" background-color="transparent" color="#fff" border-radius="24px" href="https://neon-beard.ru" target="_blank" font-family="Roboto, sans-serif" padding-bottom="40px" padding-top="10px" font-size="16px" text-transform="uppercase" border="solid 1px #fff" inner-padding="10px 50px">visit site</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section css-class="brand-background brand-sporthit" padding-top="0" padding-bottom="0">
+      <mj-column padding-left="30px" padding-right="30px">
+        <mj-text font-size="30px" line-height="40px" color="#fff" font-family="Roboto, sans-serif" padding-top="40px" padding-bottom="0" text-transform="uppercase">SPORT HIT</mj-text>
+        <mj-text font-size="20px" line-height="32px" color="#fff" font-weight="100" font-family="Roboto, sans-serif" padding-top="20px" padding-bottom="20px">The brand started in 2020 and aims to provide active people with easy to use and highly effective cosmetic products which can be used in during training.</mj-text>
+        <mj-button align="left" background-color="transparent" color="#fff" border-radius="24px" href="https://sporthit.info" target="_blank" font-family="Roboto, sans-serif" padding-bottom="40px" padding-top="10px" font-size="16px" text-transform="uppercase" border="solid 1px #fff" inner-padding="10px 50px">visit site</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section css-class="brand-background brand-yoko" padding-top="0" padding-bottom="0">
+      <mj-column padding-left="30px" padding-right="30px">
+        <mj-text font-size="30px" line-height="40px" color="#fff" font-family="Roboto, sans-serif" padding-top="40px" padding-bottom="0" text-transform="uppercase">YOKO</mj-text>
+        <mj-text font-size="20px" line-height="32px" color="#fff" font-family="Roboto, sans-serif" padding-top="20px" padding-bottom="20px" font-weight="100">Yoko is the brand of modern technological cosmetics with great variety of natural components which forms a quintessence of organic and technology.</mj-text>
+        <mj-button align="left" background-color="transparent" color="#fff" border-radius="24px" href="https://yoko24.ru" target="_blank" font-family="Roboto, sans-serif" padding-bottom="40px" padding-top="10px" font-size="16px" text-transform="uppercase" border="solid 1px #fff" inner-padding="10px 50px">visit site</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-text font-size="30px" line-height="40px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-top="30px" padding-bottom="0" text-transform="uppercase">our offer</mj-text>
+        <mj-text font-size="20px" line-height="32px" align="center" color="#5e5343" font-family="Roboto, sans-serif" padding-top="0" padding-bottom="0">We can produce cosmetics for certain prices</mj-text>
+        <mj-button align="center" background-color="#806534" color="#fff" border-radius="34px" href="https://yoko24.ru" target="_blank" font-family="Roboto, sans-serif" padding-bottom="40px" padding-top="20px" font-size="18px" text-transform="uppercase" border="solid 1px #fff" inner-padding="20px 50px">download prices</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section css-class="footer" padding-top="0px" padding-bottom="0" full-width="full-width">
+      <mj-column padding-top="40px" padding-bottom="40px" width="65%">
+        <mj-text font-size="24px" line-height="28px" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Demidov Lux SPA LLC</mj-text>
+        <mj-text font-size="16px" line-height="26px" padding-bottom="10px" font-family="Roboto, sans-serif" color="#5e5343">Manufacturing company<br />ITN 7751525117<br />OGRN 5147746230297</mj-text>
+
+      </mj-column>
+      <mj-column padding-top="40px" padding-bottom="40px" width="35%">
+        <mj-text font-size="20px" line-height="28px" color="#5e5343" font-family="Roboto, sans-serif" padding-bottom="0">Contact us</mj-text>
+        <mj-text font-size="16px" line-height="26px" padding-bottom="10px" font-family="Roboto, sans-serif">
+          <a href="tel:+79252353751" style="text-decoration: none; color: #5e5343">+7 (925) 235-37-51</a><br /><a href="tel:+79263853751" style="text-decoration: none; color: #5e5343">+7 (926) 385-37-51</a><br /><a href="mailto:office@deluxspa.ru" style="text-decoration: none; color: #5e5343">office@deluxspa.ru</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text align="center" font-size="12px" line-height="16px" padding-bottom="0" padding-top="0" font-family="Roboto, sans-serif"><a href="{{UnsubscribeUrl}}" style="text-decoration: underline; color: #5e5343">unsubscribe from this list</a></mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

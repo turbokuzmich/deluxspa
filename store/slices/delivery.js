@@ -1,24 +1,47 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import property from "lodash/property";
+import get from "lodash/get";
 
 export const getDelivery = (state) => state.delivery;
 export const getDeliveryType = createSelector(getDelivery, property("type"));
-export const getDeliveryInput = createSelector(getDelivery, property("input"));
+export const getDeliveryAddressInput = createSelector(
+  getDelivery,
+  property("addressInput")
+);
 export const getDeliveryCalculationResult = createSelector(
   getDelivery,
   ({ sum, min, max }) => ({ sum, min, max })
 );
+const getDeliveryLat = createSelector(getDelivery, ({ lat }) => lat);
+const getDeliveryLng = createSelector(getDelivery, ({ lng }) => lng);
 export const getDeliveryCoordinates = createSelector(
-  getDelivery,
-  ({ lat, lng }) => ({ lat, lng })
+  getDeliveryLat,
+  getDeliveryLng,
+  (lat, lng) => ({ lat, lng })
 );
 export const getDeliveryAddress = createSelector(
   getDelivery,
   property("address")
 );
-export const getDeliverySuggestions = createSelector(
+export const getDeliveryCity = createSelector(getDelivery, property("city"));
+export const getDeliveryCityName = createSelector(getDeliveryCity, (city) =>
+  get(city, "label", "")
+);
+const tempDeliveryCityCoordinates = { lat: 56.092356, lng: 38.185341 };
+export const getDeliveryCityCoordinates = createSelector(
+  getDeliveryCity,
+  (city) =>
+    city
+      ? { lat: city.latitude, lng: city.longitude }
+      : tempDeliveryCityCoordinates
+);
+export const getDeliveryAddressSuggestions = createSelector(
   getDelivery,
-  property("suggestions")
+  property("addressSuggestions")
+);
+export const getDeliveryCitySuggestions = createSelector(
+  getDelivery,
+  property("citySuggestions")
 );
 export const getGeocodingStatus = createSelector(
   getDelivery,
@@ -49,19 +72,29 @@ export default createSlice({
   name: "delivery",
 
   initialState: {
+    type: "store", // store | home
+
     isAPILoaded: false,
+
     address: null,
-    input: "",
-    suggestions: [],
+    addressInput: "",
+    addressSuggestions: [],
+
     geocodingStatus: "initial", // failed | insufficient | ok
     lat: null,
     lng: null,
-    type: "home", // store | home
+
+    city: null,
+    cityInput: "",
+    citySuggestions: [],
+
     calculationStatus: "initial", // calculating | failed | ok
     sum: null,
     min: null,
     max: null,
+
     isDialogVisible: false, // диалог выбора ПВЗ
+
     deliveryPoint: null,
     deliveryPoints: [],
     deliveryPointsStatus: "initial", // fetching | failed | ok
@@ -71,15 +104,26 @@ export default createSlice({
     apiLoaded(state) {
       state.isAPILoaded = true;
     },
-    changeInput(state, { payload }) {
-      state.input = payload;
+    changeAddressInput(state, { payload }) {
+      state.addressInput = payload;
       state.geocodingStatus = "initial";
     },
-    setSuggestions(state, { payload }) {
-      state.suggestions = payload;
+    changeCityInput(state, { payload }) {
+      state.cityInput = payload;
+    },
+    setAddressSuggestions(state, { payload }) {
+      state.addressSuggestions = payload;
+    },
+    setCitySuggestions(state, { payload }) {
+      state.citySuggestions = payload;
     },
     setAddress(state, { payload }) {
       state.address = payload;
+    },
+    setCity(state, { payload }) {
+      state.city = payload;
+      state.deliveryPoints = [];
+      state.deliveryPointsStatus = "initial";
     },
     setGeocodingStatus(state, { payload }) {
       state.geocodingStatus = payload;
@@ -92,9 +136,6 @@ export default createSlice({
     },
     setType(state, { payload }) {
       state.type = payload;
-    },
-    calculate(state) {
-      state.calculationStatus = "calculating";
     },
     setCalculationResult(state, { payload: { sum, min, max } }) {
       state.calculationStatus = "ok";
@@ -116,6 +157,7 @@ export default createSlice({
     },
     setDeliveryPoint(state, { payload }) {
       state.deliveryPoint = payload;
+      state.calculationStatus = "calculating";
     },
   },
 });
