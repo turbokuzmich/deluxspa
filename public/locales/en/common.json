@@ -17,6 +17,7 @@
   "menu-catalog": "Catalog",
   "menu-promo": "Promo",
   "menu-map": "Retailers",
+  "menu-partners": "Partners",
   "menu-ingredients": "Ingredients",
   "menu-cooperation": "Cooperation",
 
@@ -67,5 +68,7 @@
   "catalog-composition": "Composition",
 
   "consumption-common": "body massage",
-  "consumption-back": "back massage"
+  "consumption-back": "back massage",
+
+  "partner-cprm-title": "Международный Центр Подготовки и Развития Массажистов"
 }

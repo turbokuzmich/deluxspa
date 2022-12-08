@@ -17,6 +17,7 @@
   "menu-catalog": "Продукция",
   "menu-promo": "Акции",
   "menu-map": "Где купить",
+  "menu-partners": "Партнеры",
   "menu-ingredients": "Ингредиенты",
   "menu-cooperation": "Сотрудничество",
 
@@ -67,5 +68,7 @@
   "catalog-composition": "Состав",
 
   "consumption-common": "общий массаж всего тела",
-  "consumption-back": "массаж спины"
+  "consumption-back": "массаж спины",
+
+  "partner-cprm-title": "Международный Центр Подготовки и Развития Массажистов"
 }

@@ -27,6 +27,10 @@ export const mainMenu = [
     hidden: true,
   },
   {
+    title: "menu-partners",
+    link: "/partners",
+  },
+  {
     title: "menu-map",
     link: "/map",
   },
