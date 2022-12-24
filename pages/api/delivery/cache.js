@@ -8,6 +8,10 @@ import {
   regions as fetchCdekRegions,
   deliveryPoints as fetchCdekPoints,
 } from "../../../lib/backend/cdek";
+import {
+  listPoints as fetchBoxberryPoints,
+  listCities as fetchBoxberryCities,
+} from "../../../lib/backend/boxberry";
 import sequelize from "../../../lib/backend/sequelize";
 import get from "lodash/get";
 import property from "lodash/property";
@@ -297,6 +301,38 @@ async function importPickpointCities() {
   console.log("pickpoint imported");
 }
 
+async function importBoxberryCities() {
+  const cities = await fetchBoxberryCities();
+
+  const stat = {
+    noKlard: 0,
+    notFoundKlard: 0,
+    foundKlard: 0,
+  };
+
+  for (const city of cities) {
+    const { Name, Prefix, Kladr, Region } = city;
+
+    if (Kladr) {
+      const existing = await sequelize.models.City.findAll({
+        raw: true,
+        where: {
+          kladrId: Kladr,
+        },
+      });
+
+      if (existing.length) {
+        stat.foundKlard++;
+        continue;
+      }
+    } else {
+      stat.noKlard++;
+    }
+  }
+
+  console.log(stat);
+}
+
 async function updateLonePickpoints() {
   const alone = await sequelize.models.City.findAll({
     where: {
@@ -378,11 +414,12 @@ async function importCdekPoints() {
 }
 
 export default async function cache(_, res) {
-  await importCdekRegions();
-  await importCdekCities();
-  await importPickpointCities();
-  await importCdekPoints();
-  await importPickpointPoints();
+  // await importCdekRegions();
+  // await importCdekCities();
+  // await importPickpointCities();
+  await importBoxberryCities();
+  // await importCdekPoints();
+  // await importPickpointPoints();
 
   // await updateLonePickpoints();
 

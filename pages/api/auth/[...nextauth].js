@@ -1,8 +1,7 @@
 import NextAuth from "next-auth";
-import sequelize from "../../../lib/backend/sequelize";
+import sequelize, { User } from "../../../lib/backend/sequelize";
 import { sendSignupEmail } from "../../../lib/backend/queue";
 import SequelizeAdapter from "@next-auth/sequelize-adapter";
-import { User } from "../../../lib/backend/sequelize";
 
 export const authOptions = {
   adapter: SequelizeAdapter(sequelize, {

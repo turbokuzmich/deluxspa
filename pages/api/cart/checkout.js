@@ -26,6 +26,7 @@ export default async function checkout(req, res) {
   if (user === null) {
     return res.status(401).json({});
   }
+
   try {
     const [{ items, subtotal, quantity, itemsData, noteHtml }, amoUserId] =
       await Promise.all([processCart(user), findOrCreateAmoUser(user)]);
