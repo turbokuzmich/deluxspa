@@ -5,6 +5,7 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
+import Playmarket from "./playmarket";
 import { useTranslation } from "next-i18next";
 
 export default function Footer() {
@@ -71,6 +72,7 @@ export default function Footer() {
               xs: "flex",
               md: "none",
             },
+            flexWrap: "wrap",
             justifyContent: "center",
             gap: 2,
           }}
@@ -84,6 +86,9 @@ export default function Footer() {
             <Link href="/cooperation" passHref>
               <A data-variant="footer">{t("menu-cooperation")}</A>
             </Link>
+          </Typography>
+          <Typography>
+            <PlaymarketLink />
           </Typography>
         </Box>
         <Box
@@ -106,6 +111,9 @@ export default function Footer() {
             <Link href="/cooperation" passHref>
               <A data-variant="footer">{t("menu-cooperation")}</A>
             </Link>
+          </Typography>
+          <Typography paragraph>
+            <PlaymarketLink />
           </Typography>
         </Box>
         <Box
@@ -176,5 +184,29 @@ export default function Footer() {
         </Box>
       </Container>
     </Box>
+  );
+}
+
+function PlaymarketLink() {
+  const { t } = useTranslation();
+
+  return (
+    <Link
+      passHref
+      href="https://play.google.com/store/apps/details?id=com.wAtpmarket_10254794"
+    >
+      <A
+        target="_blank"
+        data-variant="footer"
+        sx={{
+          gap: 1,
+          display: "flex",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <Playmarket />
+        <Typography component="span">{t("download-playmarket")}</Typography>
+      </A>
+    </Link>
   );
 }
