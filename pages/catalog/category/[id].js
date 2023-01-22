@@ -4,14 +4,14 @@ import Layout from "../../../components/layout";
 import Items from "../../../components/items";
 import Submenu from "../../../components/submenu";
 import Category from "../../../components/category";
-import generativeBackground from "../../../helpers/background";
+import generativeBackground from "../../../lib/helpers/background";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import {
   getCategoryById,
   getCategoryColorById,
   getCategoryParentById,
-} from "../../../helpers/catalog";
+} from "../../../lib/helpers/catalog";
 
 export default function CategoryView({ id }) {
   const { t } = useTranslation();

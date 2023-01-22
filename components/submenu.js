@@ -11,8 +11,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useTranslation } from "next-i18next";
 import { catalogTree } from "../constants";
-import { getCategoryById } from "../helpers/catalog";
-import { isTouch as detectTouch } from "../helpers/features";
+import { getCategoryById } from "../lib/helpers/catalog";
+import { isTouch as detectTouch } from "../lib/helpers/features";
 import {
   usePopupState,
   bindHover,

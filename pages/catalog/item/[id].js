@@ -13,6 +13,7 @@ import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import HandshakeIcon from "@mui/icons-material/Handshake";
 import Number from "../../../components/number";
 import A from "@mui/material/Link";
 import Link from "next/link";
@@ -20,26 +21,37 @@ import get from "lodash/get";
 import Price from "../../../components/price";
 import { compositionItems, consumptionTitles } from "../../../constants";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { getSession } from "../../../lib/helpers/session";
+import { useDispatch, useSelector } from "react-redux";
+import cartSlice from "../../../store/slices/cart";
 import {
   getItemById,
   formatCapacity,
   getItemCategoriesById,
   getItemFirstPreviewImage,
   getItemAuxiliaryItemsIdsById,
-} from "../../../helpers/catalog";
+} from "../../../lib/helpers/catalog";
 
 export default function Item({ id, auxiliaryIds }) {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { push } = useRouter();
 
   const item = useMemo(() => getItemById(id), [id]);
   const categories = useMemo(() => getItemCategoriesById(id).slice(0, 3), [id]);
-  const auxiliary = useMemo(() => auxiliaryIds.map(getItemById), [id]);
+  const auxiliary = useMemo(
+    () => auxiliaryIds.map(getItemById),
+    [auxiliaryIds]
+  );
 
   const [variantIndex, setVariantIndex] = useState(0);
   const variant = item.variants.byId[item.variants.list[variantIndex]];
 
-  const onGoToMap = useCallback(() => push(`/map`), []);
+  const onBuy = useCallback(() => {
+    dispatch(cartSlice.actions.changeItem({ id, qty: 1, append: true }));
+  }, [dispatch, id]);
+
+  const onGoToMap = useCallback(() => push(`/map`), [push]);
   const onChangeVolume = useCallback(
     (_, value) => setVariantIndex(item.variants.list.indexOf(value)),
     [item, setVariantIndex]
@@ -129,7 +141,22 @@ export default function Item({ id, auxiliaryIds }) {
                 );
               })}
             </RadioGroup>
-            <Typography paragraph>
+            <Typography
+              component="div"
+              sx={{
+                display: "flex",
+                gap: 1,
+              }}
+              paragraph
+            >
+              <Button
+                onClick={onBuy}
+                startIcon={<ShoppingCartIcon />}
+                variant="contained"
+                size="large"
+              >
+                Купить онлайн
+              </Button>
               <Tooltip
                 title="Узнайте, где ближайших магазин"
                 placement="right"
@@ -137,11 +164,11 @@ export default function Item({ id, auxiliaryIds }) {
               >
                 <Button
                   onClick={onGoToMap}
-                  startIcon={<ShoppingCartIcon />}
+                  startIcon={<HandshakeIcon />}
                   variant="outlined"
                   size="large"
                 >
-                  Где можно купить?
+                  Купить у нашего партнера
                 </Button>
               </Tooltip>
             </Typography>
@@ -389,12 +416,17 @@ function Composition({ item }) {
   );
 }
 
-export async function getServerSideProps({ locale, params: { id } }) {
+export async function getServerSideProps({ req, res, locale, params: { id } }) {
+  const [i18n, session] = await Promise.all([
+    serverSideTranslations(locale, ["common"]),
+    getSession(req, res),
+  ]);
+
   return {
     props: {
       id,
       auxiliaryIds: getItemAuxiliaryItemsIdsById(id),
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...i18n,
     },
   };
 }

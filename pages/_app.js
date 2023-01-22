@@ -2,6 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import * as Color from "color";
 import { ecoColor, auxColors } from "../constants";
 import { appWithTranslation } from "next-i18next";
+import reduxWrapper from "../store";
 import {
   createTheme,
   ThemeProvider,
@@ -88,4 +89,4 @@ function DeluxSpaApp({ Component, pageProps }) {
   );
 }
 
-export default appWithTranslation(DeluxSpaApp);
+export default reduxWrapper.withRedux(appWithTranslation(DeluxSpaApp));

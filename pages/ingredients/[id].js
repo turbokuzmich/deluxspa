@@ -8,7 +8,7 @@ import Link from "next/link";
 import Price from "../../components/price";
 import Image from "../../components/image";
 import { compositionItems } from "../../constants";
-import { getItemsByCompositionId } from "../../helpers/catalog";
+import { getItemsByCompositionId } from "../../lib/helpers/catalog";
 
 function Content({ id, title, brief, description }) {
   const catalogItems = getItemsByCompositionId(id);
