@@ -48,8 +48,15 @@ export default function Item({ id, auxiliaryIds }) {
   const variant = item.variants.byId[item.variants.list[variantIndex]];
 
   const onBuy = useCallback(() => {
-    dispatch(cartSlice.actions.changeItem({ id, qty: 1, append: true }));
-  }, [dispatch, id]);
+    dispatch(
+      cartSlice.actions.changeItem({
+        id,
+        variant: item.variants.list[variantIndex],
+        qty: 1,
+        append: true,
+      })
+    );
+  }, [dispatch, id, item, variantIndex]);
 
   const onGoToMap = useCallback(() => push(`/map`), [push]);
   const onChangeVolume = useCallback(

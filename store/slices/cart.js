@@ -33,17 +33,20 @@ export default createSlice({
       state.items = items;
       state.isFetching = false;
     },
-    changeItem(state, { payload: { id, qty = 1, append = false } }) {
+    changeItem(state, { payload: { id, variant, qty = 1, append = false } }) {
       state.changingItems[id] = true;
 
-      const index = state.items.find(({ id: itemId }) => itemId === id);
+      const index = state.items.find(
+        ({ id: itemId, variant: variantId }) =>
+          itemId === id && variantId === variant
+      );
 
       if (index > -1) {
         state.items[index].quantity = append
           ? state.items[index].quantity + qty
           : qty;
       } else {
-        state.items.push({ id, quantity: qty });
+        state.items.push({ id, variant, quantity: qty });
       }
     },
     changeItemComplete(state, { payload: { id, items } }) {

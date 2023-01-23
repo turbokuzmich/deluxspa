@@ -3,17 +3,29 @@ import { getSession } from "../../lib/helpers/session";
 
 export default async function cart(req, res) {
   if (req.method === "POST") {
-    const { id, qty = 1, append = false } = req.body;
     const session = await getSession(req, res);
 
-    const items = get(session, "items", {});
-    const currentQty = get(items, id, 0);
-    const newQty = append ? currentQty + qty : qty;
+    const { id, variant: variantStr, qty = 1, append = false } = req.body;
+    const variant = parseInt(variantStr, 10);
+    const items = get(session, "items", []);
+    const itemsIndex = items.findIndex(
+      ({ itemId, variantId }) => itemId === id && variantId === variant
+    );
 
-    session.items = {
-      ...items,
-      [id]: newQty,
-    };
+    if (itemsIndex > -1) {
+      const currentQty = items[itemsIndex].qty;
+      const newQty = append ? currentQty + qty : qty;
+
+      session.items[itemsIndex].qty = newQty;
+    } else {
+      session.items = [
+        {
+          qty,
+          itemId: id,
+          variantId: variant,
+        },
+      ];
+    }
 
     await session.commit();
 
