@@ -20,9 +20,9 @@ function makeStore() {
 
   const store = configureStore({
     ...config,
+    devTools: process.env.NODE_ENV === "development",
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ thunk: false }).concat(sagas),
-    devTools: process.env.NODE_ENV === "development",
   });
 
   sagas.run(rootSaga);

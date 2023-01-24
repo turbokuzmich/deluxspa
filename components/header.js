@@ -9,6 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LangSwitcher from "./langswitcher";
+import CartLink from "./cartlink";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
@@ -94,21 +95,25 @@ export default function Header() {
             />
           </A>
         </Link>
-        <IconButton
-          edge="start"
-          onClick={handleClick}
+        <Box
           sx={{
             display: {
+              xs: "flex",
               md: "none",
+              gap: 10,
             },
           }}
         >
-          <MenuIcon
-            sx={{
-              fontSize: "2rem",
-            }}
-          />
-        </IconButton>
+          <LangSwitcher />
+          <IconButton edge="start" onClick={handleClick}>
+            <MenuIcon
+              sx={{
+                fontSize: "2rem",
+              }}
+            />
+          </IconButton>
+          <CartLink />
+        </Box>
         <Menu
           anchorEl={anchorEl}
           open={anchorEl !== null}
@@ -126,7 +131,7 @@ export default function Header() {
             .filter(({ hidden }) => !hidden)
             .map(({ title, link }) => (
               <MenuItem key={link} onClick={clickHandlers[link]}>
-                {title}
+                {t(title)}
               </MenuItem>
             ))}
         </Menu>
@@ -193,10 +198,12 @@ export default function Header() {
             display: {
               xs: "none",
               md: "flex",
+              gap: 10,
             },
           }}
         >
           <LangSwitcher />
+          <CartLink />
         </Box>
       </Container>
     </Box>

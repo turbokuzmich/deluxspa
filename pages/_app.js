@@ -2,6 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import * as Color from "color";
 import { ecoColor, auxColors } from "../constants";
 import { appWithTranslation } from "next-i18next";
+import { Provider } from "react-redux";
 import reduxWrapper from "../store";
 import {
   createTheme,
@@ -80,13 +81,17 @@ const theme = responsiveFontSizes(
   })
 );
 
-function DeluxSpaApp({ Component, pageProps }) {
+function DeluxSpaApp({ Component, ...rest }) {
+  const { store, props } = reduxWrapper.useWrappedStore(rest);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...props.pageProps} />
+      </Provider>
     </ThemeProvider>
   );
 }
 
-export default reduxWrapper.withRedux(appWithTranslation(DeluxSpaApp));
+export default appWithTranslation(DeluxSpaApp);

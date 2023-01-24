@@ -136,7 +136,7 @@ function TouchSubmenu({ selected = "", sx = {} }) {
       catalogTree.reduce(
         (items, category) => [
           ...items,
-          <ListSubheader key={category.id}>{category.title}</ListSubheader>,
+          <ListSubheader key={category.id}>{t(category.title)}</ListSubheader>,
           ...category.categories.map((category) => (
             <MenuItem key={category.id} value={category.id}>
               {t(category.title)}
@@ -145,7 +145,7 @@ function TouchSubmenu({ selected = "", sx = {} }) {
         ],
         []
       ),
-    []
+    [t]
   );
 
   return (

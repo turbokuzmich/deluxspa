@@ -21,8 +21,7 @@ import get from "lodash/get";
 import Price from "../../../components/price";
 import { compositionItems, consumptionTitles } from "../../../constants";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "../../../lib/helpers/session";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import cartSlice from "../../../store/slices/cart";
 import {
   getItemById,
@@ -423,17 +422,12 @@ function Composition({ item }) {
   );
 }
 
-export async function getServerSideProps({ req, res, locale, params: { id } }) {
-  const [i18n, session] = await Promise.all([
-    serverSideTranslations(locale, ["common"]),
-    getSession(req, res),
-  ]);
-
+export async function getServerSideProps({ locale, params: { id } }) {
   return {
     props: {
       id,
       auxiliaryIds: getItemAuxiliaryItemsIdsById(id),
-      ...i18n,
+      ...(await serverSideTranslations(locale, ["common"])),
     },
   };
 }

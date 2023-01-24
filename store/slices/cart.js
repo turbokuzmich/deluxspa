@@ -1,12 +1,11 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
 import { getItemById } from "../../lib/helpers/catalog";
 import property from "lodash/property";
 
 export const getCart = (state) => state.cart;
 export const getCartItems = createSelector(getCart, (cart) => cart.items);
 export const getCartItemsCount = createSelector(getCartItems, (items) =>
-  items.map(property("quantity")).reduce((count, qty) => count + qty, 0)
+  items.map(property("qty")).reduce((count, qty) => count + qty, 0)
 );
 export const isChangingItem = (id) => (state) =>
   Boolean(state.cart.changingItems[id]);
@@ -61,11 +60,6 @@ export default createSlice({
       state.isFetching = false;
       state.items = [];
       state.changingItems = {};
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state) => {
-      return { ...state };
     },
   },
 });

@@ -2,7 +2,11 @@ import get from "lodash/get";
 import { getSession } from "../../lib/helpers/session";
 
 export default async function cart(req, res) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
+    const session = await getSession(req, res);
+
+    res.status(200).json({ items: get(session, "items", []) });
+  } else if (req.method === "POST") {
     const session = await getSession(req, res);
 
     const { id, variant: variantStr, qty = 1, append = false } = req.body;
@@ -19,6 +23,7 @@ export default async function cart(req, res) {
       session.items[itemsIndex].qty = newQty;
     } else {
       session.items = [
+        ...items,
         {
           qty,
           itemId: id,
