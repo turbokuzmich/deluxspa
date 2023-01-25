@@ -21,6 +21,7 @@ export default createSlice({
   initialState: {
     isCheckouting: false,
     isFetching: false,
+    isFetched: false,
     items: [],
     changingItems: {},
   },
@@ -31,6 +32,7 @@ export default createSlice({
     fetchComplete(state, { payload: { items } }) {
       state.items = items;
       state.isFetching = false;
+      state.isFetched = true;
     },
     changeItem(state, { payload: { id, variant, qty = 1, append = false } }) {
       state.changingItems[id] = true;
