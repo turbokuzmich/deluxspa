@@ -88,6 +88,7 @@ export default function Item({ id }) {
           <Image
             className="image"
             src={getItemFirstPreviewImage(item.id)}
+            alt={item.title}
             sx={{
               maxWidth: "100%",
               maxHeight: "100%",
@@ -119,7 +120,14 @@ export default function Item({ id }) {
             color="text.primary"
             sx={{ fontWeight: "bold" }}
           >
-            <Price sum={item.variants.byId[item.variants.list[0]].price} />
+            {item.variants.list.length > 1 ? (
+              <>
+                {t("price_from")}{" "}
+                <Price sum={item.variants.byId[item.variants.list[0]].price} />
+              </>
+            ) : (
+              <Price sum={item.variants.byId[item.variants.list[0]].price} />
+            )}
           </Typography>
           <Typography align="right" variant="subtitle2">
             <Capacity item={item} />

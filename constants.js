@@ -754,18 +754,22 @@ const bodyScrubs = [
         1000: {
           price: 1990,
           volume: 1000,
+          image: "/images/items/scrub_extra_slim_1000.jpg",
         },
         2000: {
           price: 3590,
           volume: 2000,
+          image: "/images/items/scrub_extra_slim_1000.jpg",
         },
         3000: {
           price: 4990,
           volume: 3000,
+          image: "/images/items/scrub_extra_slim_1000.jpg",
         },
         5000: {
           price: 6990,
           volume: 5000,
+          image: "/images/items/scrub_extra_slim_1000.jpg",
         },
       },
     },
