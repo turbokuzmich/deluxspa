@@ -9,7 +9,7 @@ export default function Cooperation() {
   const { t } = useTranslation();
 
   return (
-    <Layout>
+    <Layout title={t("page-title-cooperation")}>
       <>
         <Container>
           <Box

@@ -46,7 +46,7 @@ export default function Item({ id, auxiliaryIds }) {
   );
 
   return (
-    <Layout>
+    <Layout title={item.title}>
       <>
         <Submenu />
         <Container
@@ -76,7 +76,11 @@ export default function Item({ id, auxiliaryIds }) {
               fontSize: "120px",
             }}
           >
-            <Image src={variant.image} sx={{ maxWidth: "100%" }} />
+            <Image
+              src={variant.image}
+              alt={item.title}
+              sx={{ maxWidth: "100%" }}
+            />
           </Box>
           <Box
             sx={{
@@ -187,6 +191,7 @@ function Auxiliary({ auxiliary }) {
                 }}
               >
                 <Image
+                  alt={item.title}
                   src={getItemFirstPreviewImage(item.id)}
                   sx={{ maxWidth: "100%" }}
                 />

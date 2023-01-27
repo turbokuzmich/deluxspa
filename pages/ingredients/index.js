@@ -666,7 +666,7 @@ export default function Ingredients() {
   const { t } = useTranslation();
 
   return (
-    <Layout>
+    <Layout title={t("page-title-ingredients")}>
       <Container>
         <Box
           sx={{

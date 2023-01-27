@@ -4,11 +4,14 @@ import Carousel from "../components/carousel";
 import CategoriesPane from "../components/categories";
 import Advantages from "../components/advantages";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 // import Brands from "../components/brands";
 
 export default function Home() {
+  const { t } = useTranslation();
+
   return (
-    <Layout>
+    <Layout title={t("page-title-index")}>
       <Carousel />
       <Advantages />
       <CategoriesPane />

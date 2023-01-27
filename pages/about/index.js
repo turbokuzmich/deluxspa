@@ -31,11 +31,12 @@ export default function About() {
   const { t } = useTranslation();
 
   return (
-    <Layout>
+    <Layout title={t("page-title-about")}>
       <>
         <Container>
           <Image
             src="/images/about.jpg"
+            alt="about"
             sx={{
               maxWidth: "100%",
             }}

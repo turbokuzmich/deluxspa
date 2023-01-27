@@ -6,6 +6,7 @@ import Submenu from "../../../components/submenu";
 import Category from "../../../components/category";
 import generativeBackground from "../../../helpers/background";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import {
   getCategoryById,
   getCategoryColorById,
@@ -13,13 +14,15 @@ import {
 } from "../../../helpers/catalog";
 
 export default function CategoryView({ id }) {
+  const { t } = useTranslation();
+
   const category = useMemo(() => getCategoryById(id), [id]);
   const parent = useMemo(() => getCategoryParentById(id), [id]);
   const color = useMemo(() => getCategoryColorById(id), [id]);
-  const items = useMemo(() => get(category, "items", []), [id]);
+  const items = useMemo(() => get(category, "items", []), [category]);
 
   return (
-    <Layout>
+    <Layout title={t(category.title)}>
       <Category
         {...category}
         sx={{

@@ -11,7 +11,7 @@ export default function Partners() {
   const { t } = useTranslation();
 
   return (
-    <Layout>
+    <Layout title={t("page-title-partners")}>
       <>
         <Container>
           <Box

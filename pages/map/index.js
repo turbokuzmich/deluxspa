@@ -81,7 +81,7 @@ export default function DeluxSpaMap() {
         strategy="afterInteractive"
         onLoad={onApiLoaded}
       />
-      <Layout>
+      <Layout title={t("page-title-map")}>
         <Container
           sx={{
             pt: {

@@ -9,7 +9,7 @@ export default function Promo() {
   const { t } = useTranslation();
 
   return (
-    <Layout>
+    <Layout title={t("page-title-promo")}>
       <>
         <Container>
           <Box
