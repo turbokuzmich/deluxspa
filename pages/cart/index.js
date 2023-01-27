@@ -15,29 +15,37 @@ export default function Cart() {
   return (
     <Layout>
       <Container>
-        {items.map((item) => {
-          const catalogItem = getItemById(item.itemId);
-          const [capacity, unitKey] = formatCapacity(
-            item.variantId,
-            catalogItem.unit
-          );
+        <Box sx={{ pt: 8 }}>
+          <Typography variant="h3" paragraph>
+            Корзина
+          </Typography>
+          <Box
+            sx={{
+              gap: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {items.map((item) => {
+              const catalogItem = getItemById(item.itemId);
+              const [capacity, unitKey] = formatCapacity(
+                item.variantId,
+                catalogItem.unit
+              );
 
-          return (
-            <Box
-              key={`${item.itemId}-${item.variantId}`}
-              sx={{
-                mb: 4,
-              }}
-            >
-              <Typography textTransform="uppercase" variant="body2">
-                {t(catalogItem.brief)}
-              </Typography>
-              <Typography textTransform="uppercase" variant="h6">
-                {t(catalogItem.title)} {capacity} {t(unitKey)}
-              </Typography>
-            </Box>
-          );
-        })}
+              return (
+                <Box key={`${item.itemId}-${item.variantId}`}>
+                  <Typography textTransform="uppercase" variant="body2">
+                    {t(catalogItem.brief)}
+                  </Typography>
+                  <Typography textTransform="uppercase" variant="h6">
+                    {t(catalogItem.title)} {capacity} {t(unitKey)}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
       </Container>
     </Layout>
   );
