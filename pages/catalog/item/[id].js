@@ -21,6 +21,7 @@ import NumbericStepper from "../../../components/numericstepper";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import get from "lodash/get";
+import last from "lodash/last";
 import Price from "../../../components/price";
 import { compositionItems, consumptionTitles } from "../../../constants";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -46,8 +47,24 @@ export default function Item({ id, auxiliaryIds }) {
     [auxiliaryIds]
   );
 
-  const [variantIndex, setVariantIndex] = useState(0);
-  const variant = item.variants.byId[item.variants.list[variantIndex]];
+  const images = useMemo(
+    () =>
+      item.variants.list.reduce((result, variantId) => {
+        const lastImage = last(result);
+        const variant = item.variants.byId[variantId];
+
+        if (!lastImage || lastImage.image !== variant.image) {
+          return [...result, { variants: [variantId], image: variant.image }];
+        }
+
+        lastImage.variants.push(variantId);
+
+        return result;
+      }, []),
+    [item]
+  );
+
+  const [imageIndex, setImageIndex] = useState(0);
 
   const [qtys, setQtys] = useState(() =>
     item.variants.list.reduce(
@@ -74,16 +91,9 @@ export default function Item({ id, auxiliaryIds }) {
     [qtys, item, setQtys]
   );
 
-  const onVariantChanges = useMemo(
-    () =>
-      item.variants.list.reduce(
-        (callbacks, variant, index) => ({
-          ...callbacks,
-          [variant]: () => setVariantIndex(index),
-        }),
-        {}
-      ),
-    [item, setVariantIndex]
+  const onImageChanges = useMemo(
+    () => images.map((_, index) => () => setImageIndex(index)),
+    [images, setImageIndex]
   );
 
   const onBuys = useMemo(
@@ -142,38 +152,43 @@ export default function Item({ id, auxiliaryIds }) {
             }}
           >
             <Image
-              src={variant.image}
+              src={images[imageIndex].image}
               alt={item.title}
               sx={{ maxWidth: "100%", userSelect: "none" }}
             />
-            <ButtonGroup
-              color="secondary"
-              variant="contained"
-              orientation="vertical"
-              sx={(theme) => ({
-                position: "absolute",
-                top: theme.spacing(2),
-                right: theme.spacing(2),
-              })}
-            >
-              {item.variants.list.map((variant, index) => {
-                const { unit } = item;
-                const { volume } = item.variants.byId[variant];
-                const [capacity, unitKey] = formatCapacity(volume, unit);
+            {images.length > 1 ? (
+              <ButtonGroup
+                color="secondary"
+                variant="contained"
+                orientation="vertical"
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: theme.spacing(2),
+                  right: theme.spacing(2),
+                })}
+              >
+                {images.map(({ variants }, index) => {
+                  const { unit } = item;
+                  const [variant] = variants;
+                  const { volume } = item.variants.byId[variant];
+                  const [capacity, unitKey] = formatCapacity(volume, unit);
+                  const hasMore = variants.length > 1;
 
-                return (
-                  <Button
-                    key={variant}
-                    size="large"
-                    onClick={onVariantChanges[variant]}
-                    color={index === variantIndex ? "primary" : "secondary"}
-                  >
-                    <Number value={capacity} />
-                    &nbsp;{t(unitKey)}
-                  </Button>
-                );
-              })}
-            </ButtonGroup>
+                  return (
+                    <Button
+                      key={index}
+                      size="large"
+                      onClick={onImageChanges[index]}
+                      color={index === imageIndex ? "primary" : "secondary"}
+                    >
+                      {hasMore ? `${t("price_from")} ` : null}
+                      <Number value={capacity} />
+                      &nbsp;{t(unitKey)}
+                    </Button>
+                  );
+                })}
+              </ButtonGroup>
+            ) : null}
           </Box>
           <Box
             sx={{
