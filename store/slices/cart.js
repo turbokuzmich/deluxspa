@@ -1,9 +1,12 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { getItemById } from "../../lib/helpers/catalog";
 import property from "lodash/property";
+import get from "lodash/get";
 
 export const getCart = (state) => state.cart;
-export const getCartItems = createSelector(getCart, (cart) => cart.items);
+export const getCartItems = createSelector(getCart, (cart) =>
+  get(cart, "items", [])
+);
 export const getCartItemsCount = createSelector(getCartItems, (items) =>
   items.map(property("qty")).reduce((count, qty) => count + qty, 0)
 );

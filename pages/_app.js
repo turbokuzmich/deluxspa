@@ -24,6 +24,9 @@ const theme = responsiveFontSizes(
       primary: {
         main: primaryColor,
       },
+      secondary: {
+        main: Color(primaryColor).lighten(0.6).rgb().toString(),
+      },
       background: {
         default: Color("#f1e3c9").lighten(0.11).rgb().toString(),
         paper: Color("#e3c68e").lighten(0.15).rgb().toString(),
