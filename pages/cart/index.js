@@ -18,6 +18,8 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import decline from "../../lib/helpers/declension";
 import identity from "lodash/identity";
+import { Formik, Form, Field } from "formik";
+import { TextField as TextInput } from "formik-mui";
 import { useSelector } from "react-redux";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -26,6 +28,7 @@ import { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import deliverySlice, {
   getDeliveryAddress,
+  getDeliveryFormValues,
   getDeliveryAddressSuggestions,
 } from "../../store/slices/delivery";
 import cartSlice, {
@@ -37,6 +40,13 @@ import cartSlice, {
   getCartSubtotal,
 } from "../../store/slices/cart";
 
+const deliveryValidationSchema = yup.object().shape({
+  phone: yup.string().trim().required("Пожалуйста, укажите номер телефона"),
+  email: yup
+    .string()
+    .email("Пожалуйста, укажите правильный адрес электронной почты"),
+});
+
 export default function Cart() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -46,6 +56,7 @@ export default function Cart() {
   const state = useSelector(getCartState);
   const address = useSelector(getDeliveryAddress);
   const addressSuggestions = useSelector(getDeliveryAddressSuggestions);
+  const formValues = useSelector(getDeliveryFormValues);
 
   const onChanges = useMemo(
     () =>
@@ -334,35 +345,82 @@ export default function Cart() {
               </Card>
             )}
             {state === CartState.delivery ? (
-              <Card elevation={0} square>
-                <CardContent>
-                  <Typography variant="h4" paragraph>
-                    Доставка
-                  </Typography>
-                  <Autocomplete
-                    disablePortal
-                    autoComplete
-                    value={address}
-                    filterOptions={identity}
-                    onInputChange={onAddressInputChange}
-                    onChange={onAddressSelected}
-                    options={addressSuggestions}
-                    isOptionEqualToValue={isOptionEqualToValue}
-                    renderOption={(props, option) => (
-                      <li {...props} key={option.value}>
-                        {option.label}
-                      </li>
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Укажите адрес доставки"
+              <Formik
+                initialValues={formValues}
+                validationSchema={deliveryValidationSchema}
+                enableReinitialize
+              >
+                <Card elevation={0} square>
+                  <CardContent>
+                    <Typography variant="h4" paragraph>
+                      Доставка
+                    </Typography>
+                    <Form>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 2,
+                          mb: 1,
+                        }}
+                      >
+                        <Field
+                          component={TextInput}
+                          label="Номер телефона"
+                          autoComplete="off"
+                          name="phone"
+                          fullWidth
+                          required
+                        />
+                        <Field
+                          component={TextInput}
+                          label="Электронный адрес"
+                          autoComplete="off"
+                          name="email"
+                          fullWidth
+                        />
+                      </Box>
+                      <Box sx={{ mb: 1 }}>
+                        <Autocomplete
+                          disablePortal
+                          autoComplete
+                          value={address}
+                          filterOptions={identity}
+                          onInputChange={onAddressInputChange}
+                          onChange={onAddressSelected}
+                          options={addressSuggestions}
+                          isOptionEqualToValue={isOptionEqualToValue}
+                          renderOption={(props, option) => (
+                            <li {...props} key={option.value}>
+                              {option.label}
+                            </li>
+                          )}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Адрес доставки"
+                              fullWidth
+                            />
+                          )}
+                        />
+                      </Box>
+                      <Field
+                        component={TextInput}
+                        label="Комментарий"
+                        autoComplete="off"
+                        name="comment"
+                        rows={4}
+                        multiline
                         fullWidth
                       />
-                    )}
-                  />
-                </CardContent>
-              </Card>
+                    </Form>
+                  </CardContent>
+                  <CardActions sx={{ p: 2 }}>
+                    <Button size="large" variant="contained">
+                      Перейти к оплате
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Formik>
             ) : null}
           </Box>
         </Container>

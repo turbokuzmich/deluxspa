@@ -19,11 +19,29 @@ export const getDeliveryAddressSuggestions = createSelector(
   property("addressSuggestions")
 );
 
+export const getDeliveryPhone = createSelector(getDelivery, property("phone"));
+export const getDeliveryEmail = createSelector(getDelivery, property("email"));
+export const getDeliveryComment = createSelector(
+  getDelivery,
+  property("comment")
+);
+
+export const getDeliveryFormValues = createSelector(
+  getDeliveryPhone,
+  getDeliveryEmail,
+  getDeliveryComment,
+  (phone, email, comment) => ({ phone, email, comment })
+);
+
 export default createSlice({
   name: "delivery",
 
   initialState: {
     isAPILoaded: false,
+
+    phone: "",
+    email: "",
+    comment: "",
 
     address: null,
     addressInput: "",
