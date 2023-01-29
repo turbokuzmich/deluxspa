@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import rootSaga from "./sagas";
 import cartSlice from "./slices/cart";
+import deliverySlice from "./slices/delivery";
 import createSagaMiddleware from "redux-saga";
 
 function makeStore() {
   const config = {
     reducer: {
       [cartSlice.name]: cartSlice.reducer,
+      [deliverySlice.name]: deliverySlice.reducer,
     },
   };
 

@@ -10,16 +10,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import NumbericStepper from "../../components/numericstepper";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 import Price from "../../components/price";
+import MapLoader from "../../components/maploader";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import decline from "../../lib/helpers/declension";
+import identity from "lodash/identity";
 import { useSelector } from "react-redux";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getItemById, formatCapacity } from "../../lib/helpers/catalog";
 import { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
+import deliverySlice, {
+  getDeliveryAddress,
+  getDeliveryAddressSuggestions,
+} from "../../store/slices/delivery";
 import cartSlice, {
   CartState,
   getCartState,
@@ -36,6 +44,8 @@ export default function Cart() {
   const count = useSelector(getCartItemsCount);
   const subtotal = useSelector(getCartSubtotal);
   const state = useSelector(getCartState);
+  const address = useSelector(getDeliveryAddress);
+  const addressSuggestions = useSelector(getDeliveryAddressSuggestions);
 
   const onChanges = useMemo(
     () =>
@@ -83,6 +93,28 @@ export default function Cart() {
     [dispatch]
   );
 
+  const onMapsReady = useCallback(
+    () => dispatch(deliverySlice.actions.apiLoaded()),
+    [dispatch]
+  );
+
+  const onAddressInputChange = useCallback(
+    (_, newInput) =>
+      dispatch(deliverySlice.actions.changeAddressInput(newInput)),
+    [dispatch]
+  );
+
+  const onAddressSelected = useCallback(
+    (_, option) =>
+      dispatch(deliverySlice.actions.setAddress(option ? option.value : null)),
+    [dispatch]
+  );
+
+  const isOptionEqualToValue = useCallback(
+    ({ value }, address) => value === address,
+    []
+  );
+
   if ([CartState.initial, CartState.fetching].includes(state)) {
     return (
       <Layout>
@@ -120,194 +152,222 @@ export default function Cart() {
   }
 
   return (
-    <Layout>
-      <Container>
-        <Box sx={{ pt: 8 }}>
-          <Typography variant="h3" paragraph>
-            Оформление покупки
-          </Typography>
-          {state === CartState.fetched ? (
-            <Card elevation={0} square>
-              <CardContent>
-                <Typography variant="h4" paragraph>
-                  Товары
-                </Typography>
-                <Box
+    <>
+      <MapLoader onReady={onMapsReady} />
+      <Layout>
+        <Container>
+          <Box sx={{ pt: 8 }}>
+            <Typography variant="h3" paragraph>
+              Оформление покупки
+            </Typography>
+            {state === CartState.fetched ? (
+              <Card elevation={0} square>
+                <CardContent>
+                  <Typography variant="h4" paragraph>
+                    Товары
+                  </Typography>
+                  <Box
+                    sx={{
+                      gap: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {items.map((item, index) => {
+                      const catalogItem = getItemById(item.itemId);
+                      const variant = catalogItem.variants.byId[item.variantId];
+                      const [capacity, unitKey] = formatCapacity(
+                        item.variantId,
+                        catalogItem.unit
+                      );
+
+                      return (
+                        <Box
+                          key={`${item.itemId}-${item.variantId}`}
+                          sx={{
+                            gap: 4,
+                            display: "flex",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              maxWidth: 100,
+                              flexGrow: 0,
+                              flexShrink: 0,
+                            }}
+                          >
+                            <Link
+                              href={`/catalog/item/${catalogItem.id}`}
+                              passHref
+                            >
+                              <A sx={{ display: "block" }}>
+                                <Image
+                                  src={variant.image}
+                                  alt={catalogItem.title}
+                                  sx={{
+                                    maxWidth: "100%",
+                                    userSelect: "none",
+                                    display: "block",
+                                  }}
+                                />
+                              </A>
+                            </Link>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexGrow: 1,
+                              flexShrink: 1,
+                              flexDirection: "column",
+                              pt: 1,
+                              pb: 1,
+                            }}
+                          >
+                            <Box sx={{ flexGrow: 1 }}>
+                              <Typography
+                                textTransform="uppercase"
+                                variant="body2"
+                              >
+                                {t(catalogItem.brief)}
+                              </Typography>
+                              <Typography
+                                textTransform="uppercase"
+                                variant="h6"
+                              >
+                                <Link
+                                  href={`/catalog/item/${catalogItem.id}`}
+                                  passHref
+                                >
+                                  <A>{t(catalogItem.title)}</A>
+                                </Link>
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography>
+                                {capacity} {t(unitKey)}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              justifyContent: "flex-start",
+                            }}
+                          >
+                            <NumbericStepper
+                              value={item.qty}
+                              inc={onChanges[index].inc}
+                              dec={onChanges[index].dec}
+                            />
+                            <Button
+                              onClick={onChanges[index].del}
+                              variant="outlined"
+                              color="secondary"
+                              size="medium"
+                              sx={{
+                                ml: 2,
+                                pl: 0,
+                                pr: 0,
+                                width: 42,
+                                minWidth: 0,
+                              }}
+                            >
+                              <DeleteIcon />
+                            </Button>
+                            <Typography
+                              component="div"
+                              variant="h6"
+                              textAlign="right"
+                              sx={{
+                                minWidth: 120,
+                              }}
+                            >
+                              <Price sum={getItemTotal(item)} />
+                            </Typography>
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </CardContent>
+                <CardActions
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button size="large" variant="contained" onClick={toDelivery}>
+                    Оформить доставку
+                  </Button>
+                  <Typography variant="h5">
+                    Итого: <Price sum={subtotal} />
+                  </Typography>
+                </CardActions>
+              </Card>
+            ) : (
+              <Card elevation={0} sx={{ mb: 1 }} square>
+                <CardContent
                   sx={{
                     gap: 2,
                     display: "flex",
-                    flexDirection: "column",
+                    alignItems: "center",
+                    ":last-child": {
+                      pb: 2,
+                    },
                   }}
                 >
-                  {items.map((item, index) => {
-                    const catalogItem = getItemById(item.itemId);
-                    const variant = catalogItem.variants.byId[item.variantId];
-                    const [capacity, unitKey] = formatCapacity(
-                      item.variantId,
-                      catalogItem.unit
-                    );
-
-                    return (
-                      <Box
-                        key={`${item.itemId}-${item.variantId}`}
-                        sx={{
-                          gap: 4,
-                          display: "flex",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            maxWidth: 100,
-                            flexGrow: 0,
-                            flexShrink: 0,
-                          }}
-                        >
-                          <Link
-                            href={`/catalog/item/${catalogItem.id}`}
-                            passHref
-                          >
-                            <A sx={{ display: "block" }}>
-                              <Image
-                                src={variant.image}
-                                alt={catalogItem.title}
-                                sx={{
-                                  maxWidth: "100%",
-                                  userSelect: "none",
-                                  display: "block",
-                                }}
-                              />
-                            </A>
-                          </Link>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexGrow: 1,
-                            flexShrink: 1,
-                            flexDirection: "column",
-                            pt: 1,
-                            pb: 1,
-                          }}
-                        >
-                          <Box sx={{ flexGrow: 1 }}>
-                            <Typography
-                              textTransform="uppercase"
-                              variant="body2"
-                            >
-                              {t(catalogItem.brief)}
-                            </Typography>
-                            <Typography textTransform="uppercase" variant="h6">
-                              <Link
-                                href={`/catalog/item/${catalogItem.id}`}
-                                passHref
-                              >
-                                <A>{t(catalogItem.title)}</A>
-                              </Link>
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography>
-                              {capacity} {t(unitKey)}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "flex-start",
-                          }}
-                        >
-                          <NumbericStepper
-                            value={item.qty}
-                            inc={onChanges[index].inc}
-                            dec={onChanges[index].dec}
-                          />
-                          <Button
-                            onClick={onChanges[index].del}
-                            variant="outlined"
-                            color="secondary"
-                            size="medium"
-                            sx={{
-                              ml: 2,
-                              pl: 0,
-                              pr: 0,
-                              width: 42,
-                              minWidth: 0,
-                            }}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                          <Typography
-                            component="div"
-                            variant="h6"
-                            textAlign="right"
-                            sx={{
-                              minWidth: 120,
-                            }}
-                          >
-                            <Price sum={getItemTotal(item)} />
-                          </Typography>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </CardContent>
-              <CardActions
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Button size="large" variant="contained" onClick={toDelivery}>
-                  Оформить доставку
-                </Button>
-                <Typography variant="h5">
-                  Итого: <Price sum={subtotal} />
-                </Typography>
-              </CardActions>
-            </Card>
-          ) : (
-            <Card elevation={0} sx={{ mb: 1 }} square>
-              <CardContent
-                sx={{
-                  gap: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  ":last-child": {
-                    pb: 2,
-                  },
-                }}
-              >
-                <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                  Товары
-                </Typography>
-                <Typography variant="h6">
-                  <Number value={count} />{" "}
-                  {decline(count, ["позиция", "позиции", "позиций"])} на сумму{" "}
-                  <Price sum={subtotal} />
-                </Typography>
-                <Button variant="contained" size="medium" onClick={toItems}>
-                  Изменить
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-          {state === CartState.delivery ? (
-            <Card elevation={0} square>
-              <CardContent>
-                <Typography variant="h4" paragraph>
-                  Доставка
-                </Typography>
-              </CardContent>
-            </Card>
-          ) : null}
-        </Box>
-      </Container>
-    </Layout>
+                  <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                    Товары
+                  </Typography>
+                  <Typography variant="h6">
+                    <Number value={count} />{" "}
+                    {decline(count, ["позиция", "позиции", "позиций"])} на сумму{" "}
+                    <Price sum={subtotal} />
+                  </Typography>
+                  <Button variant="contained" size="medium" onClick={toItems}>
+                    Изменить
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            {state === CartState.delivery ? (
+              <Card elevation={0} square>
+                <CardContent>
+                  <Typography variant="h4" paragraph>
+                    Доставка
+                  </Typography>
+                  <Autocomplete
+                    disablePortal
+                    autoComplete
+                    value={address}
+                    filterOptions={identity}
+                    onInputChange={onAddressInputChange}
+                    onChange={onAddressSelected}
+                    options={addressSuggestions}
+                    isOptionEqualToValue={isOptionEqualToValue}
+                    renderOption={(props, option) => (
+                      <li {...props} key={option.value}>
+                        {option.label}
+                      </li>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Укажите адрес доставки"
+                        fullWidth
+                      />
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            ) : null}
+          </Box>
+        </Container>
+      </Layout>
+    </>
   );
 }
 
