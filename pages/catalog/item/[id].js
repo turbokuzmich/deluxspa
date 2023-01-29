@@ -11,7 +11,6 @@ import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import HandshakeIcon from "@mui/icons-material/Handshake";
 import Number from "../../../components/number";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -254,22 +253,6 @@ export default function Item({ id, auxiliaryIds }) {
                   })}
                 </TableBody>
               </Table>
-            </Typography>
-            <Typography component="div" paragraph>
-              <Tooltip
-                title="Узнайте, где ближайших магазин"
-                placement="right"
-                arrow
-              >
-                <Button
-                  onClick={onGoToMap}
-                  startIcon={<HandshakeIcon />}
-                  variant="outlined"
-                  size="large"
-                >
-                  Купить у нашего партнера
-                </Button>
-              </Tooltip>
             </Typography>
             <Categories categories={categories} />
             <Consumption item={item} />

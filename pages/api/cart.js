@@ -20,7 +20,11 @@ export default async function cart(req, res) {
       const currentQty = items[itemsIndex].qty;
       const newQty = append ? currentQty + qty : qty;
 
-      session.items[itemsIndex].qty = newQty;
+      if (newQty === 0) {
+        session.items.splice(itemsIndex, 1);
+      } else {
+        session.items[itemsIndex].qty = newQty;
+      }
     } else {
       session.items = [
         ...items,

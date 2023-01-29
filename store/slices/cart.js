@@ -2,8 +2,22 @@ import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { getItemById } from "../../lib/helpers/catalog";
 import property from "lodash/property";
 import get from "lodash/get";
+import fromPairs from "lodash/fromPairs";
+
+const cartStates = [
+  "initial",
+  "fetching",
+  "fetched",
+  "delivery",
+  "contact",
+  "buy",
+  "success",
+];
+export const CartState = fromPairs(cartStates.map((state) => [state, state]));
 
 export const getCart = (state) => state.cart;
+
+export const getCartState = createSelector(getCart, ({ state }) => state);
 
 export const getCartItems = createSelector(getCart, (cart) =>
   get(cart, "items", [])
@@ -13,15 +27,13 @@ export const getCartItemsCount = createSelector(getCartItems, (items) =>
   items.map(property("qty")).reduce((count, qty) => count + qty, 0)
 );
 
-// export const isChangingItem = (id) => (state) =>
-//   Boolean(state.cart.changingItems[id]);
-
-// export const getCartSubtotal = createSelector(getCartItems, (items) =>
-//   items.reduce(
-//     (subtotal, { id, qty }) => subtotal + getItemById(id).price * qty,
-//     0
-//   )
-// );
+export const getCartSubtotal = createSelector(getCartItems, (items) =>
+  items.reduce(
+    (subtotal, { itemId, variantId, qty }) =>
+      subtotal + getItemById(itemId).variants.byId[variantId].price * qty,
+    0
+  )
+);
 
 export const getItemTotal = ({ itemId, variantId, qty }) =>
   qty * getItemById(itemId).variants.byId[variantId].price;
@@ -39,27 +51,24 @@ export const getItemTotalById =
 export const getItemTotalByIndex =
   (index) =>
   ({ items }) => {
-    console.log(items[index])
+    console.log(items[index]);
     return getItemTotal(items[index]);
   };
 
 export default createSlice({
   name: "cart",
   initialState: {
-    isCheckouting: false,
-    isFetching: false,
-    isFetched: false,
+    state: CartState.initial,
     items: [],
     changingItems: {},
   },
   reducers: {
     fetch(state) {
-      state.isFetching = true;
+      state.state = CartState.fetching;
     },
     fetchComplete(state, { payload: { items } }) {
       state.items = items;
-      state.isFetching = false;
-      state.isFetched = true;
+      state.state = CartState.fetched;
     },
     changeItem(state, { payload: { id, variant, qty = 1, append = false } }) {
       state.changingItems[id] = true;
@@ -78,14 +87,11 @@ export default createSlice({
       state.changingItems[id] = false;
       state.items = items;
     },
-    checkout(state) {
-      state.isCheckouting = true;
+    toItems(state) {
+      state.state = "fetched";
     },
-    checkoutComplete(state) {
-      state.isCheckouting = false;
-      state.isFetching = false;
-      state.items = [];
-      state.changingItems = {};
+    toDelivery(state) {
+      state.state = "delivery";
     },
   },
 });

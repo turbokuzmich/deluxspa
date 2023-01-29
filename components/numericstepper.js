@@ -2,6 +2,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Number from "./number";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 import noop from "lodash/noop";
 
 export default function NumbericStepper({
@@ -31,7 +33,7 @@ export default function NumbericStepper({
           minWidth: 0,
         }}
       >
-        &ndash;
+        <RemoveIcon />
       </Button>
       <Typography
         sx={{
@@ -55,7 +57,7 @@ export default function NumbericStepper({
           minWidth: 0,
         }}
       >
-        +
+        <AddIcon />
       </Button>
     </Box>
   );
