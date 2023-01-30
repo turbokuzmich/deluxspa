@@ -9,8 +9,7 @@ const cartStates = [
   "fetching",
   "fetched",
   "delivery",
-  "contact",
-  "buy",
+  "payment",
   "success",
 ];
 export const CartState = fromPairs(cartStates.map((state) => [state, state]));
@@ -92,6 +91,9 @@ export default createSlice({
     },
     toDelivery(state) {
       state.state = "delivery";
+    },
+    toPayment(state) {
+      state.state = "payment";
     },
   },
 });

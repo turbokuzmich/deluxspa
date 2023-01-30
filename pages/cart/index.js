@@ -1,3 +1,4 @@
+import * as yup from "yup";
 import Number from "../../components/number";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -18,14 +19,17 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import decline from "../../lib/helpers/declension";
 import identity from "lodash/identity";
-import { Formik, Form, Field } from "formik";
+import omit from "lodash/omit";
+import { Formik, Form, Field, useField, useFormikContext } from "formik";
 import { TextField as TextInput } from "formik-mui";
+import { PatternFormat } from "react-number-format";
 import { useSelector } from "react-redux";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getItemById, formatCapacity } from "../../lib/helpers/catalog";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { phoneFormat } from "../../constants";
 import deliverySlice, {
   getDeliveryAddress,
   getDeliveryFormValues,
@@ -41,7 +45,11 @@ import cartSlice, {
 } from "../../store/slices/cart";
 
 const deliveryValidationSchema = yup.object().shape({
-  phone: yup.string().trim().required("Пожалуйста, укажите номер телефона"),
+  phone: yup
+    .string()
+    .trim()
+    .required("Пожалуйста, укажите номер телефона")
+    .matches(/^\d{10}$/, "Пожалуйста, укажите корректный номер телефона"),
   email: yup
     .string()
     .email("Пожалуйста, укажите правильный адрес электронной почты"),
@@ -57,6 +65,7 @@ export default function Cart() {
   const address = useSelector(getDeliveryAddress);
   const addressSuggestions = useSelector(getDeliveryAddressSuggestions);
   const formValues = useSelector(getDeliveryFormValues);
+  const phoneFieldRef = useRef(null);
 
   const onChanges = useMemo(
     () =>
@@ -104,6 +113,14 @@ export default function Cart() {
     [dispatch]
   );
 
+  const toPayment = useCallback(
+    (info) => {
+      dispatch(deliverySlice.actions.setContactInfo(info));
+      dispatch(cartSlice.actions.toPayment());
+    },
+    [dispatch]
+  );
+
   const onMapsReady = useCallback(
     () => dispatch(deliverySlice.actions.apiLoaded()),
     [dispatch]
@@ -125,6 +142,12 @@ export default function Cart() {
     ({ value }, address) => value === address,
     []
   );
+
+  useEffect(() => {
+    if (state === CartState.delivery && phoneFieldRef.current) {
+      phoneFieldRef.current.focus();
+    }
+  }, [state]);
 
   if ([CartState.initial, CartState.fetching].includes(state)) {
     return (
@@ -347,8 +370,10 @@ export default function Cart() {
             {state === CartState.delivery ? (
               <Formik
                 initialValues={formValues}
+                onSubmit={toPayment}
                 validationSchema={deliveryValidationSchema}
                 enableReinitialize
+                validateOnMount
               >
                 <Card elevation={0} square>
                   <CardContent>
@@ -363,14 +388,7 @@ export default function Cart() {
                           mb: 1,
                         }}
                       >
-                        <Field
-                          component={TextInput}
-                          label="Номер телефона"
-                          autoComplete="off"
-                          name="phone"
-                          fullWidth
-                          required
-                        />
+                        <PhoneInput inputRef={phoneFieldRef} />
                         <Field
                           component={TextInput}
                           label="Электронный адрес"
@@ -415,17 +433,99 @@ export default function Cart() {
                     </Form>
                   </CardContent>
                   <CardActions sx={{ p: 2 }}>
-                    <Button size="large" variant="contained">
-                      Перейти к оплате
-                    </Button>
+                    <ToPaymentButton />
                   </CardActions>
                 </Card>
               </Formik>
+            ) : null}
+            {state === CartState.payment ? (
+              <>
+                <Card elevation={0} square>
+                  <CardContent
+                    sx={{
+                      gap: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      ":last-child": {
+                        pb: 2,
+                      },
+                    }}
+                  >
+                    <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                      Доставка
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      size="medium"
+                      onClick={toDelivery}
+                    >
+                      Изменить
+                    </Button>
+                  </CardContent>
+                </Card>
+              </>
             ) : null}
           </Box>
         </Container>
       </Layout>
     </>
+  );
+}
+
+function ToPaymentButton() {
+  const { isValid, submitForm } = useFormikContext();
+
+  return (
+    <Button
+      size="large"
+      variant="contained"
+      disabled={!isValid}
+      onClick={submitForm}
+    >
+      Перейти к оплате
+    </Button>
+  );
+}
+
+function PhoneInputBase({ inputRef, ...props }) {
+  const [{ name }, { error, touched }] = useField("phone");
+
+  return (
+    <TextField
+      {...props}
+      error={touched && Boolean(error)}
+      helperText={touched ? error : undefined}
+      inputRef={inputRef}
+      label="Номер телефона"
+      autoComplete="off"
+      name={name}
+      fullWidth
+      required
+    />
+  );
+}
+
+function PhoneInput({ inputRef }) {
+  const [{ value, onBlur }, _, { setValue }] = useField("phone");
+
+  const onValueChange = useCallback(({ value }) => setValue(value), [setValue]);
+
+  const renderInput = useCallback(
+    (props) => <PhoneInputBase inputRef={inputRef} {...props} />,
+    [inputRef]
+  );
+
+  return (
+    <PatternFormat
+      mask="_"
+      value={value}
+      onBlur={onBlur}
+      format={phoneFormat}
+      customInput={renderInput}
+      onValueChange={onValueChange}
+      allowEmptyFormatting
+      valueIsNumericString
+    />
   );
 }
 

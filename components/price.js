@@ -1,8 +1,8 @@
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 
 export default function Price({ sum }) {
   return (
-    <NumberFormat
+    <NumericFormat
       value={sum}
       displayType="text"
       thousandSeparator=" "

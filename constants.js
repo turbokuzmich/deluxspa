@@ -2,6 +2,8 @@ import property from "lodash/property";
 
 export const ecoColor = "#009534";
 
+export const phoneFormat = "+7 ### ###-##-##";
+
 export const auxColors = [
   "#c6e3e9",
   "#ffcdb5",

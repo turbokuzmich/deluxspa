@@ -74,5 +74,13 @@ export default createSlice({
       state.lat = lat;
       state.lng = lng;
     },
+    setContactInfo(
+      state,
+      { payload: { phone = "", email = "", comment = "" } }
+    ) {
+      state.phone = phone;
+      state.email = email;
+      state.comment = comment;
+    },
   },
 });
