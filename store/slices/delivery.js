@@ -9,6 +9,11 @@ export const GeoCodingStatus = fromPairs(
 
 export const getDelivery = (state) => state.delivery;
 
+export const getDeliveryPhone = createSelector(getDelivery, property("phone"));
+export const getDeliveryEmail = createSelector(getDelivery, property("email"));
+export const getDeliveryLat = createSelector(getDelivery, property("lat"));
+export const getDeliveryLng = createSelector(getDelivery, property("lng"));
+
 export const getDeliveryAddress = createSelector(
   getDelivery,
   property("address")
@@ -19,8 +24,6 @@ export const getDeliveryAddressSuggestions = createSelector(
   property("addressSuggestions")
 );
 
-export const getDeliveryPhone = createSelector(getDelivery, property("phone"));
-export const getDeliveryEmail = createSelector(getDelivery, property("email"));
 export const getDeliveryComment = createSelector(
   getDelivery,
   property("comment")
@@ -31,6 +34,23 @@ export const getDeliveryFormValues = createSelector(
   getDeliveryEmail,
   getDeliveryComment,
   (phone, email, comment) => ({ phone, email, comment })
+);
+
+export const getDeliveryInfo = createSelector(
+  getDeliveryPhone,
+  getDeliveryEmail,
+  getDeliveryComment,
+  getDeliveryAddress,
+  getDeliveryLat,
+  getDeliveryLng,
+  (phone, email, comment, address, lat, lng) => ({
+    phone,
+    email,
+    comment,
+    address,
+    lat,
+    lng,
+  })
 );
 
 export default createSlice({

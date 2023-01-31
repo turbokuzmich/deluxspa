@@ -1,6 +1,9 @@
 import api from "../../lib/frontend/api";
 import cartSlice from "../slices/cart";
-import deliverySlice, { getDeliveryAddress } from "../slices/delivery";
+import deliverySlice, {
+  getDeliveryAddress,
+  getDeliveryInfo,
+} from "../slices/delivery";
 import {
   all,
   call,
@@ -79,9 +82,20 @@ export function* geocodeAddress() {
   }
 }
 
+export function* handlePayment() {
+  const info = yield select(getDeliveryInfo);
+
+  const {
+    data: { url },
+  } = yield call([api, api.post], "/checkout", info);
+
+  location.href = url;
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
+    takeLatest(cartSlice.actions.toPayment, handlePayment),
     debounce(
       300,
       deliverySlice.actions.changeAddressInput,
