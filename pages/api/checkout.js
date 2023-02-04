@@ -33,20 +33,26 @@ const api = axios.create({
 //   metadata: {}
 // }
 export default async function checkout(req, res) {
+  const db = await sequelize;
+
   if (req.method === "GET") {
     // TODO валидация ключа
     // TODO показать успех один раз
+    // TODO тут нужно генерировать криптохэш
 
     const { order: key } = req.query;
 
     const [order, session] = await Promise.all([
-      sequelize.models.order.findOne({ where: { key } }),
+      db.models.order.findOne({ where: { key } }),
       getSession(req, res),
     ]);
 
     session.items = [];
 
-    await Promise.all([order.update({ returned: true }), session.commit()]);
+    await Promise.all([
+      order.update({ status: "confirmed" }),
+      session.commit(),
+    ]);
 
     res.redirect("/");
   } else if (req.method === "POST") {
@@ -54,7 +60,7 @@ export default async function checkout(req, res) {
     // TODO валидация полей через yup
     // FIXME не создается заказ только с телефоном
 
-    const orderKey = uuid();
+    const orderKey = uuid(); // FIXME использовать механизм генерации из sequelize
     const orderData = [
       "phone",
       "email",
@@ -91,14 +97,12 @@ export default async function checkout(req, res) {
       }
     );
 
-    const order = await sequelize.models.order.create({
+    const order = await db.models.order.create({
       key: orderKey,
-      paid: false,
-      returned: false,
       ...orderData,
     });
 
-    await sequelize.models.orderItem.bulkCreate(
+    await db.models.orderItem.bulkCreate(
       items.map((item) => ({ ...item, orderId: order.id }))
     );
 
@@ -147,6 +151,8 @@ export default async function checkout(req, res) {
           },
         }
       );
+
+      // TODO переключить в статус paid
 
       res.status(200).json({ url: confirmation_url });
     } catch (error) {

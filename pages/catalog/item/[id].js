@@ -119,7 +119,7 @@ export default function Item({ id, auxiliaryIds }) {
   const onGoToMap = useCallback(() => push(`/map`), [push]);
 
   return (
-    <Layout title={`${item.title} (${t(item.brief)})`}>
+    <Layout title={`${t(item.title)} (${t(item.brief)})`}>
       <>
         <Submenu />
         <Container
@@ -152,7 +152,7 @@ export default function Item({ id, auxiliaryIds }) {
           >
             <Image
               src={images[imageIndex].image}
-              alt={item.title}
+              alt={t(item.title)}
               sx={{ maxWidth: "100%", userSelect: "none" }}
             />
             {images.length > 1 ? (
@@ -208,7 +208,7 @@ export default function Item({ id, auxiliaryIds }) {
               sx={{ textTransform: "uppercase" }}
               paragraph
             >
-              {item.title}
+              {t(item.title)}
             </Typography>
             <Typography component="div" paragraph>
               <Table>
@@ -300,7 +300,7 @@ function Auxiliary({ auxiliary }) {
                 }}
               >
                 <Image
-                  alt={item.title}
+                  alt={t(item.title)}
                   src={getItemFirstPreviewImage(item.id)}
                   sx={{ maxWidth: "100%" }}
                 />
@@ -320,7 +320,7 @@ function Auxiliary({ auxiliary }) {
                     flexShrink: 0,
                   }}
                 >
-                  {item.title}
+                  {t(item.title)}
                 </Typography>
                 <Typography
                   variant="body2"

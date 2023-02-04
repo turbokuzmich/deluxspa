@@ -1,4 +1,4 @@
-import property from "lodash/property";
+import property from "lodash/property.js";
 
 export const ecoColor = "#009534";
 
@@ -185,7 +185,7 @@ export const consumptionTitles = {
 const oils = [
   {
     id: "oil_mint_breeze",
-    title: "Мятный бриз",
+    title: "catalog-item-oil-mint-breeze",
     brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "wheat_oil", "mint_oil"],
     unit: "ml",
@@ -221,7 +221,7 @@ const oils = [
   },
   {
     id: "oil_bio",
-    title: "Биологическое",
+    title: "catalog-item-oil-bio",
     brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "wheat_oil", "vitamin_e"],
     unit: "ml",
@@ -258,7 +258,7 @@ const oils = [
   },
   {
     id: "oil_lemongrass",
-    title: "Лемонграсс",
+    title: "catalog-item-oil-lemongrass",
     brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "wheat_oil", "vitamin_e", "lemongrass_oil"],
     unit: "ml",
@@ -295,7 +295,7 @@ const oils = [
   },
   {
     id: "oil_bubble_gum",
-    title: "Баббл гам",
+    title: "catalog-item-oil-bubble-gum",
     brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
     unit: "ml",
@@ -332,7 +332,7 @@ const oils = [
   },
   {
     id: "oil_extra_slim",
-    title: "Экстра слим",
+    title: "catalog-item-oil-extra-slim",
     brief: "catalog-brief-massage-body-oil",
     unit: "ml",
     composition: [
@@ -372,7 +372,7 @@ const oils = [
   },
   {
     id: "oil_lemon_cake",
-    title: "Лимонный кекс",
+    title: "catalog-item-oil-lemon-cake",
     brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "maize_oil", "jojoba_oil", "aroma_composition"],
     unit: "ml",
@@ -403,7 +403,7 @@ const oils = [
   },
   {
     id: "oil_lemon_pepper",
-    title: "лимон и черный перец",
+    title: "catalog-item-oil-lemon-pepper",
     brief: "catalog-brief-massage-hair-oil",
     unit: "ml",
     composition: [
@@ -441,8 +441,8 @@ const oils = [
     },
   },
   {
-    id: "solar_orange",
-    title: "Солнечный апельсин",
+    id: "oil_solar_orange",
+    title: "catalog-item-oil-solar-orange",
     brief: "catalog-brief-massage-body-oil",
     composition: ["maize_oil", "almond_oil", "wheat_oil", "essential_oil"],
     unit: "ml",
@@ -467,8 +467,8 @@ const oils = [
     },
   },
   {
-    id: "kenyan_coffee",
-    title: "Кенийский кофе",
+    id: "oil_kenyan_coffee",
+    title: "catalog-item-oil-kenyan-coffee",
     brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "co2_extract", "arabica_coffee"],
     unit: "ml",
@@ -487,8 +487,8 @@ const oils = [
     },
   },
   {
-    id: "mantra",
-    title: "Мантра",
+    id: "oil_mantra",
+    title: "catalog-item-oil-mantra",
     brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "wheat_oil"],
     unit: "ml",
@@ -507,8 +507,8 @@ const oils = [
     },
   },
   {
-    id: "citrus_freshness",
-    title: "Цитрусовая свежесть",
+    id: "oil_citrus_freshness",
+    title: "catalog-item-oil-citrus-freshness",
     brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "essential_oil"],
     unit: "ml",
@@ -527,8 +527,8 @@ const oils = [
     },
   },
   {
-    id: "orange_cinnamon",
-    title: "Апельсин и корица",
+    id: "oil_orange_cinnamon",
+    title: "catalog-item-oil-orange-cinnamon",
     brief: "catalog-brief-massage-body-oil",
     composition: ["almond_oil", "jojoba_oil", "essential_oil"],
     unit: "ml",
@@ -547,8 +547,8 @@ const oils = [
     },
   },
   {
-    id: "extra_slim_ultimate",
-    title: "Экстра слим алтимейт",
+    id: "oil_extra_slim_ultimate",
+    title: "catalog-item-oil-extra-slim-ultimate",
     brief: "catalog-brief-massage-body-oil",
     unit: "ml",
     composition: [
@@ -574,8 +574,8 @@ const oils = [
     },
   },
   {
-    id: "patchouli_mint",
-    title: "Пачули и дикая мята",
+    id: "oil_patchouli_mint",
+    title: "catalog-item-oil-patchouli-mint",
     brief: "catalog-brief-massage-hair-oil",
     unit: "ml",
     composition: [
@@ -604,8 +604,8 @@ const oils = [
     },
   },
   {
-    id: "lavender",
-    title: "Лаванда",
+    id: "oil_lavender",
+    title: "catalog-item-oil-lavender",
     brief: "catalog-brief-massage-face-oil",
     composition: ["almond_oil", "wheat_oil", "lavender_oil", "palmarose_oil"],
     unit: "ml",
@@ -628,8 +628,8 @@ const oils = [
     },
   },
   {
-    id: "floral",
-    title: "Цветочное",
+    id: "oil_floral",
+    title: "catalog-item-oil-floral",
     brief: "catalog-brief-massage-face-oil",
     composition: ["almond_oil", "wheat_oil", "lavender_oil", "blue_daisy_oil"],
     unit: "ml",
@@ -652,8 +652,8 @@ const oils = [
     },
   },
   {
-    id: "evening_primrose",
-    title: "Примула вечерняя",
+    id: "oil_evening_primrose",
+    title: "catalog-item-oil-evening-primrose",
     brief: "catalog-brief-massage-face-oil",
     composition: ["almond_oil", "evening_primrose_oil"],
     unit: "ml",
@@ -677,7 +677,7 @@ const oils = [
   },
   {
     id: "oil_lime_cinnamon",
-    title: "Лайм и корица",
+    title: "catalog-item-oil-lime-cinnamon",
     brief: "catalog-brief-massage-body-oil",
     composition: [],
     unit: "ml",
@@ -702,7 +702,7 @@ const oils = [
 const bodyScrubs = [
   {
     id: "body_scrub_mint_breeze",
-    title: "Мятный бриз",
+    title: "catalog-item-body-scrub-mint-breeze",
     brief: "catalog-brief-body-scrub",
     unit: "g",
     description: [
@@ -740,7 +740,7 @@ const bodyScrubs = [
   },
   {
     id: "body_scrub_extra_slim",
-    title: "Экстра слим",
+    title: "catalog-item-body-scrub-extra-slim",
     brief: "catalog-brief-body-scrub",
     unit: "g",
     description: [
@@ -778,7 +778,7 @@ const bodyScrubs = [
   },
   {
     id: "body_scrub_gluhwein",
-    title: "Глинтвейн",
+    title: "catalog-item-body-scrub-gluhwein",
     brief: "catalog-brief-body-scrub",
     unit: "g",
     description: [
@@ -816,7 +816,7 @@ const bodyScrubs = [
   },
   {
     id: "body_scrub_lemon_cake",
-    title: "Лимонный кекс",
+    title: "catalog-item-body-scrub-lemon-cake",
     brief: "catalog-brief-body-scrub",
     unit: "g",
     description: [
@@ -854,7 +854,7 @@ const bodyScrubs = [
   },
   {
     id: "body_scrub_bubble_gum",
-    title: "Баббл гам",
+    title: "catalog-item-body-scrub-bubble-gum",
     brief: "catalog-brief-body-scrub",
     unit: "g",
     description: [
@@ -892,7 +892,7 @@ const bodyScrubs = [
   },
   {
     id: "body_scrub_mocca",
-    title: "Мокка",
+    title: "catalog-item-body-scrub-mocca",
     brief: "catalog-brief-body-scrub",
     unit: "g",
     description: [
@@ -954,12 +954,12 @@ export const catalogTree = [
           "oil_bubble_gum",
           "oil_extra_slim",
           "oil_lemon_cake",
-          "kenyan_coffee",
-          "mantra",
-          "solar_orange",
-          "citrus_freshness",
-          "orange_cinnamon",
-          "extra_slim_ultimate",
+          "oil_kenyan_coffee",
+          "oil_mantra",
+          "oil_solar_orange",
+          "oil_citrus_freshness",
+          "oil_orange_cinnamon",
+          "oil_extra_slim_ultimate",
           "oil_lime_cinnamon",
           "oil_lemon_pepper",
         ],
@@ -971,7 +971,7 @@ export const catalogTree = [
         image: "/images/categories/face_massage_oil.png",
         description: ["catalog-category-face-massage-oil-description"],
         type: "category",
-        items: ["lavender", "floral", "evening_primrose"],
+        items: ["oil_lavender", "oil_floral", "oil_evening_primrose"],
       },
       {
         id: "hair_massage_oil",
@@ -980,7 +980,7 @@ export const catalogTree = [
         image: "/images/categories/hair_massage_oil.png",
         description: ["catalog-category-hair-massage-oil-description"],
         type: "category",
-        items: ["oil_lemon_pepper", "patchouli_mint"],
+        items: ["oil_lemon_pepper", "oil_patchouli_mint"],
       },
     ],
   },

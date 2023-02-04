@@ -88,7 +88,7 @@ export default function Item({ id }) {
           <Image
             className="image"
             src={getItemFirstPreviewImage(item.id)}
-            alt={item.title}
+            alt={t(item.title)}
             sx={{
               maxWidth: "100%",
               maxHeight: "100%",
@@ -104,7 +104,7 @@ export default function Item({ id }) {
             position: "relative",
           }}
         >
-          {item.title}
+          {t(item.title)}
         </Typography>
         <Typography variant="subtitle2">{t(item.brief)}</Typography>
         <Box
