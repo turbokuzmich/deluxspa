@@ -36,7 +36,6 @@ import {
 
 export default function Item({ id, auxiliaryIds }) {
   const { t } = useTranslation();
-  const { push } = useRouter();
   const dispatch = useDispatch();
 
   const item = useMemo(() => getItemById(id), [id]);
@@ -115,8 +114,6 @@ export default function Item({ id, auxiliaryIds }) {
       ),
     [id, qtys, item, dispatch]
   );
-
-  const onGoToMap = useCallback(() => push(`/map`), [push]);
 
   return (
     <Layout title={`${t(item.title)} (${t(item.brief)})`}>

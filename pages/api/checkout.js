@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { getSession } from "../../lib/helpers/session";
 import { getItemById } from "../../lib/helpers/catalog";
+import { i18n } from "next-i18next";
 import axios from "axios";
 import get from "lodash/get";
 import sequelize from "../../lib/backend/sequelize";
@@ -15,6 +16,11 @@ const api = axios.create({
     "content-type": "application/json",
   },
 });
+
+const locales = {
+  ru: "ru_RU",
+  en: "en_US",
+};
 
 // {
 //   id: '2b6b93b5-000f-5000-9000-1ec8e23febb4',
@@ -37,30 +43,20 @@ export default async function checkout(req, res) {
 
   if (req.method === "GET") {
     // TODO валидация ключа
-    // TODO показать успех один раз
-    // TODO тут нужно генерировать криптохэш
 
-    const { order: key } = req.query;
+    const { order, locale = "ru" } = req.query;
 
-    const [order, session] = await Promise.all([
-      db.models.order.findOne({ where: { key } }),
-      getSession(req, res),
-    ]);
+    const session = await getSession(req, res);
 
     session.items = [];
 
-    await Promise.all([
-      order.update({ status: "confirmed" }),
-      session.commit(),
-    ]);
+    await session.commit();
 
-    res.redirect("/");
+    res.redirect(`/${locale}/order/${order}`);
   } else if (req.method === "POST") {
     // TODO проверка на нулевой заказ
     // TODO валидация полей через yup
-    // FIXME не создается заказ только с телефоном
 
-    const orderKey = uuid(); // FIXME использовать механизм генерации из sequelize
     const orderData = [
       "phone",
       "email",
@@ -72,78 +68,65 @@ export default async function checkout(req, res) {
       return req.body[key] ? { ...data, [key]: req.body[key] } : data;
     }, {});
 
-    const session = await getSession(req, res);
-    const cartItems = get(session, "items", []);
+    const { sessionId } = await getSession(req, res);
 
-    const { total, items } = cartItems.reduce(
-      (result, cartItem) => {
-        const catalogItem = getItemById(cartItem.itemId);
-        const variant = catalogItem.variants.byId[cartItem.variantId];
+    const session = await db.models.Session.findOne({
+      where: { SessionId: sessionId },
+    });
 
-        result.items.push({
-          title: catalogItem.title,
-          variant: cartItem.variantId,
-          price: variant.price,
-          qty: cartItem.qty,
-        });
+    const [cartItems, cartTotal] = await Promise.all([
+      session.getCartItems(),
+      session.getCartTotal(),
+    ]);
 
-        result.total += cartItem.qty * variant.price;
-
-        return result;
-      },
-      {
-        total: 0,
-        items: [],
-      }
-    );
-
-    const order = await db.models.order.create({
-      key: orderKey,
+    const order = await db.models.Order.create({
       ...orderData,
     });
 
-    await db.models.orderItem.bulkCreate(
-      items.map((item) => ({ ...item, orderId: order.id }))
+    await db.models.OrderItem.bulkCreate(
+      cartItems.map((item) => ({ ...item.orderData, OrderId: order.id }))
     );
 
     try {
       const {
         data: {
+          id: paymentId,
+          status,
           confirmation: { confirmation_url },
         },
       } = await api.post(
         "payments",
         {
           amount: {
-            value: total.toFixed(2),
+            value: cartTotal.toFixed(2),
             currency: "RUB",
           },
           capture: true,
           confirmation: {
             type: "redirect",
-            return_url: `http://localhost:3000/api/checkout?order=${orderKey}`,
+            locale: locales[i18n.language],
+            // FIXME тут нужен хеш
+            return_url: `${process.env.SITE_URL}/api/checkout?order=${order.key}&locale=${i18n.language}`,
           },
+          save_payment_method: true,
+          merchant_customer_id: order.paymentPhone,
           metadata: {
-            order: order.id,
+            order: order.externalId,
+            locale: i18n.language,
           },
           receipt: {
-            phone: `7${req.body.phone}`, // FIXME clean
-            email: req.body.email, // FIXME clean
-            customer: {
-              phone: `7${req.body.phone}`, // FIXME clean
-              email: req.body.email, // FIXME clean
-            },
-            items: items.map(({ title, variant, price, qty }) => ({
+            customer: order.paymentData,
+            items: cartItems.map(({ title, variantId, price, qty }) => ({
               vat_code: 1,
               quantity: qty,
-              description: `${title} ${variant}`,
+              description: `${title} (${variantId})`,
               amount: {
                 value: price.toFixed(2),
                 currency: "RUB",
               },
             })),
           },
-          description: `Заказ №${order.id}`,
+          description: `Заказ №${order.externalId}`,
         },
         {
           headers: {
@@ -152,7 +135,7 @@ export default async function checkout(req, res) {
         }
       );
 
-      // TODO переключить в статус paid
+      await order.update({ paymentId, status });
 
       res.status(200).json({ url: confirmation_url });
     } catch (error) {

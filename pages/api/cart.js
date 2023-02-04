@@ -1,6 +1,7 @@
 import get from "lodash/get";
 import { getSession } from "../../lib/helpers/session";
 
+// TODO yup validation
 export default async function cart(req, res) {
   if (req.method === "GET") {
     const session = await getSession(req, res);
