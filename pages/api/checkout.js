@@ -56,6 +56,7 @@ export default async function checkout(req, res) {
   } else if (req.method === "POST") {
     // TODO проверка на нулевой заказ
     // TODO валидация полей через yup
+    // TODO sequelize transactions
 
     const orderData = [
       "phone",

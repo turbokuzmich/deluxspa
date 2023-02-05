@@ -8,6 +8,8 @@ export default function Order({ externalId, status }) {
   const { t } = useTranslation();
 
   // FIXME title
+  // TODO вы можете отслеживать заказ при помощи бота
+  // TODO вы можете оставить нам свою электронную почту, чтобы получать уведомления
   return (
     <Layout>
       <Container>

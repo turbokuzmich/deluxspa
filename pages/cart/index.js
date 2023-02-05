@@ -19,7 +19,6 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import decline from "../../lib/helpers/declension";
 import identity from "lodash/identity";
-import omit from "lodash/omit";
 import { Formik, Form, Field, useField, useFormikContext } from "formik";
 import { TextField as TextInput } from "formik-mui";
 import { PatternFormat } from "react-number-format";
@@ -30,6 +29,7 @@ import { getItemById, formatCapacity } from "../../lib/helpers/catalog";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { phoneFormat } from "../../constants";
+import { useRouter } from "next/router";
 import deliverySlice, {
   getDeliveryAddress,
   getDeliveryFormValues,
@@ -44,19 +44,9 @@ import cartSlice, {
   getCartSubtotal,
 } from "../../store/slices/cart";
 
-const deliveryValidationSchema = yup.object().shape({
-  phone: yup
-    .string()
-    .trim()
-    .required("Пожалуйста, укажите номер телефона")
-    .matches(/^\d{10}$/, "Пожалуйста, укажите корректный номер телефона"),
-  email: yup
-    .string()
-    .email("Пожалуйста, укажите правильный адрес электронной почты"),
-});
-
 export default function Cart() {
   const { t } = useTranslation();
+  const { locale } = useRouter();
   const dispatch = useDispatch();
   const items = useSelector(getCartItems);
   const count = useSelector(getCartItemsCount);
@@ -66,6 +56,19 @@ export default function Cart() {
   const addressSuggestions = useSelector(getDeliveryAddressSuggestions);
   const formValues = useSelector(getDeliveryFormValues);
   const phoneFieldRef = useRef(null);
+
+  const deliveryValidationSchema = useMemo(
+    () =>
+      yup.object().shape({
+        phone: yup
+          .string()
+          .trim()
+          .required(t("cart-page-phone-number-empty"))
+          .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
+        email: yup.string().email(t("cart-page-email-incorrect")),
+      }),
+    [t]
+  );
 
   const onChanges = useMemo(
     () =>
@@ -176,7 +179,7 @@ export default function Cart() {
             </Typography>
             <Typography>
               <Link href="/catalog" passHref>
-                <A>Перейти к покупкам</A>
+                <A>{t("cart-page-back-to-catalog")}</A>
               </Link>
             </Typography>
           </Box>
@@ -191,14 +194,27 @@ export default function Cart() {
       <Layout>
         <Container>
           <Box sx={{ pt: 8 }}>
-            <Typography variant="h3" paragraph>
-              Оформление покупки
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+              }}
+            >
+              <Typography variant="h3" paragraph>
+                {t("cart-page-title")}
+              </Typography>
+              <Typography variant="h5">
+                <Link href="/catalog" passHref>
+                  <A>{t("cart-page-back-to-catalog")}</A>
+                </Link>
+              </Typography>
+            </Box>
             {state === CartState.fetched ? (
               <Card elevation={0} square>
                 <CardContent>
                   <Typography variant="h4" paragraph>
-                    Товары
+                    {t("cart-page-items-title")}
                   </Typography>
                   <Box
                     sx={{
@@ -334,10 +350,10 @@ export default function Cart() {
                   }}
                 >
                   <Button size="large" variant="contained" onClick={toDelivery}>
-                    Оформить доставку
+                    {t("cart-page-button-shipping")}
                   </Button>
                   <Typography variant="h5">
-                    Итого: <Price sum={subtotal} />
+                    {t("cart-page-subtotal")}: <Price sum={subtotal} />
                   </Typography>
                 </CardActions>
               </Card>
@@ -354,15 +370,23 @@ export default function Cart() {
                   }}
                 >
                   <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                    Товары
+                    {t("cart-page-items-title")}
                   </Typography>
                   <Typography variant="h6">
                     <Number value={count} />{" "}
-                    {decline(count, ["позиция", "позиции", "позиций"])} на сумму{" "}
-                    <Price sum={subtotal} />
+                    {decline(
+                      count,
+                      [
+                        t("cart-page-items-1"),
+                        t("cart-page-items-2"),
+                        t("cart-page-items-5"),
+                      ],
+                      locale
+                    )}{" "}
+                    {t("cart-page-for")} <Price sum={subtotal} />
                   </Typography>
                   <Button variant="contained" size="medium" onClick={toItems}>
-                    Изменить
+                    {t("cart-page-button-change")}
                   </Button>
                 </CardContent>
               </Card>
@@ -378,7 +402,7 @@ export default function Cart() {
                 <Card elevation={0} square>
                   <CardContent>
                     <Typography variant="h4" paragraph>
-                      Доставка
+                      {t("cart-page-shipping-title")}
                     </Typography>
                     <Form>
                       <Box
@@ -391,7 +415,7 @@ export default function Cart() {
                         <PhoneInput inputRef={phoneFieldRef} />
                         <Field
                           component={TextInput}
-                          label="Электронный адрес"
+                          label={t("cart-page-email")}
                           autoComplete="off"
                           name="email"
                           fullWidth
@@ -415,7 +439,7 @@ export default function Cart() {
                           renderInput={(params) => (
                             <TextField
                               {...params}
-                              label="Адрес доставки"
+                              label={t("cart-page-address")}
                               fullWidth
                             />
                           )}
@@ -423,7 +447,7 @@ export default function Cart() {
                       </Box>
                       <Field
                         component={TextInput}
-                        label="Комментарий"
+                        label={t("cart-page-comment")}
                         autoComplete="off"
                         name="comment"
                         rows={4}
@@ -473,6 +497,7 @@ export default function Cart() {
 }
 
 function ToPaymentButton() {
+  const { t } = useTranslation();
   const { isValid, submitForm } = useFormikContext();
 
   return (
@@ -482,12 +507,13 @@ function ToPaymentButton() {
       disabled={!isValid}
       onClick={submitForm}
     >
-      Перейти к оплате
+      {t("cart-page-button-complete-order")}
     </Button>
   );
 }
 
 function PhoneInputBase({ inputRef, ...props }) {
+  const { t } = useTranslation();
   const [{ name }, { error, touched }] = useField("phone");
 
   return (
@@ -496,7 +522,7 @@ function PhoneInputBase({ inputRef, ...props }) {
       error={touched && Boolean(error)}
       helperText={touched ? error : undefined}
       inputRef={inputRef}
-      label="Номер телефона"
+      label={t("cart-page-phone")}
       autoComplete="off"
       name={name}
       fullWidth

@@ -195,6 +195,7 @@ export default function Header() {
           sx={{
             flexGrow: 1,
             justifyContent: "flex-end",
+            alignItems: "center",
             display: {
               xs: "none",
               md: "flex",
