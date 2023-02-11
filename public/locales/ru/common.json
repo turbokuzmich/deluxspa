@@ -7,6 +7,7 @@
   "page-title-map": "Где купить",
   "page-title-partners": "Партнеры Delux SPA",
   "page-title-promo": "Акции",
+  "page-title-order": "Информация по заказу",
 
   "download-playmarket": "Скачать приложение",
 
@@ -131,5 +132,18 @@
   "consumption-common": "общий массаж всего тела",
   "consumption-back": "массаж спины",
 
-  "partner-cprm-title": "Международный Центр Подготовки и Развития Массажистов"
+  "partner-cprm-title": "Международный Центр Подготовки и Развития Массажистов",
+
+  "order-title": "Заказ",
+  "order-not-found-title": "Заказ не найден",
+  "order-items-title": "Состав заказа",
+  "order-status": "Статус заказа",
+  "order-status-created": "создан",
+  "order-status-pending": "ожидает оплаты",
+  "order-status-waiting_for_capture": "ожидает оплаты",
+  "order-status-succeeded": "собирается",
+  "order-status-canceled": "отменен",
+  "order-status-delivered": "доставлен",
+  "order-address": "Адрес доставки",
+  "order-no-address": "не указан"
 }

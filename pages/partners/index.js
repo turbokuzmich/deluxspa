@@ -12,38 +12,39 @@ export default function Partners() {
 
   return (
     <Layout title={t("page-title-partners")}>
-      <>
-        <Container>
-          <Box
+      <Container>
+        <Box
+          sx={{
+            pt: 8,
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{ textTransform: "uppercase" }}
+            paragraph
+          >
+            {t("menu-partners")}
+          </Typography>
+          <A
+            href="http://cprm.ru"
+            target="_blank"
+            rel="nofollow"
             sx={{
-              pt: 8,
+              gap: 4,
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <Typography
-              variant="h3"
-              sx={{ textTransform: "uppercase" }}
-              paragraph
-            >
-              {t("menu-partners")}
+            <Image
+              src="/images/partners/cprm.png"
+              alt={t("partner-cprm-title")}
+            />
+            <Typography component="span" variant="h5">
+              {t("partner-cprm-title")}
             </Typography>
-            <A
-              href="http://cprm.ru"
-              target="_blank"
-              rel="nofollow"
-              sx={{
-                gap: 4,
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Image src="/images/partners/cprm.png" />
-              <Typography component="span" variant="h5">
-                {t("partner-cprm-title")}
-              </Typography>
-            </A>
-          </Box>
-        </Container>
-      </>
+          </A>
+        </Box>
+      </Container>
     </Layout>
   );
 }

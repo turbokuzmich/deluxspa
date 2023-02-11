@@ -1,50 +1,22 @@
-import { v4 as uuid } from "uuid";
 import { getSession } from "../../lib/helpers/session";
-import { getItemById } from "../../lib/helpers/catalog";
-import { i18n } from "next-i18next";
-import axios from "axios";
-import get from "lodash/get";
-import sequelize from "../../lib/backend/sequelize";
+import { createPayment } from "../../lib/backend/yookassa";
+import sequelize, { Order } from "../../lib/backend/sequelize";
 
-const api = axios.create({
-  baseURL: process.env.YOOKASSA_API_URL,
-  auth: {
-    username: process.env.YOOKASSA_SHOP_ID,
-    password: process.env.YOOKASSA_SECRET_KEY,
-  },
-  header: {
-    "content-type": "application/json",
-  },
-});
-
-const locales = {
-  ru: "ru_RU",
-  en: "en_US",
-};
-
-// {
-//   id: '2b6b93b5-000f-5000-9000-1ec8e23febb4',
-//   status: 'pending',
-//   amount: { value: '100.00', currency: 'RUB' },
-//   description: 'Order 1',
-//   recipient: { account_id: '945343', gateway_id: '2009333' },
-//   created_at: '2023-01-31T20:54:13.749Z',
-//   confirmation: {
-//     type: 'redirect',
-//     confirmation_url: 'https://yoomoney.ru/checkout/payments/v2/contract?orderId=2b6b93b5-000f-5000-9000-1ec8e23febb4'
-//   },
-//   test: true,
-//   paid: false,
-//   refundable: false,
-//   metadata: {}
-// }
 export default async function checkout(req, res) {
   const db = await sequelize;
 
   if (req.method === "GET") {
-    // TODO валидация ключа
+    const { s, order: id, locale = "ru" } = req.query;
 
-    const { order, locale = "ru" } = req.query;
+    const order = await Order.getByExternalId(id);
+
+    if (!order) {
+      return res.status(404).json({});
+    }
+
+    if (!order.validateHmac(s)) {
+      return res.status(400).json({});
+    }
 
     const session = await getSession(req, res);
 
@@ -52,8 +24,9 @@ export default async function checkout(req, res) {
 
     await session.commit();
 
-    res.redirect(`/${locale}/order/${order}`);
+    res.redirect(`/${locale}/order/${id}-${s}`);
   } else if (req.method === "POST") {
+    // TODO CSRF
     // TODO проверка на нулевой заказ
     // TODO валидация полей через yup
     // TODO sequelize transactions
@@ -75,11 +48,17 @@ export default async function checkout(req, res) {
       where: { SessionId: sessionId },
     });
 
-    const [cartItems, cartTotal] = await Promise.all([
-      session.getCartItems(),
-      session.getCartTotal(),
-    ]);
+    if (!session) {
+      return res.status(404).json({});
+    }
 
+    const cartItems = await session.getCartItems();
+
+    if (cartItems.length === 0) {
+      return res.status(400).json({});
+    }
+
+    // FIXME transaction
     const order = await db.models.Order.create({
       ...orderData,
     });
@@ -89,57 +68,11 @@ export default async function checkout(req, res) {
     );
 
     try {
-      const {
-        data: {
-          id: paymentId,
-          status,
-          confirmation: { confirmation_url },
-        },
-      } = await api.post(
-        "payments",
-        {
-          amount: {
-            value: cartTotal.toFixed(2),
-            currency: "RUB",
-          },
-          capture: true,
-          confirmation: {
-            type: "redirect",
-            locale: locales[i18n.language],
-            // FIXME тут нужен хеш
-            return_url: `${process.env.SITE_URL}/api/checkout?order=${order.key}&locale=${i18n.language}`,
-          },
-          save_payment_method: true,
-          merchant_customer_id: order.paymentPhone,
-          metadata: {
-            order: order.externalId,
-            locale: i18n.language,
-          },
-          receipt: {
-            customer: order.paymentData,
-            items: cartItems.map(({ title, variantId, price, qty }) => ({
-              vat_code: 1,
-              quantity: qty,
-              description: `${title} (${variantId})`,
-              amount: {
-                value: price.toFixed(2),
-                currency: "RUB",
-              },
-            })),
-          },
-          description: `Заказ №${order.externalId}`,
-        },
-        {
-          headers: {
-            "idempotence-key": uuid(),
-          },
-        }
-      );
+      const url = await createPayment(order);
 
-      await order.update({ paymentId, status });
-
-      res.status(200).json({ url: confirmation_url });
+      res.status(200).json({ url });
     } catch (error) {
+      console.log(error);
       res.status(500).json({});
     }
   } else {

@@ -7,6 +7,7 @@
   "page-title-map": "Delux SPA retailers",
   "page-title-partners": "Delux SPA partners",
   "page-title-promo": "Promo",
+  "page-title-order": "Order info",
 
   "download-playmarket": "Download app",
 
@@ -131,5 +132,18 @@
   "consumption-common": "body massage",
   "consumption-back": "back massage",
 
-  "partner-cprm-title": "Международный Центр Подготовки и Развития Массажистов"
+  "partner-cprm-title": "Международный Центр Подготовки и Развития Массажистов",
+
+  "order-title": "Order",
+  "order-not-found-title": "Order not found",
+  "order-items-title": "Order items",
+  "order-status": "Order status",
+  "order-status-created": "created",
+  "order-status-pending": "waiting payment",
+  "order-status-waiting_for_capture": "waiting payment",
+  "order-status-succeeded": "preparing",
+  "order-status-canceled": "canceled",
+  "order-status-delivered": "delivered",
+  "order-address": "Delivery info",
+  "order-no-address": "not specified"
 }
