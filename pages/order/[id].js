@@ -145,8 +145,6 @@ export async function getServerSideProps({ locale, params: { id } }) {
     order.getOrderTotal(),
   ]);
 
-  // const items = (await order.getOrderItems());
-
   return {
     props: {
       ...props,
