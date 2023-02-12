@@ -1,6 +1,9 @@
 import get from "lodash/get";
 import { getSession } from "../../lib/helpers/session";
 
+// TODO move
+import "../../lib/backend/cron";
+
 // TODO yup validation
 export default async function cart(req, res) {
   if (req.method === "GET") {
