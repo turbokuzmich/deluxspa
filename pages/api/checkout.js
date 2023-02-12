@@ -1,6 +1,22 @@
 import { getSession } from "../../lib/helpers/session";
 import { createPayment } from "../../lib/backend/yookassa";
+import t from "../../lib/helpers/i18n";
+import * as yup from "yup";
 import sequelize, { Order } from "../../lib/backend/sequelize";
+import send, { sendNewOrderEmail } from "../../lib/backend/letters";
+
+const orderValidators = yup.object().shape({
+  phone: yup
+    .string()
+    .trim()
+    .required(t("cart-page-phone-number-empty"))
+    .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
+  email: yup.string().email(t("cart-page-email-incorrect")),
+  comment: yup.string(),
+  address: yup.string().nullable(),
+  lat: yup.number().nullable(),
+  lng: yup.number().nullable(),
+});
 
 export default async function checkout(req, res) {
   const db = await sequelize;
@@ -24,23 +40,15 @@ export default async function checkout(req, res) {
 
     await session.commit();
 
-    res.redirect(`/${locale}/order/${id}-${s}`);
+    res.redirect(order.infoUrl);
   } else if (req.method === "POST") {
     // TODO CSRF
-    // TODO проверка на нулевой заказ
-    // TODO валидация полей через yup
     // TODO sequelize transactions
 
-    const orderData = [
-      "phone",
-      "email",
-      "comment",
-      "address",
-      "lat",
-      "lng",
-    ].reduce((data, key) => {
-      return req.body[key] ? { ...data, [key]: req.body[key] } : data;
-    }, {});
+    const orderData = await orderValidators.validate(req.body, {
+      strict: true,
+      stripUnknown: true,
+    });
 
     const { sessionId } = await getSession(req, res);
 
@@ -69,6 +77,8 @@ export default async function checkout(req, res) {
 
     try {
       const url = await createPayment(order);
+
+      await sendNewOrderEmail(order);
 
       res.status(200).json({ url });
     } catch (error) {
