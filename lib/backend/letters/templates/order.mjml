@@ -92,11 +92,6 @@
     </mj-section>
     <mj-section padding-top="0" padding-bottom="20px">
       <mj-column background-color="#ffffff" padding-top="10px" padding-bottom="10px">
-        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px"></mj-text>
-      </mj-column>
-    </mj-section>
-    <mj-section padding-top="0" padding-bottom="20px">
-      <mj-column background-color="#ffffff" padding-top="10px" padding-bottom="10px">
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">Отслеживайте статус заказа на нашем сайте по <a href="<%= data.order.url %>" target="_blank" style="color:#5e5343">ссылке</a>.</mj-text>
       </mj-column>
     </mj-section>
