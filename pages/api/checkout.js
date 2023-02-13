@@ -5,6 +5,7 @@ import * as yup from "yup";
 import sequelize, { Order } from "../../lib/backend/sequelize";
 import { sendNewOrderEmail } from "../../lib/backend/letters";
 import { calculate } from "../../lib/backend/cdek";
+import { notifyOfNewOrder } from "../../lib/backend/bot";
 
 const orderValidators = yup.object().shape({
   phone: yup
@@ -92,9 +93,8 @@ export default async function checkout(req, res) {
       await orderTransaction.commit();
 
       const url = await createPayment(order);
-      console.log(url);
 
-      await sendNewOrderEmail(order);
+      await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
 
       res.status(200).json({ url });
     } catch (error) {

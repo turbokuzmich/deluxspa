@@ -3,6 +3,9 @@ import { getSession } from "../../lib/helpers/session";
 
 // TODO move
 import "../../lib/backend/cron";
+import runBot from "../../lib/backend/bot";
+
+runBot();
 
 // TODO yup validation
 export default async function cart(req, res) {
