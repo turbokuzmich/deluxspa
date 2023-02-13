@@ -57,6 +57,7 @@
         <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px">
           Здравствуйте. Вы сделали заказ в <span style="white-space:nowrap">интернет-магазине</span>&nbsp;«Демидов&nbsp;Люкс&nbsp;СПА».
           В заказе <%= data.order.size %> <%= data.order.text.positions %> на сумму <%= data.order.subtotal %>&nbsp;руб.
+          Заказ будет доставлен в пункт «<%= data.order.name %>» по адресу <%= data.order.address %>.
           Мы свяжемся с вами в ближайшее время для уточнения деталей доставки.</mj-text>
         <mj-divider border-width="1px" border-color="lightgrey" />
         <mj-table>
@@ -75,12 +76,23 @@
           </tr>
           <% }); %>
           <tr>
+            <td style="padding: 0 15px 10px 0; font-size: 14px">Доставка СДЭК</td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"></td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"></td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"><%= data.order.delivery %></td>
+          </tr>
+          <tr>
             <td style="padding: 0 15px 10px 0; font-size: 14px"></td>
             <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top"></td>
             <td style="padding: 0 0 10px 15px; text-align: right; font-size: 16px; vertical-align: top; font-weight: bold">Итого</td>
-            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top;font-size: 16px; font-weight: bold; white-space: nowrap"><%= data.order.subtotal %>&nbsp;руб.</td>
+            <td style="padding: 0 0 10px 15px; text-align: right; font-size: 14px; vertical-align: top;font-size: 16px; font-weight: bold; white-space: nowrap"><%= data.order.total %>&nbsp;руб.</td>
           </tr>
         </mj-table>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top="0" padding-bottom="20px">
+      <mj-column background-color="#ffffff" padding-top="10px" padding-bottom="10px">
+        <mj-text font-family="Roboto, sans-serif" line-height="24px" font-size="18px"></mj-text>
       </mj-column>
     </mj-section>
     <mj-section padding-top="0" padding-bottom="20px">

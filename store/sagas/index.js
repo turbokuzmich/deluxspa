@@ -92,6 +92,55 @@ export function* handlePayment() {
   location.href = url;
 }
 
+export function* fetchCdekCitiesSuggestions({ payload: title }) {
+  if (title.length === 0) {
+    return yield put(deliverySlice.actions.setCitySuggestions([]));
+  }
+
+  const { data: citySuggestions } = yield call([api, api.get], "/cdek/cities", {
+    params: {
+      title,
+    },
+  });
+
+  yield put(
+    deliverySlice.actions.setCitySuggestions(
+      citySuggestions.map((city) => ({
+        ...city,
+        label: `${city.city}, ${city.region}`,
+        value: city.code,
+      }))
+    )
+  );
+}
+
+export function* fetchCdekPointsSuggestions({ payload: city }) {
+  if (city === null) {
+    return;
+  }
+
+  const { data: points } = yield call([api, api.get], "/cdek/points", {
+    params: { city: city.code },
+  });
+
+  yield put(deliverySlice.actions.setPoints(points));
+}
+
+export function* calculateCdekTariff({ payload: point }) {
+  if (point === null) {
+    return;
+  }
+
+  const { data: calculation } = yield call([api, api.get], "/cdek/calculate", {
+    params: {
+      code: point.location.city_code,
+      address: point.location.address_full,
+    },
+  });
+
+  yield put(deliverySlice.actions.setCalculation(calculation));
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
@@ -102,6 +151,13 @@ export default function* rootSaga() {
       fetchAddressSuggestions
     ),
     takeLatest(deliverySlice.actions.setAddress, geocodeAddress),
+    debounce(
+      300,
+      deliverySlice.actions.changeTitleInput,
+      fetchCdekCitiesSuggestions
+    ),
+    takeLatest(deliverySlice.actions.setCity, fetchCdekPointsSuggestions),
+    takeLatest(deliverySlice.actions.setPoint, calculateCdekTariff),
   ]);
 
   yield call(getItemsSaga);

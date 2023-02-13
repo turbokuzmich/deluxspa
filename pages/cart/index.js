@@ -31,9 +31,12 @@ import { useDispatch } from "react-redux";
 import { phoneFormat } from "../../constants";
 import { useRouter } from "next/router";
 import deliverySlice, {
-  getDeliveryAddress,
+  getDeliveryCitySuggestions,
+  getDeliveryCity,
+  getDeliveryPoints,
+  getDeliveryPoint,
+  getDeliveryCalculation,
   getDeliveryFormValues,
-  getDeliveryAddressSuggestions,
 } from "../../store/slices/delivery";
 import cartSlice, {
   CartState,
@@ -52,10 +55,16 @@ export default function Cart() {
   const count = useSelector(getCartItemsCount);
   const subtotal = useSelector(getCartSubtotal);
   const state = useSelector(getCartState);
-  const address = useSelector(getDeliveryAddress);
-  const addressSuggestions = useSelector(getDeliveryAddressSuggestions);
   const formValues = useSelector(getDeliveryFormValues);
   const phoneFieldRef = useRef(null);
+  const city = useSelector(getDeliveryCity);
+  const citySuggestions = useSelector(getDeliveryCitySuggestions);
+  const points = useSelector(getDeliveryPoints);
+  const point = useSelector(getDeliveryPoint);
+  const calculation = useSelector(getDeliveryCalculation);
+
+  const mapsContainerRef = useRef();
+  const map = useRef();
 
   const deliveryValidationSchema = useMemo(
     () =>
@@ -129,28 +138,94 @@ export default function Cart() {
     [dispatch]
   );
 
-  const onAddressInputChange = useCallback(
-    (_, newInput) =>
-      dispatch(deliverySlice.actions.changeAddressInput(newInput)),
+  const onTitleInputChange = useCallback(
+    (_, newInput) => dispatch(deliverySlice.actions.changeTitleInput(newInput)),
     [dispatch]
   );
 
-  const onAddressSelected = useCallback(
+  const onCitySelected = useCallback(
     (_, option) =>
-      dispatch(deliverySlice.actions.setAddress(option ? option.value : null)),
+      dispatch(deliverySlice.actions.setCity(option ? option : null)),
     [dispatch]
   );
 
-  const isOptionEqualToValue = useCallback(
-    ({ value }, address) => value === address,
-    []
+  const onPointSelected = useCallback(
+    (point) => {
+      dispatch(deliverySlice.actions.setPoint(point));
+    },
+    [dispatch]
   );
+
+  const isOptionEqualToValue = useCallback((cityA, cityB) => {
+    return cityA.code === cityB.code;
+  }, []);
 
   useEffect(() => {
     if (state === CartState.delivery && phoneFieldRef.current) {
       phoneFieldRef.current.focus();
     }
   }, [state]);
+
+  useEffect(() => {
+    if (city) {
+      if (map.current) {
+        map.current.destroy();
+        map.current = null;
+      }
+
+      const { latitude, longitude } = city;
+
+      map.current = new ymaps.Map(mapsContainerRef.current, {
+        center: [latitude, longitude],
+        zoom: 11,
+        controls: ["smallMapDefaultSet"],
+      });
+    } else {
+      if (map.current) {
+        map.current.destroy();
+        map.current = null;
+      }
+    }
+  }, [city]);
+
+  useEffect(() => {
+    if (map.current) {
+      const clusterer = new ymaps.Clusterer({
+        groupByCoordinates: false,
+        clusterDisableClickZoom: true,
+        clusterHideIconOnBalloonOpen: false,
+        geoObjectHideIconOnBalloonOpen: false,
+      });
+
+      clusterer.balloon.events.add(["open", "click"], () => {
+        const { cluster } = clusterer.balloon.getData();
+        const object = cluster.state.get("activeObject");
+        object.events.fire("deluxspa:selected");
+      });
+
+      const placemarks = points.map((point) => {
+        const placemark = new ymaps.Placemark(
+          [point.location.latitude, point.location.longitude],
+          {
+            balloonContentHeader: point.name,
+            balloonContentBody: point.location.address_full,
+          },
+          {
+            preset: "islands#circleIcon",
+          }
+        );
+
+        placemark.events.add(["click", "deluxspa:selected"], () =>
+          onPointSelected(point)
+        );
+
+        return placemark;
+      });
+
+      clusterer.add(placemarks);
+      map.current.geoObjects.add(clusterer);
+    }
+  }, [points, onPointSelected]);
 
   if ([CartState.initial, CartState.fetching].includes(state)) {
     return (
@@ -401,15 +476,37 @@ export default function Cart() {
               >
                 <Card elevation={0} square>
                   <CardContent>
-                    <Typography variant="h4" paragraph>
-                      {t("cart-page-shipping-title")}
-                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        alignItems: "center",
+                        mb: 2,
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                        {t("cart-page-shipping-title")}
+                      </Typography>
+                      {point && calculation ? (
+                        <Typography variant="h6">
+                          В пункт «{point.name}» на сумму{" "}
+                          <Price sum={calculation.total_sum} /> (
+                          {calculation.period_min} – {calculation.period_max}{" "}
+                          {decline(calculation.period_max, [
+                            "день",
+                            "дня",
+                            "дней",
+                          ])}
+                          )
+                        </Typography>
+                      ) : null}
+                    </Box>
                     <Form>
                       <Box
                         sx={{
                           display: "flex",
                           gap: 2,
-                          mb: 1,
+                          mb: 2,
                         }}
                       >
                         <PhoneInput inputRef={phoneFieldRef} />
@@ -421,15 +518,15 @@ export default function Cart() {
                           fullWidth
                         />
                       </Box>
-                      <Box sx={{ mb: 1 }}>
+                      <Box sx={{ mb: 2 }}>
                         <Autocomplete
                           disablePortal
                           autoComplete
-                          value={address}
+                          value={city}
                           filterOptions={identity}
-                          onInputChange={onAddressInputChange}
-                          onChange={onAddressSelected}
-                          options={addressSuggestions}
+                          onInputChange={onTitleInputChange}
+                          onChange={onCitySelected}
+                          options={citySuggestions}
                           isOptionEqualToValue={isOptionEqualToValue}
                           renderOption={(props, option) => (
                             <li {...props} key={option.value}>
@@ -437,13 +534,20 @@ export default function Cart() {
                             </li>
                           )}
                           renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label={t("cart-page-address")}
-                              fullWidth
-                            />
+                            <TextField {...params} label="Город" fullWidth />
                           )}
+                          sx={{ mb: 1 }}
                         />
+                        {city ? (
+                          <>
+                            <Box
+                              ref={mapsContainerRef}
+                              sx={{
+                                height: { xs: 200, md: 400 },
+                              }}
+                            ></Box>
+                          </>
+                        ) : null}
                       </Box>
                       <Field
                         component={TextInput}
@@ -499,12 +603,14 @@ export default function Cart() {
 function ToPaymentButton() {
   const { t } = useTranslation();
   const { isValid, submitForm } = useFormikContext();
+  const point = useSelector(getDeliveryPoint);
+  const calculation = useSelector(getDeliveryCalculation);
 
   return (
     <Button
       size="large"
       variant="contained"
-      disabled={!isValid}
+      disabled={!(isValid && point && calculation)}
       onClick={submitForm}
     >
       {t("cart-page-button-complete-order")}

@@ -18,9 +18,11 @@ import TableRow from "@mui/material/TableRow";
 export default function ViewOrder({
   error,
   address,
+  name,
   status,
   externalId,
   total,
+  delivery,
   items,
 }) {
   const { t } = useTranslation();
@@ -55,12 +57,11 @@ export default function ViewOrder({
               >
                 {t("order-title")} {externalId}
               </Typography>
-              <Typography>
-                {t("order-status")}: {t(`order-status-${status}`)}
-              </Typography>
+              <Typography fontWeight="bold">{t("order-status")}</Typography>
+              <Typography paragraph>{t(`order-status-${status}`)}</Typography>
+              <Typography fontWeight="bold">{t("order-address")}</Typography>
               <Typography paragraph>
-                {t("order-address")}:{" "}
-                {address ? address : t("order-no-address")}
+                «{name}» по адресу {address}
               </Typography>
               <Typography variant="h4" paragraph>
                 {t("order-items-title")}
@@ -97,6 +98,23 @@ export default function ViewOrder({
                         </TableCell>
                       </TableRow>
                     ))}
+                    <TableRow>
+                      <TableCell>
+                        <Typography>доставка</Typography>
+                        <Typography variant="h5" textTransform="uppercase">
+                          СДЭК
+                        </Typography>
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{ verticalAlign: "bottom" }}
+                      ></TableCell>
+                      <TableCell align="right" sx={{ verticalAlign: "bottom" }}>
+                        <Typography variant="h5">
+                          <Price sum={delivery} />
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
                     <TableRow>
                       <TableCell sx={{ borderBottom: "none" }}></TableCell>
                       <TableCell sx={{ borderBottom: "none" }}></TableCell>
@@ -140,16 +158,19 @@ export async function getServerSideProps({ locale, params: { id } }) {
     return { props: { ...props, error: true } };
   }
 
-  const [items, total] = await Promise.all([
-    order.getOrderItems(),
-    order.getOrderTotal(),
-  ]);
+  const items = await order.getOrderItems();
 
   return {
     props: {
       ...props,
-      ...pick(order, ["address", "status", "externalId"]),
-      total,
+      ...pick(order, [
+        "address",
+        "name",
+        "total",
+        "delivery",
+        "status",
+        "externalId",
+      ]),
       items: items.map((item) =>
         pick(item, [
           "title",

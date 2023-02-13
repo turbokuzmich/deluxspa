@@ -29,6 +29,50 @@ export const getDeliveryComment = createSelector(
   property("comment")
 );
 
+export const getDeliveryCity = createSelector(getDelivery, property("city"));
+export const getDeliveryTitle = createSelector(getDelivery, property("title"));
+export const getDeliveryPoint = createSelector(getDelivery, property("point"));
+export const getDeliveryPointCode = createSelector(
+  getDeliveryPoint,
+  property("code")
+);
+export const getDeliveryPointName = createSelector(
+  getDeliveryPoint,
+  property("name")
+);
+export const getDeliveryPointLocation = createSelector(
+  getDeliveryPoint,
+  property("location")
+);
+export const getDeliveryPointCityCode = createSelector(
+  getDeliveryPointLocation,
+  property("city_code")
+);
+export const getDeliveryPointAddress = createSelector(
+  getDeliveryPointLocation,
+  property("address_full")
+);
+export const getDeliveryPointLatitude = createSelector(
+  getDeliveryPointLocation,
+  property("latitude")
+);
+export const getDeliveryPointLongitude = createSelector(
+  getDeliveryPointLocation,
+  property("longitude")
+);
+export const getDeliveryCalculation = createSelector(
+  getDelivery,
+  property("calculation")
+);
+export const getDeliveryPoints = createSelector(
+  getDelivery,
+  property("points")
+);
+export const getDeliveryCitySuggestions = createSelector(
+  getDelivery,
+  property("citySuggestions")
+);
+
 export const getDeliveryFormValues = createSelector(
   getDeliveryPhone,
   getDeliveryEmail,
@@ -40,16 +84,22 @@ export const getDeliveryInfo = createSelector(
   getDeliveryPhone,
   getDeliveryEmail,
   getDeliveryComment,
-  getDeliveryAddress,
-  getDeliveryLat,
-  getDeliveryLng,
-  (phone, email, comment, address, lat, lng) => ({
+  getDeliveryPointCode,
+  getDeliveryPointCityCode,
+  getDeliveryPointName,
+  getDeliveryPointAddress,
+  getDeliveryPointLatitude,
+  getDeliveryPointLongitude,
+  (phone, email, comment, code, city, name, address, latitude, longitude) => ({
     phone,
     email,
     comment,
+    code,
+    city,
+    name,
     address,
-    lat,
-    lng,
+    latitude,
+    longitude,
   })
 );
 
@@ -70,6 +120,13 @@ export default createSlice({
     geocodingStatus: GeoCodingStatus.initial,
     lat: null,
     lng: null,
+
+    title: "",
+    citySuggestions: [],
+    city: null,
+    points: [],
+    point: null,
+    calculation: null,
   },
   reducers: {
     apiLoaded(state) {
@@ -101,6 +158,37 @@ export default createSlice({
       state.phone = phone;
       state.email = email;
       state.comment = comment;
+    },
+    changeTitleInput(state, { payload }) {
+      state.city = null;
+      state.points = [];
+      state.point = null;
+      state.calculation = null;
+      state.title = payload;
+    },
+    setCity(state, { payload }) {
+      state.city = payload;
+      state.points = [];
+      state.point = null;
+      state.calculation = null;
+    },
+    setCitySuggestions(state, { payload }) {
+      state.citySuggestions = payload;
+      state.points = [];
+      state.point = null;
+      state.calculation = null;
+    },
+    setPoints(state, { payload }) {
+      state.points = payload;
+      state.point = null;
+      state.calculation = null;
+    },
+    setPoint(state, { payload }) {
+      state.point = payload;
+      state.calculation = null;
+    },
+    setCalculation(state, { payload }) {
+      state.calculation = payload;
     },
   },
 });

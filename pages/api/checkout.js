@@ -3,7 +3,8 @@ import { createPayment } from "../../lib/backend/yookassa";
 import t from "../../lib/helpers/i18n";
 import * as yup from "yup";
 import sequelize, { Order } from "../../lib/backend/sequelize";
-import send, { sendNewOrderEmail } from "../../lib/backend/letters";
+import { sendNewOrderEmail } from "../../lib/backend/letters";
+import { calculate } from "../../lib/backend/cdek";
 
 const orderValidators = yup.object().shape({
   phone: yup
@@ -11,11 +12,14 @@ const orderValidators = yup.object().shape({
     .trim()
     .required(t("cart-page-phone-number-empty"))
     .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
-  email: yup.string().email(t("cart-page-email-incorrect")),
-  comment: yup.string(),
-  address: yup.string().nullable(),
-  lat: yup.number().nullable(),
-  lng: yup.number().nullable(),
+  code: yup.string().trim().required(),
+  city: yup.number().required(),
+  name: yup.string().trim().required(),
+  address: yup.string().trim().required(),
+  latitude: yup.number().required(),
+  longitude: yup.number().required(),
+  email: yup.string().nullable().email(t("cart-page-email-incorrect")),
+  comment: yup.string().nullable(),
 });
 
 export default async function checkout(req, res) {
@@ -66,24 +70,38 @@ export default async function checkout(req, res) {
       return res.status(400).json({});
     }
 
-    // FIXME transaction
-    const order = await db.models.Order.create({
-      ...orderData,
-    });
-
-    await db.models.OrderItem.bulkCreate(
-      cartItems.map((item) => ({ ...item.orderData, OrderId: order.id }))
-    );
+    const orderTransaction = await db.transaction();
 
     try {
+      const [{ total_sum: delivery }, subtotal] = await Promise.all([
+        await calculate(orderData.city, orderData.address),
+        await session.getCartTotal(),
+      ]);
+
+      const order = await db.models.Order.create({
+        ...orderData,
+        subtotal,
+        delivery,
+        total: subtotal + delivery,
+      });
+
+      await db.models.OrderItem.bulkCreate(
+        cartItems.map((item) => ({ ...item.orderData, OrderId: order.id }))
+      );
+
+      await orderTransaction.commit();
+
       const url = await createPayment(order);
+      console.log(url);
 
       await sendNewOrderEmail(order);
 
       res.status(200).json({ url });
     } catch (error) {
       console.log(error);
-      res.status(500).json({});
+      await orderTransaction.rollback();
+
+      return res.status(500).json({});
     }
   } else {
     res.status(405).json({});
