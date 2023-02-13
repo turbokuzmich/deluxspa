@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { Order } from "../../lib/backend/sequelize";
 import get from "lodash/get";
 import pick from "lodash/pick";
+import A from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Price from "../../components/price";
 import Typography from "@mui/material/Typography";
@@ -14,6 +15,10 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
+import Grid from "@mui/material/Grid";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 
 export default function ViewOrder({
   error,
@@ -66,7 +71,7 @@ export default function ViewOrder({
               <Typography variant="h4" paragraph>
                 {t("order-items-title")}
               </Typography>
-              <TableContainer>
+              <TableContainer sx={{ mb: 8 }}>
                 <Table>
                   <TableBody>
                     {items.map((item) => (
@@ -130,6 +135,44 @@ export default function ViewOrder({
                   </TableBody>
                 </Table>
               </TableContainer>
+              <Typography variant="h5" paragraph>
+                Если у вас остались вопросы&hellip;
+              </Typography>
+              <Typography paragraph>
+                Если у Вас остались вопросы относительно заказа или нашей
+                работы, пожалуйста, позвоните или напишите нам:
+              </Typography>
+              <Grid container sx={{ mb: 8 }}>
+                <Grid item xs={6}>
+                  <A
+                    href="tel:+79263853751"
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                    }}
+                  >
+                    <LocalPhoneIcon fontSize="large" />
+                    <WhatsAppIcon fontSize="large" />
+                    <Typography component="span" variant="h5" fontWeight="bold">
+                      +7 926 385 3751
+                    </Typography>
+                  </A>
+                </Grid>
+                <Grid item xs={6}>
+                  <A
+                    href="mailto:office@deluxspa.ru"
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                    }}
+                  >
+                    <AlternateEmailIcon fontSize="large" />
+                    <Typography component="span" variant="h5" fontWeight="bold">
+                      office@deluxspa.ru
+                    </Typography>
+                  </A>
+                </Grid>
+              </Grid>
             </>
           )}
         </Box>
