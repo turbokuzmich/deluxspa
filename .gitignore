@@ -42,3 +42,6 @@ yarn-error.log*
 
 # dev db
 site.db
+
+# certs
+/.mysql
