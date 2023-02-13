@@ -7,21 +7,24 @@ import { sendNewOrderEmail } from "../../lib/backend/letters";
 import { calculate } from "../../lib/backend/cdek";
 import { notifyOfNewOrder } from "../../lib/backend/bot";
 import omit from "lodash/omit";
+import memoize from "lodash/memoize";
 
-const orderValidators = yup.object().shape({
-  phone: yup
-    .string()
-    .trim()
-    .required(t("cart-page-phone-number-empty"))
-    .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
-  code: yup.string().trim().required(),
-  city: yup.number().required(),
-  name: yup.string().trim().required(),
-  address: yup.string().trim().required(),
-  latitude: yup.number().required(),
-  longitude: yup.number().required(),
-  email: yup.string().email(t("cart-page-email-incorrect")).nullable(),
-  comment: yup.string().nullable(),
+const getOrderValidators = memoize(() => {
+  return yup.object().shape({
+    phone: yup
+      .string()
+      .trim()
+      .required(t("cart-page-phone-number-empty"))
+      .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
+    code: yup.string().trim().required(),
+    city: yup.number().required(),
+    name: yup.string().trim().required(),
+    address: yup.string().trim().required(),
+    latitude: yup.number().required(),
+    longitude: yup.number().required(),
+    email: yup.string().email(t("cart-page-email-incorrect")).nullable(),
+    comment: yup.string().nullable(),
+  });
 });
 
 function sanitize(orderData) {
@@ -60,7 +63,7 @@ export default async function checkout(req, res) {
     // TODO sequelize transactions
 
     const orderData = sanitize(
-      await orderValidators.validate(req.body, {
+      await getOrderValidators().validate(req.body, {
         strict: true,
         stripUnknown: true,
       })
