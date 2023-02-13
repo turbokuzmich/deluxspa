@@ -6,6 +6,7 @@ import sequelize, { Order } from "../../lib/backend/sequelize";
 import { sendNewOrderEmail } from "../../lib/backend/letters";
 import { calculate } from "../../lib/backend/cdek";
 import { notifyOfNewOrder } from "../../lib/backend/bot";
+import omit from "lodash/omit";
 
 const orderValidators = yup.object().shape({
   phone: yup
@@ -19,9 +20,17 @@ const orderValidators = yup.object().shape({
   address: yup.string().trim().required(),
   latitude: yup.number().required(),
   longitude: yup.number().required(),
-  email: yup.string().nullable().email(t("cart-page-email-incorrect")),
+  email: yup.string().email(t("cart-page-email-incorrect")).nullable(),
   comment: yup.string().nullable(),
 });
+
+function sanitize(orderData) {
+  if (orderData.email === "") {
+    return omit(orderData, "email");
+  }
+
+  return orderData;
+}
 
 export default async function checkout(req, res) {
   const db = await sequelize;
@@ -50,10 +59,12 @@ export default async function checkout(req, res) {
     // TODO CSRF
     // TODO sequelize transactions
 
-    const orderData = await orderValidators.validate(req.body, {
-      strict: true,
-      stripUnknown: true,
-    });
+    const orderData = sanitize(
+      await orderValidators.validate(req.body, {
+        strict: true,
+        stripUnknown: true,
+      })
+    );
 
     const { sessionId } = await getSession(req, res);
 
