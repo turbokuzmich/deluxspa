@@ -8,8 +8,8 @@ export default function Admin() {
 
   const onApiLoaded = useCallback(async () => {
     try {
-      await api.get("/api/admin/auth", {
-        params: Telegram.WebApp.initDataUnsafe,
+      await api.post("/api/admin/auth", {
+        data: Telegram.WebApp.initDataUnsafe,
       });
 
       setStatus("authorized");
