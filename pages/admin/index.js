@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import InfoIcon from "@mui/icons-material/Info";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -400,7 +399,14 @@ export default function Admin() {
                     pb: 0,
                   }}
                 >
-                  <Typography variant="h4">Комментарий</Typography>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      mb: 2,
+                    }}
+                  >
+                    Комментарий
+                  </Typography>
                   <Typography>{order.comment}</Typography>
                 </Box>
               ) : null}
