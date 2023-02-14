@@ -7,10 +7,17 @@ import Alert from "@mui/material/Alert";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
 import LockIcon from "@mui/icons-material/Lock";
 import MenuIcon from "@mui/icons-material/Menu";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import PersonIcon from "@mui/icons-material/Person";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,13 +31,33 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { formatDate } from "../../lib/helpers/date";
 import { formatPhone } from "../../lib/helpers/phone";
 import { getHumanStatus } from "../../lib/helpers/order";
+import { useRouter } from "next/router";
 import api from "../../lib/frontend/api";
 import { useTheme } from "@mui/material";
 
+// const Telegram = {
+//   WebApp: {
+//     initDataUnsafe: {
+//       user: {
+//         id: 177074269,
+//         first_name: "Дмитрий",
+//         last_name: "Куртеев",
+//       },
+//     },
+//   },
+// };
+
 export default function Admin() {
-  const [status, setStatus] = useState("initial");
+  const { query, replace } = useRouter();
+
+  const [authStatus, setAuthStatus] = useState("initial");
+  const [token, setToken] = useState(null);
+
+  const [ordersFetchStatus, setOrdersFetchStatus] = useState("initial");
   const [orders, setOrders] = useState([]);
   const [order, setOrder] = useState(null);
+
+  const [error, setError] = useState(null);
 
   const {
     palette: {
@@ -45,15 +72,19 @@ export default function Admin() {
 
   const onApiLoaded = useCallback(async () => {
     try {
-      await api.post("/admin/auth", {
+      const {
+        data: { token },
+      } = await api.post("/admin/auth", {
         data: Telegram.WebApp.initDataUnsafe,
       });
 
-      setStatus("authorized");
+      setToken(token);
+      setAuthStatus("authorized");
     } catch (error) {
-      setStatus("unauthorized");
+      setToken(null);
+      setAuthStatus("unauthorized");
     }
-  }, [setStatus]);
+  }, [setAuthStatus]);
 
   const onOrderClicks = useMemo(
     () => orders.map((order) => () => setOrder(order)),
@@ -66,17 +97,51 @@ export default function Admin() {
     setOrder(null);
   }, [setOrder]);
 
+  const onDialogClose = useCallback(() => {
+    setError(null);
+  }, [setError]);
+
   useEffect(() => {
-    if (status === "authorized") {
+    if (authStatus === "authorized" && ordersFetchStatus === "initial") {
+      setOrdersFetchStatus("fetching");
+
       api
-        .post("/admin/orders", {
-          data: Telegram.WebApp.initDataUnsafe,
-        })
+        .post(
+          "/admin/orders",
+          {},
+          {
+            params: {
+              token,
+            },
+          }
+        )
         .then(({ data }) => {
           setOrders(data);
+          setOrdersFetchStatus("fetched");
+        })
+        .catch(() => {
+          setOrdersFetchStatus("failed");
         });
     }
-  }, [status, setOrders]);
+  }, [authStatus, ordersFetchStatus, setOrdersFetchStatus, token, setOrders]);
+
+  useEffect(() => {
+    if (ordersFetchStatus === "fetched" && query.order_id) {
+      const strippedUrl = new URL(location.href);
+
+      strippedUrl.searchParams.delete("order_id");
+
+      replace(strippedUrl);
+
+      const foundOrder = orders.find(({ id }) => String(id) === query.order_id);
+
+      if (foundOrder) {
+        setOrder(foundOrder);
+      } else {
+        setError("Заказ не найден");
+      }
+    }
+  }, [query, orders, ordersFetchStatus, replace, setOrder]);
 
   return (
     <>
@@ -85,6 +150,19 @@ export default function Admin() {
         strategy="afterInteractive"
         onLoad={onApiLoaded}
       />
+      <Dialog open={Boolean(error)} onClose={onDialogClose} fullWidth>
+        <DialogTitle>Ошибка</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {error}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={onDialogClose}>
+            Закрыть
+          </Button>
+        </DialogActions>
+      </Dialog>
       <AppBar
         sx={{
           mb: 2,
@@ -97,9 +175,9 @@ export default function Admin() {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             Заказы
           </Typography>
-          {status === "initial" ? <CircularProgress /> : null}
-          {status === "unauthorized" ? <LockIcon /> : null}
-          {status === "authorized" ? (
+          {authStatus === "initial" ? <CircularProgress /> : null}
+          {authStatus === "unauthorized" ? <LockIcon /> : null}
+          {authStatus === "authorized" ? (
             <Box
               sx={{
                 display: "flex",
@@ -161,11 +239,17 @@ export default function Admin() {
             >
               <Box
                 sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                   p: 2,
                   pt: 0,
                 }}
               >
                 <Typography variant="h4">Заказ</Typography>
+                <IconButton>
+                  <MoreVertIcon />
+                </IconButton>
               </Box>
               <TableContainer>
                 <Table size="small">
@@ -415,82 +499,97 @@ export default function Admin() {
         ) : null}
       </SwipeableDrawer>
       <Container sx={{ pt: 10 }}>
-        {status === "unauthorized" ? (
+        {authStatus === "initial" ? (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress />
+          </Box>
+        ) : null}
+        {authStatus === "unauthorized" ? (
           <Alert severity="error">У вас нет доступа к этой странице.</Alert>
         ) : null}
-        {status === "authorized" ? (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="right">
-                    <Typography variant="caption" fontWeight="bold">
-                      ID
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="caption" fontWeight="bold">
-                      Создан
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="caption" fontWeight="bold">
-                      Сумма
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="caption" fontWeight="bold">
-                      Статус
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orders.map((order, index) => (
-                  <TableRow key={order.id} onClick={onOrderClicks[index]}>
-                    <TableCell
-                      align="right"
-                      sx={{
-                        borderBottomColor: "transparent",
-                      }}
-                    >
-                      <Typography variant="body2">{order.id}</Typography>
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{
-                        borderBottomColor: "transparent",
-                      }}
-                    >
-                      <Typography whiteSpace="nowrap" variant="body2">
-                        {formatDate(new Date(order.createdAt), true)}
+        {authStatus === "authorized" ? (
+          <>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="right">
+                      <Typography variant="caption" fontWeight="bold">
+                        ID
                       </Typography>
                     </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{
-                        borderBottomColor: "transparent",
-                      }}
-                    >
-                      <Typography whiteSpace="nowrap" variant="body2">
-                        <Price sum={order.total} />
+                    <TableCell align="right">
+                      <Typography variant="caption" fontWeight="bold">
+                        Создан
                       </Typography>
                     </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{
-                        borderBottomColor: "transparent",
-                      }}
-                    >
-                      <Typography whiteSpace="nowrap" variant="body2">
-                        {getHumanStatus(order.status)}
+                    <TableCell align="right">
+                      <Typography variant="caption" fontWeight="bold">
+                        Сумма
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="caption" fontWeight="bold">
+                        Статус
                       </Typography>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {orders.map((order, index) => (
+                    <TableRow key={order.id} onClick={onOrderClicks[index]}>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          borderBottomColor: "transparent",
+                        }}
+                      >
+                        <Typography variant="body2">{order.id}</Typography>
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          borderBottomColor: "transparent",
+                        }}
+                      >
+                        <Typography whiteSpace="nowrap" variant="body2">
+                          {formatDate(new Date(order.createdAt), true)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          borderBottomColor: "transparent",
+                        }}
+                      >
+                        <Typography whiteSpace="nowrap" variant="body2">
+                          <Price sum={order.total} />
+                        </Typography>
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          borderBottomColor: "transparent",
+                        }}
+                      >
+                        <Typography whiteSpace="nowrap" variant="body2">
+                          {getHumanStatus(order.status)}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {ordersFetchStatus === "initial" ? (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+              </Box>
+            ) : null}
+            {ordersFetchStatus === "failed" ? (
+              <Alert severity="error">Не удалось получить список заказов</Alert>
+            ) : null}
+          </>
         ) : null}
       </Container>
     </>

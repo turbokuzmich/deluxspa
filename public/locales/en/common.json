@@ -143,6 +143,8 @@
   "order-status-waiting_for_capture": "waiting payment",
   "order-status-succeeded": "preparing",
   "order-status-canceled": "canceled",
+  "order-status-preparing": "preparing",
+  "order-status-shipping": "shipping",
   "order-status-delivered": "delivered",
   "order-address": "Delivery info",
   "order-no-address": "not specified"

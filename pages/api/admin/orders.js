@@ -1,15 +1,8 @@
 import sequelize, { Order, OrderItem } from "../../../lib/backend/sequelize";
 import omit from "lodash/omit";
-import get from "lodash/get";
-import { isAuthorized } from "../../../lib/backend/bot/webapp";
+import { restricted } from "../../../lib/middleware/admin";
 
-export default async function orders(req, res) {
-  const input = get(req, "body.data", {});
-
-  if (!(await isAuthorized(input))) {
-    return res.status(401).json({});
-  }
-
+export default restricted(async function orders(_, res) {
   await sequelize;
 
   const orders = (
@@ -20,4 +13,4 @@ export default async function orders(req, res) {
   ).map((order) => omit(order.toJSON(), ["hmac", "paymentReturnUrl"]));
 
   res.status(200).json(orders);
-}
+});

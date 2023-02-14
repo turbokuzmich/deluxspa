@@ -143,6 +143,8 @@
   "order-status-waiting_for_capture": "ожидает оплаты",
   "order-status-succeeded": "собирается",
   "order-status-canceled": "отменен",
+  "order-status-preparing": "готовится к отправке",
+  "order-status-shipping": "в пути",
   "order-status-delivered": "доставлен",
   "order-address": "Адрес доставки",
   "order-no-address": "не указан"
