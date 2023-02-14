@@ -1,5 +1,6 @@
-import sequelize, { Order } from "../../../lib/backend/sequelize";
+import sequelize, { Order, OrderItem } from "../../../lib/backend/sequelize";
 import omit from "lodash/omit";
+import get from "lodash/get";
 import { isAuthorized } from "../../../lib/backend/bot/webapp";
 
 export default async function orders(req, res) {
@@ -14,6 +15,7 @@ export default async function orders(req, res) {
   const orders = (
     await Order.findAll({
       order: [["createdAt", "DESC"]],
+      include: [OrderItem],
     })
   ).map((order) => omit(order.toJSON(), ["hmac", "paymentReturnUrl"]));
 
