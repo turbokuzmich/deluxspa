@@ -26,8 +26,17 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Price from "../../components/price";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
+import Divider from "@mui/material/Divider";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { formatDate } from "../../lib/helpers/date";
 import { formatPhone } from "../../lib/helpers/phone";
 import { getHumanStatus } from "../../lib/helpers/order";
@@ -35,17 +44,17 @@ import { useRouter } from "next/router";
 import api from "../../lib/frontend/api";
 import { useTheme } from "@mui/material";
 
-// const Telegram = {
-//   WebApp: {
-//     initDataUnsafe: {
-//       user: {
-//         id: 177074269,
-//         first_name: "Дмитрий",
-//         last_name: "Куртеев",
-//       },
-//     },
-//   },
-// };
+const Telegram = {
+  WebApp: {
+    initDataUnsafe: {
+      user: {
+        id: 177074269,
+        first_name: "Дмитрий",
+        last_name: "Куртеев",
+      },
+    },
+  },
+};
 
 export default function Admin() {
   const { query, replace } = useRouter();
@@ -53,9 +62,12 @@ export default function Admin() {
   const [authStatus, setAuthStatus] = useState("initial");
   const [token, setToken] = useState(null);
 
+  const [isOrderMenuVisible, setIsOrderMenuVisible] = useState(false);
   const [ordersFetchStatus, setOrdersFetchStatus] = useState("initial");
   const [orders, setOrders] = useState([]);
   const [order, setOrder] = useState(null);
+
+  const moreButtonRef = useRef();
 
   const [error, setError] = useState(null);
 
@@ -100,6 +112,14 @@ export default function Admin() {
   const onDialogClose = useCallback(() => {
     setError(null);
   }, [setError]);
+
+  const onMoreButtonClick = useCallback(() => {
+    setIsOrderMenuVisible(true);
+  }, [setIsOrderMenuVisible]);
+
+  const onOrderMenuClose = useCallback(() => {
+    setIsOrderMenuVisible(false);
+  }, [setIsOrderMenuVisible]);
 
   useEffect(() => {
     if (authStatus === "authorized" && ordersFetchStatus === "initial") {
@@ -163,6 +183,37 @@ export default function Admin() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Menu
+        anchorEl={moreButtonRef.current}
+        open={isOrderMenuVisible}
+        onClose={onOrderMenuClose}
+      >
+        <MenuItem onClick={onOrderMenuClose}>
+          <ListItemIcon>
+            <AccessTimeFilledIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>В обработке</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={onOrderMenuClose}>
+          <ListItemIcon>
+            <LocalShippingIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>В пути</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={onOrderMenuClose}>
+          <ListItemIcon>
+            <CheckCircleIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Доставлен</ListItemText>
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={onOrderMenuClose}>
+          <ListItemIcon>
+            <DoNotDisturbOnIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Отменить</ListItemText>
+        </MenuItem>
+      </Menu>
       <AppBar
         sx={{
           mb: 2,
@@ -241,13 +292,15 @@ export default function Admin() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  gap: 1,
                   p: 2,
                   pt: 0,
                 }}
               >
-                <Typography variant="h4">Заказ</Typography>
-                <IconButton>
+                <Typography variant="h4" sx={{ pb: "5px" }}>
+                  Заказ
+                </Typography>
+                <IconButton ref={moreButtonRef} onClick={onMoreButtonClick}>
                   <MoreVertIcon />
                 </IconButton>
               </Box>
