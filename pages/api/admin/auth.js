@@ -1,31 +1,34 @@
 import sequelize, { BotUser } from "../../../lib/backend/sequelize";
 import get from "lodash/get";
-import { URLSearchParams } from "url";
+import isObject from "lodash/isObject";
 import { createHmac } from "crypto";
+
+const secretKey = createHmac("sha256", "WebAppData")
+  .update(process.env.TELEGRAM_API_TOKEN)
+  .digest();
 
 export default async function authorize(req, res) {
   if (req.method === "POST") {
-    const input = get(req, "body.data", "");
+    const input = get(req, "body.data", {});
+    const hashToCheck = get(input, "hash", "");
 
-    const params = new URLSearchParams(input);
-    const hashToCheck = params.get("hash");
-
-    params.delete("hash");
-    params.sort();
-
-    const data = Array.from(params.entries())
-      .map((entry) => entry.join("="))
+    const data = Object.keys(input)
+      .filter((key) => key !== "hash")
+      .sort()
+      .map((key) =>
+        isObject(input[key])
+          ? `${key}=${JSON.stringify(input[key])}`
+          : `${key}=${input[key]}`
+      )
       .join("\n");
-
-    const secretKey = createHmac("sha256", "WebAppData")
-      .update(process.env.TELEGRAM_API_TOKEN)
-      .digest();
 
     const hash = createHmac("sha256", secretKey).update(data).digest("hex");
 
     if (hash !== hashToCheck) {
       return res.status(401).json({});
     }
+
+    await sequelize;
 
     const { id } = JSON.parse(params.get("user"));
     const user = await BotUser.findOne({ where: { chatId: id } });
