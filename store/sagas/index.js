@@ -4,13 +4,27 @@ import deliverySlice, {
   getDeliveryAddress,
   getDeliveryInfo,
 } from "../slices/delivery";
+import feedbackSlice from "../slices/feedback";
+import notificationsSlice, {
+  checkNotifications,
+  showSuccessNotification,
+  showErrorNotification,
+  getAutoHideNotifications,
+  getDueNotifications,
+} from "../slices/notifications";
 import {
   all,
   call,
   put,
+  delay,
+  take,
   select,
+  cancel,
+  cancelled,
   debounce,
+  takeLeading,
   takeLatest,
+  fork,
 } from "redux-saga/effects";
 
 export function* getItemsSaga() {
@@ -36,7 +50,9 @@ export function* changeItemSaga({ payload }) {
     } = yield call([api, api.post], "/cart", payload);
 
     yield put(cartSlice.actions.changeItemComplete({ id, items }));
-  } catch (_) {}
+  } catch (_) {
+    yield put(showErrorNotification("Не удалось изменить количество товара"));
+  }
 }
 
 export function* fetchAddressSuggestions({ payload: input }) {
@@ -62,8 +78,7 @@ export function* geocodeAddress() {
   const geo = response.geoObjects.get(0);
 
   if (!geo) {
-    // TODO показывать ошибку
-    return;
+    return yield put(showErrorNotification("Не удалось проверить адрес."));
   }
 
   const precision = geo.properties.get(
@@ -83,13 +98,21 @@ export function* geocodeAddress() {
 }
 
 export function* handlePayment() {
-  const info = yield select(getDeliveryInfo);
+  try {
+    const info = yield select(getDeliveryInfo);
 
-  const {
-    data: { url },
-  } = yield call([api, api.post], "/checkout", info);
+    const {
+      data: { url },
+    } = yield call([api, api.post], "/checkout", info);
 
-  location.href = url;
+    location.href = url;
+  } catch (_) {
+    yield put(
+      showErrorNotification(
+        "Возникла ошибка при оплате. Пожалуйста, попробуйте позже."
+      )
+    );
+  }
 }
 
 export function* fetchCdekCitiesSuggestions({ payload: title }) {
@@ -97,21 +120,31 @@ export function* fetchCdekCitiesSuggestions({ payload: title }) {
     return yield put(deliverySlice.actions.setCitySuggestions([]));
   }
 
-  const { data: citySuggestions } = yield call([api, api.get], "/cdek/cities", {
-    params: {
-      title,
-    },
-  });
+  try {
+    const { data: citySuggestions } = yield call(
+      [api, api.get],
+      "/cdek/cities",
+      {
+        params: {
+          title,
+        },
+      }
+    );
 
-  yield put(
-    deliverySlice.actions.setCitySuggestions(
-      citySuggestions.map((city) => ({
-        ...city,
-        label: `${city.city}, ${city.region}`,
-        value: city.code,
-      }))
-    )
-  );
+    yield put(
+      deliverySlice.actions.setCitySuggestions(
+        citySuggestions.map((city) => ({
+          ...city,
+          label: `${city.city}, ${city.region}`,
+          value: city.code,
+        }))
+      )
+    );
+  } catch (_) {
+    yield put(
+      showErrorNotification("Не удалось загрузить список городов доставки.")
+    );
+  }
 }
 
 export function* fetchCdekPointsSuggestions({ payload: city }) {
@@ -119,11 +152,15 @@ export function* fetchCdekPointsSuggestions({ payload: city }) {
     return;
   }
 
-  const { data: points } = yield call([api, api.get], "/cdek/points", {
-    params: { city: city.code },
-  });
+  try {
+    const { data: points } = yield call([api, api.get], "/cdek/points", {
+      params: { city: city.code },
+    });
 
-  yield put(deliverySlice.actions.setPoints(points));
+    yield put(deliverySlice.actions.setPoints(points));
+  } catch (_) {
+    yield put(showErrorNotification("Не удалось найти пункты выдачи заказов."));
+  }
 }
 
 export function* calculateCdekTariff({ payload: point }) {
@@ -131,14 +168,104 @@ export function* calculateCdekTariff({ payload: point }) {
     return;
   }
 
-  const { data: calculation } = yield call([api, api.get], "/cdek/calculate", {
-    params: {
-      code: point.location.city_code,
-      address: point.location.address_full,
-    },
-  });
+  try {
+    const { data: calculation } = yield call(
+      [api, api.get],
+      "/cdek/calculate",
+      {
+        params: {
+          code: point.location.city_code,
+          address: point.location.address_full,
+        },
+      }
+    );
 
-  yield put(deliverySlice.actions.setCalculation(calculation));
+    yield put(deliverySlice.actions.setCalculation(calculation));
+  } catch (_) {
+    yield put(showErrorNotification("Не удалось рассчитать доставку."));
+  }
+}
+
+export function* sendFeedback({ payload }) {
+  yield put(feedbackSlice.actions.send());
+
+  try {
+    yield call([api, api.post], "/feedback", payload);
+    yield put(feedbackSlice.actions.sent());
+    yield put(
+      showSuccessNotification("Сообщение отправлено. Мы скоро вам ответим!")
+    );
+  } catch (error) {
+    yield put(
+      showErrorNotification(
+        "Что-то пошло не так. Пожалуйста, попробуйте позже."
+      )
+    );
+    yield put(feedbackSlice.actions.failed());
+  } finally {
+    yield delay(2000);
+    yield put(feedbackSlice.actions.reset());
+  }
+}
+
+function* destroyDueNotifications() {
+  const notifications = yield select(getDueNotifications);
+
+  for (const notification of notifications) {
+    yield put(notificationsSlice.actions.silentlyRemove(notification.id));
+  }
+
+  yield delay(1000);
+  yield put(checkNotifications());
+}
+
+function* setDestroyTimeout(timeout) {
+  yield delay(timeout);
+
+  if (!(yield cancelled())) {
+    yield call(destroyDueNotifications);
+  }
+}
+
+export function* watchNotifications() {
+  let destroyTimerTask = null;
+
+  while (true) {
+    yield take([
+      notificationsSlice.actions.add,
+      notificationsSlice.actions.remove,
+      showSuccessNotification,
+      showErrorNotification,
+      checkNotifications,
+    ]);
+
+    const now = Date.now();
+    const autoHideNotifications = yield select(getAutoHideNotifications);
+
+    if (autoHideNotifications.length === 0) {
+      continue;
+    }
+
+    if (destroyTimerTask) {
+      yield cancel(destroyTimerTask);
+    }
+
+    const checkTimeout = autoHideNotifications.reduce(
+      (timeout, notification) => {
+        const notificationTimeout =
+          notification.at + notification.autoHide - now + 20;
+
+        return notificationTimeout < timeout ? notificationTimeout : timeout;
+      },
+      Infinity
+    );
+
+    if (checkTimeout <= 0) {
+      yield call(destroyDueNotifications);
+    } else {
+      destroyTimerTask = yield fork(setDestroyTimeout, checkTimeout);
+    }
+  }
 }
 
 export default function* rootSaga() {
@@ -158,7 +285,9 @@ export default function* rootSaga() {
     ),
     takeLatest(deliverySlice.actions.setCity, fetchCdekPointsSuggestions),
     takeLatest(deliverySlice.actions.setPoint, calculateCdekTariff),
+    takeLeading(feedbackSlice.actions.submit, sendFeedback),
   ]);
 
   yield call(getItemsSaga);
+  yield fork(watchNotifications);
 }

@@ -4,6 +4,8 @@ import { createWrapper } from "next-redux-wrapper";
 import rootSaga from "./sagas";
 import cartSlice from "./slices/cart";
 import deliverySlice from "./slices/delivery";
+import feedbackSlice from "./slices/feedback";
+import notificationsSlice from "./slices/notifications";
 import createSagaMiddleware from "redux-saga";
 
 function makeStore() {
@@ -11,6 +13,8 @@ function makeStore() {
     reducer: {
       [cartSlice.name]: cartSlice.reducer,
       [deliverySlice.name]: deliverySlice.reducer,
+      [feedbackSlice.name]: feedbackSlice.reducer,
+      [notificationsSlice.name]: notificationsSlice.reducer,
     },
   };
 
