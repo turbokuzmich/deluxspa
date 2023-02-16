@@ -3,9 +3,9 @@ import withSession, { getSession } from "../../lib/backend/session";
 
 // TODO move
 import "../../lib/backend/cron";
-// import runBot from "../../lib/backend/bot";
+import runBot from "../../lib/backend/bot";
 
-// runBot();
+runBot();
 
 // TODO yup validation
 export default async function cart(req, res) {
