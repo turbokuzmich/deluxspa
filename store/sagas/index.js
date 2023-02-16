@@ -5,6 +5,7 @@ import deliverySlice, {
   getDeliveryInfo,
 } from "../slices/delivery";
 import feedbackSlice from "../slices/feedback";
+import { getIsOnline, getIsVisible } from "../slices/environment";
 import notificationsSlice, {
   checkNotifications,
   showSuccessNotification,
@@ -268,6 +269,51 @@ export function* watchNotifications() {
   }
 }
 
+export function* watchSession() {
+  const checkInterval = 5000; /* parseInt(
+    process.env.NEXT_PUBLIC_API_SESSION_CHECK_INTERVAL,
+    10
+  );*/
+
+  while (true) {
+    if ((yield select(getIsVisible)) === false) {
+      yield delay(checkInterval);
+
+      continue;
+    }
+
+    if ((yield select(getIsOnline)) === false) {
+      yield delay(checkInterval);
+
+      continue;
+    }
+
+    try {
+      const {
+        data: { responds },
+      } = yield call([api, api.get], "/feedback");
+
+      if (responds.length) {
+        yield call([api, api.delete], "/feedback", {
+          params: {
+            key: responds.map(({ key }) => key).join(","),
+          },
+        });
+
+        for (const response of responds) {
+          yield put(
+            showSuccessNotification(response.response, false, {
+              title: response.message,
+            })
+          );
+        }
+      }
+    } catch (error) {}
+
+    yield delay(checkInterval);
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
@@ -289,5 +335,7 @@ export default function* rootSaga() {
   ]);
 
   yield call(getItemsSaga);
+
   yield fork(watchNotifications);
+  yield fork(watchSession);
 }

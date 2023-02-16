@@ -29,6 +29,7 @@ const defaultNotificationData = {
   autoHide: defaultAutoHideInterval,
   severity: "info",
   message: "",
+  title: null,
 };
 
 function build(payload) {
@@ -81,9 +82,10 @@ export const checkNotifications = createAction("notifications@check");
 
 export const showSuccessNotification = createAction(
   "notifications@success",
-  function (message, autoHide = defaultAutoHideInterval) {
+  function (message, autoHide = defaultAutoHideInterval, data = {}) {
     return {
       payload: {
+        ...data,
         message,
         autoHide,
         severity: "success",

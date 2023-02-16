@@ -1,4 +1,5 @@
 import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { useMemo } from "react";
@@ -48,6 +49,9 @@ export default function Notifications() {
             onClose={closeHandlers[index]}
             sx={{ pt: 2, pb: 2, pl: 4, pr: 4 }}
           >
+            {notification.title ? (
+              <AlertTitle>{notification.title}</AlertTitle>
+            ) : null}
             {notification.message}
           </Alert>
         ))}

@@ -1,8 +1,11 @@
 import * as yup from "yup";
 import memoize from "lodash/memoize";
+import get from "lodash/get";
+import pick from "lodash/pick";
 import t from "../../lib/helpers/i18n";
+import { v4 as uuid } from "uuid";
 import { notifyOfFeedBack } from "../../lib/backend/bot";
-import withSession from "../../lib/backend/session";
+import withSession, { runIfHasSession } from "../../lib/backend/session";
 
 const getFeedbackValidators = memoize(() =>
   yup.object().shape({
@@ -17,22 +20,67 @@ const getFeedbackValidators = memoize(() =>
 );
 
 export default async function feedback(req, res) {
-  const feedback = await getFeedbackValidators().validate(req.body, {
-    strict: true,
-    stripUnknown: true,
-  });
+  if (req.method === "POST") {
+    const feedbackData = await getFeedbackValidators().validate(
+      get(req, "body", {}),
+      {
+        strict: true,
+        stripUnknown: true,
+      }
+    );
 
-  await withSession(
-    async function (session) {
-      session.feedbackRequests = session.feedbackRequests
-        ? [...session.feedbackRequests, feedback]
-        : [feedback];
+    const feedback = {
+      key: uuid(),
+      ...feedbackData,
+    };
 
-      await notifyOfFeedBack(feedback);
-    },
-    req,
-    res
-  );
+    await withSession(
+      async function (session) {
+        session.feedbackRequests.push(feedback);
 
-  res.status(200).json({});
+        await notifyOfFeedBack(feedback);
+      },
+      req,
+      res
+    );
+
+    res.status(200).json({});
+  } else if (req.method === "GET") {
+    await runIfHasSession(
+      async (session) => {
+        const responds = session.feedbackRequests
+          .filter((resp) => {
+            const { isSeen, response } = resp;
+            return Boolean(response) && !isSeen;
+          })
+          .map((request) => pick(request, ["key", "message", "response"]));
+
+        res.status(200).json({ responds });
+      },
+      async () => {
+        res.status(200).json({ responds: 0 });
+      },
+      req,
+      res
+    );
+  } else if (req.method === "DELETE") {
+    return await runIfHasSession(
+      async (session) => {
+        const keys = new Set(get(req, ["query", "key"], "").split(","));
+
+        for (let i = 0; i < session.feedbackRequests.length; i++) {
+          session.feedbackRequests[i].isSeen = true;
+        }
+
+        res.status(200).json({});
+      },
+      async () => {
+        res.status(200).json({});
+      },
+      req,
+      res
+    );
+  } else {
+    res.status(405).json({});
+  }
 }
