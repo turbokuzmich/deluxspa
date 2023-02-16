@@ -270,10 +270,10 @@ export function* watchNotifications() {
 }
 
 export function* watchSession() {
-  const checkInterval = 5000; /* parseInt(
+  const checkInterval = parseInt(
     process.env.NEXT_PUBLIC_API_SESSION_CHECK_INTERVAL,
     10
-  );*/
+  );
 
   while (true) {
     if ((yield select(getIsVisible)) === false) {
