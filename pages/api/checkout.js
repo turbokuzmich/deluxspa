@@ -1,13 +1,18 @@
-import withSession, { getSession } from "../../lib/backend/session";
+import withSession, { getSessionId } from "../../lib/backend/session";
 import { createPayment } from "../../lib/backend/yookassa";
 import t from "../../lib/helpers/i18n";
 import * as yup from "yup";
-import sequelize, { Order } from "../../lib/backend/sequelize";
 import { sendNewOrderEmail } from "../../lib/backend/letters";
 import { calculate } from "../../lib/backend/cdek";
 import { notifyOfNewOrder } from "../../lib/backend/bot";
 import omit from "lodash/omit";
 import memoize from "lodash/memoize";
+import sequelize, {
+  Order,
+  OrderItem,
+  Session,
+  CartItem,
+} from "../../lib/backend/sequelize";
 
 const getOrderValidators = memoize(() => {
   return yup.object().shape({
@@ -68,22 +73,22 @@ export default async function checkout(req, res) {
       })
     );
 
-    const { sessionId } = await getSession(req, res);
+    const id = getSessionId(req);
 
-    const session = await db.models.Session.findOne({
-      where: { SessionId: sessionId },
-    });
-
-    if (!session) {
+    if (id.isNone()) {
       return res.status(404).json({});
     }
 
-    const cartItems = await session.getCartItems();
+    const session = await Session.findOne({
+      where: { SessionId: id.unwrap() },
+      include: [CartItem],
+    });
 
-    if (cartItems.length === 0) {
-      return res.status(400).json({});
+    if (!session || session.CartItems.length === 0) {
+      return res.status(404).json({});
     }
 
+    const cartItems = session.CartItems;
     const orderTransaction = await db.transaction();
 
     try {
@@ -92,14 +97,14 @@ export default async function checkout(req, res) {
         await session.getCartTotal(),
       ]);
 
-      const order = await db.models.Order.create({
+      const order = await Order.create({
         ...orderData,
         subtotal,
         delivery,
         total: subtotal + delivery,
       });
 
-      await db.models.OrderItem.bulkCreate(
+      await OrderItem.bulkCreate(
         cartItems.map((item) => ({ ...item.orderData, OrderId: order.id }))
       );
 
@@ -107,7 +112,7 @@ export default async function checkout(req, res) {
 
       const url = await createPayment(order);
 
-      // await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
+      await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
 
       res.status(200).json({ url });
     } catch (error) {
