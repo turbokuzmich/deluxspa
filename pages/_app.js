@@ -3,6 +3,10 @@ import * as Color from "color";
 import { ecoColor, auxColors } from "../constants";
 import { appWithTranslation } from "next-i18next";
 import { Provider } from "react-redux";
+import { usePageVisibility } from "react-page-visibility";
+import { useEffect } from "react";
+import environmentSlice, { getIsOnline } from "../store/slices/environment";
+import noInternet from "no-internet";
 import reduxWrapper from "../store";
 import {
   createTheme,
@@ -86,6 +90,30 @@ const theme = responsiveFontSizes(
 
 function DeluxSpaApp({ Component, ...rest }) {
   const { store, props } = reduxWrapper.useWrappedStore(rest);
+
+  const { dispatch } = store;
+
+  const isVisible = usePageVisibility();
+
+  useEffect(() => {
+    noInternet({
+      callback(isOffline) {
+        const isOnline = getIsOnline(store.getState());
+
+        if (isOnline === isOffline) {
+          dispatch(environmentSlice.actions.setOnline(!isOffline));
+        }
+      },
+    });
+
+    return function () {
+      noInternet.clearInterval();
+    };
+  }, [dispatch, store]);
+
+  useEffect(() => {
+    dispatch(environmentSlice.actions.setVisibility(isVisible));
+  }, [isVisible, dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

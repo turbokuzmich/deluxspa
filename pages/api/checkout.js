@@ -1,4 +1,4 @@
-import { getSession } from "../../lib/helpers/session";
+import withSession, { getSession } from "../../lib/backend/session";
 import { createPayment } from "../../lib/backend/yookassa";
 import t from "../../lib/helpers/i18n";
 import * as yup from "yup";
@@ -51,17 +51,16 @@ export default async function checkout(req, res) {
       return res.status(400).json({});
     }
 
-    const session = await getSession(req, res);
-
-    session.items = [];
-
-    await session.commit();
+    await withSession(
+      async function (session) {
+        session.items = [];
+      },
+      req,
+      res
+    );
 
     res.redirect(order.infoUrl);
   } else if (req.method === "POST") {
-    // TODO CSRF
-    // TODO sequelize transactions
-
     const orderData = sanitize(
       await getOrderValidators().validate(req.body, {
         strict: true,
@@ -108,7 +107,7 @@ export default async function checkout(req, res) {
 
       const url = await createPayment(order);
 
-      await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
+      // await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
 
       res.status(200).json({ url });
     } catch (error) {

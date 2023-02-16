@@ -2,6 +2,7 @@ import * as yup from "yup";
 import memoize from "lodash/memoize";
 import t from "../../lib/helpers/i18n";
 import { notifyOfFeedBack } from "../../lib/backend/bot";
+import withSession from "../../lib/backend/session";
 
 const getFeedbackValidators = memoize(() =>
   yup.object().shape({
@@ -21,7 +22,17 @@ export default async function feedback(req, res) {
     stripUnknown: true,
   });
 
-  await notifyOfFeedBack(feedback);
+  await withSession(
+    async function (session) {
+      session.feedbackRequests = session.feedbackRequests
+        ? [...session.feedbackRequests, feedback]
+        : [feedback];
+
+      await notifyOfFeedBack(feedback);
+    },
+    req,
+    res
+  );
 
   res.status(200).json({});
 }

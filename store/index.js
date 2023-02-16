@@ -6,6 +6,7 @@ import cartSlice from "./slices/cart";
 import deliverySlice from "./slices/delivery";
 import feedbackSlice from "./slices/feedback";
 import notificationsSlice from "./slices/notifications";
+import environmentSlice from "./slices/environment";
 import createSagaMiddleware from "redux-saga";
 
 function makeStore() {
@@ -15,6 +16,7 @@ function makeStore() {
       [deliverySlice.name]: deliverySlice.reducer,
       [feedbackSlice.name]: feedbackSlice.reducer,
       [notificationsSlice.name]: notificationsSlice.reducer,
+      [environmentSlice.name]: environmentSlice.reducer,
     },
   };
 
