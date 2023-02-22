@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { sendNewOrderEmail } from "../../lib/backend/letters";
 import { calculate } from "../../lib/backend/cdek";
 import { notifyOfNewOrder } from "../../lib/backend/bot";
+import { csrf } from "../../lib/backend/csrf";
 import omit from "lodash/omit";
 import memoize from "lodash/memoize";
 import sequelize, {
@@ -40,88 +41,96 @@ function sanitize(orderData) {
   return orderData;
 }
 
-export default async function checkout(req, res) {
+async function doCheckout(req, res) {
   const db = await sequelize;
 
-  if (req.method === "GET") {
-    const { s, order: id, locale = "ru" } = req.query;
+  const orderData = sanitize(
+    await getOrderValidators().validate(req.body, {
+      strict: true,
+      stripUnknown: true,
+    })
+  );
 
-    const order = await Order.getByExternalId(id);
+  const id = getSessionId(req);
 
-    if (!order) {
-      return res.status(404).json({});
-    }
+  if (id.isNone()) {
+    return res.status(404).json({});
+  }
 
-    if (!order.validateHmac(s)) {
-      return res.status(400).json({});
-    }
+  const session = await Session.findOne({
+    where: { SessionId: id.unwrap() },
+    include: [CartItem],
+  });
 
-    await withSession(
-      async function (session) {
-        session.items = [];
-      },
-      req,
-      res
-    );
+  if (!session || session.CartItems.length === 0) {
+    return res.status(404).json({});
+  }
 
-    res.redirect(order.infoUrl);
-  } else if (req.method === "POST") {
-    const orderData = sanitize(
-      await getOrderValidators().validate(req.body, {
-        strict: true,
-        stripUnknown: true,
-      })
-    );
+  const cartItems = session.CartItems;
+  const orderTransaction = await db.transaction();
 
-    const id = getSessionId(req);
+  try {
+    const [{ total_sum: delivery }, subtotal] = await Promise.all([
+      await calculate(orderData.city, orderData.address),
+      await session.getCartTotal(),
+    ]);
 
-    if (id.isNone()) {
-      return res.status(404).json({});
-    }
-
-    const session = await Session.findOne({
-      where: { SessionId: id.unwrap() },
-      include: [CartItem],
+    const order = await Order.create({
+      ...orderData,
+      subtotal,
+      delivery,
+      total: subtotal + delivery,
     });
 
-    if (!session || session.CartItems.length === 0) {
-      return res.status(404).json({});
-    }
+    await OrderItem.bulkCreate(
+      cartItems.map((item) => ({ ...item.orderData, OrderId: order.id }))
+    );
 
-    const cartItems = session.CartItems;
-    const orderTransaction = await db.transaction();
+    await orderTransaction.commit();
 
-    try {
-      const [{ total_sum: delivery }, subtotal] = await Promise.all([
-        await calculate(orderData.city, orderData.address),
-        await session.getCartTotal(),
-      ]);
+    const url = await createPayment(order);
 
-      const order = await Order.create({
-        ...orderData,
-        subtotal,
-        delivery,
-        total: subtotal + delivery,
-      });
+    await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
 
-      await OrderItem.bulkCreate(
-        cartItems.map((item) => ({ ...item.orderData, OrderId: order.id }))
-      );
+    res.status(200).json({ url });
+  } catch (error) {
+    console.log(error);
+    await orderTransaction.rollback();
 
-      await orderTransaction.commit();
+    return res.status(500).json({});
+  }
+}
 
-      const url = await createPayment(order);
+async function finalizeCheckout(req, res) {
+  const { s, order: id, locale = "ru" } = req.query;
 
-      await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
+  const order = await Order.getByExternalId(id);
 
-      res.status(200).json({ url });
-    } catch (error) {
-      console.log(error);
-      await orderTransaction.rollback();
+  if (!order) {
+    return res.status(404).json({});
+  }
 
-      return res.status(500).json({});
-    }
+  if (!order.validateHmac(s)) {
+    return res.status(400).json({});
+  }
+
+  await withSession(
+    async function (session) {
+      session.items = [];
+    },
+    req,
+    res
+  );
+
+  res.redirect(order.infoUrl);
+}
+
+export default csrf(async function (req, res) {
+  if (req.method === "GET") {
+    return finalizeCheckout(req, res);
+  } else if (req.method === "POST") {
+    return doCheckout(req, res);
   } else {
     res.status(405).json({});
   }
-}
+});

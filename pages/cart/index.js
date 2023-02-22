@@ -30,6 +30,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { phoneFormat } from "../../constants";
 import { useRouter } from "next/router";
+import { setup } from "../../lib/backend/csrf";
 import deliverySlice, {
   getDeliveryCitySuggestions,
   getDeliveryCity,
@@ -661,10 +662,10 @@ function PhoneInput({ inputRef }) {
   );
 }
 
-export async function getStaticProps({ locale }) {
+export const getServerSideProps = setup(async function ({ locale }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };
-}
+});

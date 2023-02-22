@@ -25,6 +25,7 @@ import Price from "../../../components/price";
 import { compositionItems, consumptionTitles } from "../../../constants";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useDispatch } from "react-redux";
+import { setup } from "../../../lib/backend/csrf";
 import cartSlice from "../../../store/slices/cart";
 import {
   getItemById,
@@ -495,7 +496,10 @@ function Composition({ item }) {
   );
 }
 
-export async function getServerSideProps({ locale, params: { id } }) {
+export const getServerSideProps = setup(async function ({
+  locale,
+  params: { id },
+}) {
   return {
     props: {
       id,
@@ -503,4 +507,4 @@ export async function getServerSideProps({ locale, params: { id } }) {
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };
-}
+});

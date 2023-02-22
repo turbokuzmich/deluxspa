@@ -27,6 +27,7 @@ import { TextField as TextInput } from "formik-mui";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { setup } from "../../lib/backend/csrf";
 import feedbackSlice, {
   getFeedbackFormValues,
   getFeedBackStatus,
@@ -347,13 +348,14 @@ export default function About() {
   );
 }
 
-export async function getStaticProps({ locale }) {
+export const getServerSideProps = setup(async function (props) {
+  const { locale } = props;
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };
-}
+});
 
 function FeedBackSubmitButton({ status }) {
   const { t } = useTranslation();

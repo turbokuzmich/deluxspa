@@ -5,6 +5,7 @@ import pick from "lodash/pick";
 import t from "../../lib/helpers/i18n";
 import { v4 as uuid } from "uuid";
 import { notifyOfFeedBack } from "../../lib/backend/bot";
+import { csrf } from "../../lib/backend/csrf";
 import withSession, { runIfHasSession } from "../../lib/backend/session";
 
 const getFeedbackValidators = memoize(() =>
@@ -19,68 +20,78 @@ const getFeedbackValidators = memoize(() =>
   })
 );
 
-export default async function feedback(req, res) {
-  if (req.method === "POST") {
-    const feedbackData = await getFeedbackValidators().validate(
-      get(req, "body", {}),
-      {
-        strict: true,
-        stripUnknown: true,
+async function sendFeedback(req, res) {
+  const feedbackData = await getFeedbackValidators().validate(
+    get(req, "body", {}),
+    {
+      strict: true,
+      stripUnknown: true,
+    }
+  );
+
+  const feedback = {
+    key: uuid(),
+    ...feedbackData,
+  };
+
+  await withSession(
+    async function (session) {
+      session.feedbackRequests.push(feedback);
+
+      await notifyOfFeedBack(feedback);
+    },
+    req,
+    res
+  );
+
+  res.status(200).json({});
+}
+
+async function getUnreadCount(req, res) {
+  await runIfHasSession(
+    async (session) => {
+      // FIXME fetch session lazy
+      const responds = session.feedbackRequests
+        .filter(({ isSeen, response }) => Boolean(response) && !isSeen)
+        .map((request) => pick(request, ["key", "message", "response"]));
+
+      res.status(200).json({ responds });
+    },
+    async () => {
+      res.status(200).json({ responds: 0 });
+    },
+    req,
+    res
+  );
+}
+
+async function resetUnreadCount(req, res) {
+  await runIfHasSession(
+    async (session) => {
+      const keys = new Set(get(req, ["query", "key"], "").split(","));
+
+      for (let i = 0; i < session.feedbackRequests.length; i++) {
+        session.feedbackRequests[i].isSeen = true;
       }
-    );
 
-    const feedback = {
-      key: uuid(),
-      ...feedbackData,
-    };
+      res.status(200).json({});
+    },
+    async () => {
+      res.status(200).json({});
+    },
+    req,
+    res
+  );
+}
 
-    await withSession(
-      async function (session) {
-        session.feedbackRequests.push(feedback);
-
-        await notifyOfFeedBack(feedback);
-      },
-      req,
-      res
-    );
-
-    res.status(200).json({});
+export default csrf(async function (req, res) {
+  if (req.method === "POST") {
+    return sendFeedback(req, res);
   } else if (req.method === "GET") {
-    await runIfHasSession(
-      async (session) => {
-        const responds = session.feedbackRequests
-          .filter((resp) => {
-            const { isSeen, response } = resp;
-            return Boolean(response) && !isSeen;
-          })
-          .map((request) => pick(request, ["key", "message", "response"]));
-
-        res.status(200).json({ responds });
-      },
-      async () => {
-        res.status(200).json({ responds: 0 });
-      },
-      req,
-      res
-    );
+    return getUnreadCount(req, res);
   } else if (req.method === "DELETE") {
-    return await runIfHasSession(
-      async (session) => {
-        const keys = new Set(get(req, ["query", "key"], "").split(","));
-
-        for (let i = 0; i < session.feedbackRequests.length; i++) {
-          session.feedbackRequests[i].isSeen = true;
-        }
-
-        res.status(200).json({});
-      },
-      async () => {
-        res.status(200).json({});
-      },
-      req,
-      res
-    );
+    return resetUnreadCount(req, res);
   } else {
     res.status(405).json({});
   }
-}
+});
