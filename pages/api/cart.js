@@ -18,6 +18,7 @@ async function getCart(req, res) {
   );
 }
 
+// TODO validation
 async function updateCart(req, res) {
   const session = await withSession(
     async function (session) {
