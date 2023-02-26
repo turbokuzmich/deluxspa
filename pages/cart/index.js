@@ -191,6 +191,8 @@ export default function Cart() {
 
   useEffect(() => {
     if (map.current) {
+      // FIXME remove clusterer or update all points
+
       const clusterer = new ymaps.Clusterer({
         groupByCoordinates: false,
         clusterDisableClickZoom: true,
@@ -528,6 +530,7 @@ export default function Cart() {
                           onInputChange={onTitleInputChange}
                           onChange={onCitySelected}
                           options={citySuggestions}
+                          noOptionsText="Выберите город"
                           isOptionEqualToValue={isOptionEqualToValue}
                           renderOption={(props, option) => (
                             <li {...props} key={option.value}>

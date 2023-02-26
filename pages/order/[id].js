@@ -203,6 +203,13 @@ export async function getServerSideProps({ locale, params: { id } }) {
 
   const items = await order.getOrderItems();
 
+  // FIXME
+  // res.status(200).json({
+  //   orders: orders.map((order) => ({
+  //     ...order.viewData,
+  //     items: order.OrderItems.map((item) => item.viewData),
+  //   })),
+  // });
   return {
     props: {
       ...props,
