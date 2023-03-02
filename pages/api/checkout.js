@@ -42,8 +42,6 @@ function sanitize(orderData) {
 }
 
 async function doCheckout(req, res) {
-  const db = await sequelize;
-
   const orderData = sanitize(
     await getOrderValidators().validate(req.body, {
       strict: true,
@@ -67,7 +65,7 @@ async function doCheckout(req, res) {
   }
 
   const cartItems = session.CartItems;
-  const orderTransaction = await db.transaction();
+  const orderTransaction = await sequelize.transaction();
 
   try {
     const [{ total_sum: delivery }, subtotal] = await Promise.all([

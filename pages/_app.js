@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { usePageVisibility } from "react-page-visibility";
 import { useEffect } from "react";
 import MapLoader from "../components/maploader";
+import ErrorBoundary from "../components/error";
 import environmentSlice, { getIsOnline } from "../store/slices/environment";
 import noInternet from "no-internet";
 import reduxWrapper from "../store";
@@ -117,13 +118,15 @@ function DeluxSpaApp({ Component, ...rest }) {
   }, [isVisible, dispatch]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <MapLoader dispatch={dispatch} />
-      <CssBaseline />
-      <Provider store={store}>
-        <Component {...props.pageProps} />
-      </Provider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <MapLoader dispatch={dispatch} />
+        <CssBaseline />
+        <Provider store={store}>
+          <Component {...props.pageProps} />
+        </Provider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
