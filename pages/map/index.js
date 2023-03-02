@@ -3,15 +3,18 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Layout from "../../components/layout";
-import MapLoader from "../../components/maploader";
 import A from "@mui/material/Link";
+import { isAPILoaded } from "../../store/slices/geo";
 import { map as retailers } from "../../constants";
 import { useTheme } from "@mui/material/styles";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import { useSelector } from "react-redux";
 
 export default function DeluxSpaMap() {
   const { t } = useTranslation();
+
+  const isReady = useSelector(isAPILoaded);
 
   const {
     palette: {
@@ -22,65 +25,55 @@ export default function DeluxSpaMap() {
   const mapsContainerRef = useRef();
   const map = useRef();
 
-  const onApiReady = useCallback(
-    (maps) => {
-      if (map.current) {
-        return;
-      }
-
-      map.current = new maps.Map(mapsContainerRef.current, {
-        center: [55.76, 37.64],
-        zoom: 5,
-        controls: ["smallMapDefaultSet"],
-      });
-
-      const clusterer = new maps.Clusterer({
-        groupByCoordinates: false,
-        clusterDisableClickZoom: true,
-        clusterHideIconOnBalloonOpen: false,
-        geoObjectHideIconOnBalloonOpen: false,
-      });
-
-      const retailersPlacemarks = retailers.map(
-        (retailer) =>
-          new maps.Placemark(
-            [retailer.coordinates[1], retailer.coordinates[0]],
-            {
-              balloonContentHeader: retailer.title,
-              balloonContentBody: renderRetailerBalloonBody(retailer),
-            },
-            {
-              preset: "islands#circleIcon",
-              iconColor: attention,
-            }
-          )
-      );
-
-      clusterer.add(retailersPlacemarks);
-      map.current.geoObjects.add(clusterer);
-
-      map.current.setBounds(clusterer.getBounds(), {
-        checkZoomRange: true,
-      });
-    },
-    [attention]
-  );
-
-  useEffect(() => {
-    if (typeof ymaps !== "undefined" && !map.current) {
-      ymaps.ready(onApiReady);
+  const onApiReady = useCallback(() => {
+    if (map.current) {
+      return;
     }
 
-    return () => {
-      if (map.current) {
-        map.current.destroy();
-      }
-    };
-  }, [onApiReady]);
+    map.current = new ymaps.Map(mapsContainerRef.current, {
+      center: [55.76, 37.64],
+      zoom: 5,
+      controls: ["smallMapDefaultSet"],
+    });
+
+    const clusterer = new ymaps.Clusterer({
+      groupByCoordinates: false,
+      clusterDisableClickZoom: true,
+      clusterHideIconOnBalloonOpen: false,
+      geoObjectHideIconOnBalloonOpen: false,
+    });
+
+    const retailersPlacemarks = retailers.map(
+      (retailer) =>
+        new ymaps.Placemark(
+          [retailer.coordinates[1], retailer.coordinates[0]],
+          {
+            balloonContentHeader: retailer.title,
+            balloonContentBody: renderRetailerBalloonBody(retailer),
+          },
+          {
+            preset: "islands#circleIcon",
+            iconColor: attention,
+          }
+        )
+    );
+
+    clusterer.add(retailersPlacemarks);
+    map.current.geoObjects.add(clusterer);
+
+    map.current.setBounds(clusterer.getBounds(), {
+      checkZoomRange: true,
+    });
+  }, [attention]);
+
+  useEffect(() => {
+    if (isReady) {
+      onApiReady();
+    }
+  }, [isReady, onApiReady]);
 
   return (
     <>
-      <MapLoader onReady={onApiReady} />
       <Layout title={t("page-title-map")}>
         <Container
           sx={{

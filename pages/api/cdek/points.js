@@ -1,5 +1,6 @@
-import { points as fetchPoints } from "../../../lib/backend/cdek";
+import { Point } from "../../../lib/backend/sequelize";
 import get from "lodash/get";
+import omit from "lodash/omit";
 
 export default async function points(req, res) {
   const city = get(req, "query.city", null);
@@ -8,5 +9,12 @@ export default async function points(req, res) {
     return res.status(200).json([]);
   }
 
-  res.status(200).json(await fetchPoints(city));
+  const points = await Point.findAll({
+    where: {
+      cityCode: city,
+      confirmed: true,
+    },
+  });
+
+  res.status(200).json(points.map((point) => point.mapData));
 }

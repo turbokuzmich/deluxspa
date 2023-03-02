@@ -1,6 +1,9 @@
 import api from "../../lib/frontend/api";
+import get from "lodash/get";
+import geoSlice, { isAPILoaded, getUserCity } from "../slices/geo";
 import cartSlice from "../slices/cart";
 import deliverySlice, {
+  getDeliveryCity,
   getDeliveryAddress,
   getDeliveryInfo,
 } from "../slices/delivery";
@@ -25,7 +28,7 @@ import {
   debounce,
   takeLeading,
   takeLatest,
-  fork,
+  spawn,
 } from "redux-saga/effects";
 
 export function* getItemsSaga() {
@@ -53,6 +56,26 @@ export function* changeItemSaga({ payload }) {
     yield put(cartSlice.actions.changeItemComplete({ id, items }));
   } catch (_) {
     yield put(showErrorNotification("Не удалось изменить количество товара"));
+  }
+}
+
+export function* maybeSetDeliveryCity() {
+  const userCity = yield select(getUserCity);
+  const deliveryCity = yield select(getDeliveryCity);
+
+  const userCityCode = get(userCity, "code", -1);
+  const deliveryCityCode = get(deliveryCity, "code", -2);
+
+  if (userCity && userCityCode !== deliveryCityCode) {
+    const city = {
+      ...userCity,
+      label: `${userCity.city}, ${userCity.region}`,
+      value: userCity.code,
+    };
+
+    yield put(deliverySlice.actions.changeTitleInput(city.label));
+    yield put(deliverySlice.actions.setCitySuggestions([city]));
+    yield put(deliverySlice.actions.setCity(city));
   }
 }
 
@@ -264,7 +287,7 @@ export function* watchNotifications() {
     if (checkTimeout <= 0) {
       yield call(destroyDueNotifications);
     } else {
-      destroyTimerTask = yield fork(setDestroyTimeout, checkTimeout);
+      destroyTimerTask = yield spawn(setDestroyTimeout, checkTimeout);
     }
   }
 }
@@ -314,9 +337,41 @@ export function* watchSession() {
   }
 }
 
+export function* waitMapsApi() {
+  const isLoaded = yield select(isAPILoaded);
+
+  if (!isLoaded) {
+    yield take(geoSlice.actions.setAPILoaded);
+  }
+}
+
+export function* findNearestCity() {
+  yield call(waitMapsApi);
+
+  const {
+    geoObjects: {
+      position: [latitude, longitude],
+    },
+  } = yield ymaps.geolocation.get({
+    provider: "browser",
+  });
+
+  yield put(geoSlice.actions.setUserLocation({ latitude, longitude }));
+
+  const { data: city } = yield call([api, api.get], "/cdek/nearest", {
+    params: {
+      lat: latitude,
+      lng: longitude,
+    },
+  });
+
+  yield put(geoSlice.actions.setUserCity(city));
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
+    takeLatest(cartSlice.actions.toDelivery, maybeSetDeliveryCity),
     takeLatest(cartSlice.actions.toPayment, handlePayment),
     debounce(
       300,
@@ -336,6 +391,7 @@ export default function* rootSaga() {
 
   yield call(getItemsSaga);
 
-  yield fork(watchNotifications);
-  yield fork(watchSession);
+  yield spawn(watchNotifications);
+  yield spawn(watchSession);
+  yield spawn(findNearestCity);
 }

@@ -1,8 +1,9 @@
 import { useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
+import geo from "../store/slices/geo";
 import Script from "next/script";
 
-export default function MapLoader({ onReady }) {
+export default function MapLoader({ dispatch }) {
   const { locale } = useRouter();
 
   const mapLocale = useMemo(
@@ -11,8 +12,10 @@ export default function MapLoader({ onReady }) {
   );
 
   const onApiLoaded = useCallback(() => {
-    ymaps.ready(onReady);
-  }, [onReady]);
+    ymaps.ready(function () {
+      dispatch(geo.actions.setAPILoaded());
+    });
+  }, [dispatch]);
 
   return (
     <Script

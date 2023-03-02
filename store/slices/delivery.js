@@ -107,8 +107,6 @@ export default createSlice({
   name: "delivery",
 
   initialState: {
-    isAPILoaded: false,
-
     phone: "",
     email: "",
     comment: "",
@@ -129,9 +127,6 @@ export default createSlice({
     calculation: null,
   },
   reducers: {
-    apiLoaded(state) {
-      state.isAPILoaded = true;
-    },
     changeAddressInput(state, { payload }) {
       state.addressInput = payload;
       state.geocodingStatus = GeoCodingStatus.initial;

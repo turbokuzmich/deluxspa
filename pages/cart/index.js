@@ -14,7 +14,6 @@ import NumbericStepper from "../../components/numericstepper";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Price from "../../components/price";
-import MapLoader from "../../components/maploader";
 import A from "@mui/material/Link";
 import Link from "next/link";
 import decline from "../../lib/helpers/declension";
@@ -134,13 +133,12 @@ export default function Cart() {
     [dispatch]
   );
 
-  const onMapsReady = useCallback(
-    () => dispatch(deliverySlice.actions.apiLoaded()),
-    [dispatch]
-  );
-
   const onTitleInputChange = useCallback(
-    (_, newInput) => dispatch(deliverySlice.actions.changeTitleInput(newInput)),
+    (event, newInput) => {
+      if (event) {
+        dispatch(deliverySlice.actions.changeTitleInput(newInput));
+      }
+    },
     [dispatch]
   );
 
@@ -268,7 +266,6 @@ export default function Cart() {
 
   return (
     <>
-      <MapLoader onReady={onMapsReady} />
       <Layout>
         <Container>
           <Box sx={{ pt: 8 }}>
