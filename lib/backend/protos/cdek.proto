@@ -1,0 +1,39 @@
+syntax="proto3";
+
+service Cdek {
+    rpc getCities(CityQuery) returns (stream City);
+    rpc getPoints(PointQuery) returns (stream Point);
+}
+
+message CityQuery {
+    string name = 1;
+}
+
+message PointQuery {
+    uint32 city = 1;
+}
+
+message City {
+    uint32 code = 1;
+    string city = 2;
+    string region = 3;
+    string country = 4;
+    float latitude = 5;
+    float longitude = 6;
+}
+
+message PointLocation {
+    string region = 1;
+    uint32 regionCode = 2;
+    string city = 3;
+    uint32 cityCode = 4;
+    float latitude = 5;
+    float longitude = 6;
+    string address = 7;
+}
+
+message Point {
+    string name = 1;
+    string code = 2;
+    PointLocation location = 3;
+}
