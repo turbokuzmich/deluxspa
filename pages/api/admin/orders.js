@@ -1,10 +1,8 @@
-import sequelize, { Order, OrderItem } from "../../../lib/backend/sequelize";
+import { Order, OrderItem } from "../../../lib/backend/sequelize";
 import omit from "lodash/omit";
 import { restricted } from "../../../lib/middleware/admin";
 
 export default restricted(async function orders(_, res) {
-  await sequelize;
-
   const orders = (
     await Order.findAll({
       order: [["createdAt", "DESC"]],
