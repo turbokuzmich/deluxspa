@@ -65,7 +65,9 @@ export default function Layout({ children, title = "Панель управле�
             ) : null}
           </Toolbar>
         </AppBar>
-        <Container>{authState === "authorized" ? children : null}</Container>
+        <Container sx={{ pt: 10 }}>
+          {authState === "authorized" ? children : null}
+        </Container>
       </>
     </>
   );

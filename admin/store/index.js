@@ -30,6 +30,4 @@ function makeStore() {
   return store;
 }
 
-const wrapper = createWrapper(makeStore);
-
-export default wrapper;
+export default createWrapper(makeStore);
