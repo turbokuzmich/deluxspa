@@ -8,11 +8,9 @@ import { Formik, Form, Field } from "formik";
 import { TextField as TextInput } from "formik-mui";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
-const formValues = { password: "" };
-
-const validators = object({
+const commonValidators = object({
   password: string()
     .required("Необходимо ввести пароль")
     .min(6, "Длина пароля не менее 6 символов")
@@ -22,17 +20,37 @@ const validators = object({
     ),
 });
 
+const typedValidators = {
+  email: {
+    ...commonValidators,
+    key: string()
+      .trim()
+      .required("Необходимо указать адрес электронной почты")
+      .email("Необходимо указать корректный адрес электронной почты"),
+  },
+};
+
 export default function Admin() {
   const dispatch = useDispatch();
 
   const { query } = useRouter();
 
   const type = get(query, "type");
-  const key = get(query, "key");
+  const key = get(query, "key", "");
+
+  const formValues = {
+    key,
+    password: "",
+  };
+
+  const keyLabel = useMemo(
+    () => ({ email: "Элекстронный адрес" }[type]),
+    [type]
+  );
 
   const onSubmit = useCallback(
-    ({ password }) => dispatch(setPassword({ key, type, password })),
-    [dispatch, type, key]
+    ({ key, password }) => dispatch(setPassword({ key, type, password })),
+    [dispatch, type]
   );
 
   return (
@@ -44,11 +62,19 @@ export default function Admin() {
       <Formik
         initialValues={formValues}
         onSubmit={onSubmit}
-        validationSchema={validators}
+        validationSchema={typedValidators[type]}
         validateOnMount
       >
         {(props) => (
           <Form>
+            <Field
+              component={TextInput}
+              label={keyLabel}
+              autoComplete="off"
+              name="key"
+              sx={{ mb: 2 }}
+              fullWidth
+            />
             <Field
               component={TextInput}
               label="Пароль"
