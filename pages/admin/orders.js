@@ -36,12 +36,14 @@ import ordersSlice, {
 } from "../../admin/store/slices/orders";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { getAuthState } from "../../admin/store/slices/auth";
 
 export default function Admin() {
   const { query, replace } = useRouter();
 
   const dispatch = useDispatch();
 
+  const auth = useSelector(getAuthState);
   const orders = useSelector(getOrdersList);
   const state = useSelector(getOrdersState);
   const order = useSelector(getOrder);
@@ -87,10 +89,10 @@ export default function Admin() {
   }, [setIsOrderMenuVisible]);
 
   useEffect(() => {
-    if (state === "initial") {
+    if (auth === "authorized" && state === "initial") {
       dispatch(ordersSlice.actions.fetch());
     }
-  }, [dispatch, state]);
+  }, [dispatch, state, auth]);
 
   useEffect(() => {
     if (state === "fetched" && query.order_id) {
