@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
+import Container from "@mui/material/Container";
 import { getAuthState, getUserName } from "../store/slices/auth";
 import { setApiLoaded } from "../store/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,9 +45,11 @@ export default function Layout({ children, title = "Панель управле�
               <MenuIcon />
             </IconButton>
             <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-              Заказы
+              {title}
             </Typography>
-            {authState === "initial" ? <CircularProgress /> : null}
+            {authState === "initial" || authState === "authorizing" ? (
+              <CircularProgress />
+            ) : null}
             {authState === "unauthorized" ? <LockIcon /> : null}
             {authState === "authorized" ? (
               <Box
@@ -62,7 +65,7 @@ export default function Layout({ children, title = "Панель управле�
             ) : null}
           </Toolbar>
         </AppBar>
-        {children}
+        <Container>{authState === "authorized" ? children : null}</Container>
       </>
     </>
   );

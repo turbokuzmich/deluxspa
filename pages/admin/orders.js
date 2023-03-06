@@ -44,18 +44,6 @@ import { useRouter } from "next/router";
 import api from "../../lib/frontend/api";
 import { useTheme } from "@mui/material";
 
-// const Telegram = {
-//   WebApp: {
-//     initDataUnsafe: {
-//       user: {
-//         id: 177074269,
-//         first_name: "Дмитрий",
-//         last_name: "Куртеев",
-//       },
-//     },
-//   },
-// };
-
 export default function Admin() {
   const { query, replace } = useRouter();
 

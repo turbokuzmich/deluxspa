@@ -32,16 +32,20 @@ function* authorize() {
         ["Telegram", "WebApp", "initDataUnsafe"],
         {}
       );
+
+      const id = get(initData, ["user", "id"], 0);
       const firstName = get(initData, ["user", "first_name"], "");
       const lastName = get(initData, ["user", "last_name"], "");
 
+      yield put(auth.actions.setAuthorizing());
+
       const {
         data: { token },
-      } = yield call([api, api.post], {
+      } = yield call([api, api.post], "/admin/auth", {
         data: initData,
       });
 
-      yield put(auth.actions.setAuthorized({ token, firstName, lastName }));
+      yield put(auth.actions.setAuthorized({ id, token, firstName, lastName }));
     } catch (_) {
       yield put(auth.actions.setUnauthorized());
     }
