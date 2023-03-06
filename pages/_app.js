@@ -9,12 +9,14 @@ import MapLoader from "../components/maploader";
 import ErrorBoundary from "../components/error";
 import environmentSlice, { getIsOnline } from "../store/slices/environment";
 import noInternet from "no-internet";
-import reduxWrapper from "../store";
+import clientReduxWrapper from "../store";
+import adminReduxWrapper from "../admin/store";
 import {
   createTheme,
   ThemeProvider,
   responsiveFontSizes,
 } from "@mui/material/styles";
+import a from "next/router";
 
 import "../styles/global.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -90,8 +92,8 @@ const theme = responsiveFontSizes(
   })
 );
 
-function DeluxSpaApp({ Component, ...rest }) {
-  const { store, props } = reduxWrapper.useWrappedStore(rest);
+function DeluxSpaClientApp({ Component, ...rest }) {
+  const { store, props } = clientReduxWrapper.useWrappedStore(rest);
 
   const { dispatch } = store;
 
@@ -128,6 +130,31 @@ function DeluxSpaApp({ Component, ...rest }) {
       </ThemeProvider>
     </ErrorBoundary>
   );
+}
+
+function DeluxSpaAdminApp({ Component, ...rest }) {
+  const { store, props } = adminReduxWrapper.useWrappedStore(rest);
+
+  return (
+    <ErrorBoundary>
+      <CssBaseline />
+      <Provider store={store}>
+        <Component {...props.pageProps} />
+      </Provider>
+    </ErrorBoundary>
+  );
+}
+
+function DeluxSpaApp(props) {
+  const {
+    router: { pathname },
+  } = props;
+
+  if (pathname.startsWith("/admin")) {
+    return <DeluxSpaAdminApp {...props} />;
+  } else {
+    return <DeluxSpaClientApp {...props} />;
+  }
 }
 
 export default appWithTranslation(DeluxSpaApp);
