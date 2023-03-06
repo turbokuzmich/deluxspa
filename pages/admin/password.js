@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { useCallback, useMemo } from "react";
 
-const commonValidators = object({
+const commonValidators = {
   password: string()
     .required("Необходимо ввести пароль")
     .min(6, "Длина пароля не менее 6 символов")
@@ -18,16 +18,16 @@ const commonValidators = object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
       "Пароль должен содержать как минимум одну строчную букву, одну заглавную букву, одно число и один специальный символ"
     ),
-});
+};
 
 const typedValidators = {
-  email: {
+  email: object({
     ...commonValidators,
     key: string()
       .trim()
       .required("Необходимо указать адрес электронной почты")
       .email("Необходимо указать корректный адрес электронной почты"),
-  },
+  }),
 };
 
 export default function Admin() {
