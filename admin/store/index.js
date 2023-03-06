@@ -2,13 +2,17 @@ import { isServer } from "../../lib/helpers/features";
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import saga from "./sagas";
+import ui from "./slices/ui";
 import auth from "./slices/auth";
+import orders from "./slices/orders";
 import createSagaMiddleware from "redux-saga";
 
 function makeStore() {
   const config = {
     reducer: {
+      [ui.name]: ui.reducer,
       [auth.name]: auth.reducer,
+      [orders.name]: orders.reducer,
     },
   };
 

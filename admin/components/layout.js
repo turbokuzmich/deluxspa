@@ -14,12 +14,14 @@ import { getAuthState, getUserName } from "../store/slices/auth";
 import { setApiLoaded } from "../store/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback } from "react";
+import { isFetching } from "../store/slices/ui";
 
 export default function Layout({ children, title = "Панель управления" }) {
   const dispatch = useDispatch();
 
   const userName = useSelector(getUserName);
   const authState = useSelector(getAuthState);
+  const showSpinner = useSelector(isFetching);
 
   const onApiLoaded = useCallback(() => dispatch(setApiLoaded()), [dispatch]);
 
@@ -65,6 +67,24 @@ export default function Layout({ children, title = "Панель управле�
             ) : null}
           </Toolbar>
         </AppBar>
+        {showSpinner ? (
+          <Box
+            sx={{
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              backdropFilter: "blur(3px)",
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              position: "absolute",
+              zIndex: 1,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress sx={{ mt: 12 }} />
+          </Box>
+        ) : null}
         <Container sx={{ pt: 10 }}>
           {authState === "authorized" ? children : null}
         </Container>

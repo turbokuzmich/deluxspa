@@ -7,8 +7,9 @@ import { string, object } from "yup";
 import { Formik, Form, Field } from "formik";
 import { TextField as TextInput } from "formik-mui";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useMemo } from "react";
+import { isFetching } from "../../admin/store/slices/ui";
 
 const commonValidators = {
   password: string()
@@ -37,6 +38,8 @@ export default function Admin() {
 
   const type = get(query, "type");
   const key = get(query, "key", "");
+
+  const disabled = useSelector(isFetching);
 
   const formValues = {
     key,
@@ -86,7 +89,7 @@ export default function Admin() {
             <Button
               variant="contained"
               size="large"
-              disabled={!props.isValid}
+              disabled={!props.isValid || disabled}
               type="submit"
             >
               Установить

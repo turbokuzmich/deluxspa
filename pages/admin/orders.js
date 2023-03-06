@@ -1,24 +1,12 @@
+import Layout from "../../admin/components/layout";
 import * as Color from "color";
-import Script from "next/script";
 import Typography from "@mui/material/Typography";
 import A from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
-import LockIcon from "@mui/icons-material/Lock";
-import MenuIcon from "@mui/icons-material/Menu";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import PersonIcon from "@mui/icons-material/Person";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -40,24 +28,27 @@ import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { formatDate } from "../../lib/helpers/date";
 import { formatPhone } from "../../lib/helpers/phone";
 import { getHumanStatus } from "../../lib/helpers/order";
-import { useRouter } from "next/router";
-import api from "../../lib/frontend/api";
 import { useTheme } from "@mui/material";
+import ordersSlice, {
+  getOrder,
+  getOrdersList,
+  getOrdersState,
+} from "../../admin/store/slices/orders";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function Admin() {
   const { query, replace } = useRouter();
 
-  const [authStatus, setAuthStatus] = useState("initial");
-  const [token, setToken] = useState(null);
+  const dispatch = useDispatch();
+
+  const orders = useSelector(getOrdersList);
+  const state = useSelector(getOrdersState);
+  const order = useSelector(getOrder);
 
   const [isOrderMenuVisible, setIsOrderMenuVisible] = useState(false);
-  const [ordersFetchStatus, setOrdersFetchStatus] = useState("initial");
-  const [orders, setOrders] = useState([]);
-  const [order, setOrder] = useState(null);
 
   const moreButtonRef = useRef();
-
-  const [error, setError] = useState(null);
 
   const {
     palette: {
@@ -70,36 +61,22 @@ export default function Admin() {
     [paper]
   );
 
-  const onApiLoaded = useCallback(async () => {
-    try {
-      const {
-        data: { token },
-      } = await api.post("/admin/auth", {
-        data: Telegram.WebApp.initDataUnsafe,
-      });
-
-      setToken(token);
-      setAuthStatus("authorized");
-    } catch (error) {
-      setToken(null);
-      setAuthStatus("unauthorized");
-    }
-  }, [setAuthStatus]);
-
   const onOrderClicks = useMemo(
-    () => orders.map((order) => () => setOrder(order)),
-    [orders, setOrder]
+    () =>
+      orders.map(
+        ({ id }) =>
+          () =>
+            dispatch(ordersSlice.actions.setOrder(id))
+      ),
+    [dispatch, orders]
   );
 
   const onDrawerOpen = useCallback(() => {}, []);
 
-  const onDrawerClose = useCallback(() => {
-    setOrder(null);
-  }, [setOrder]);
-
-  const onDialogClose = useCallback(() => {
-    setError(null);
-  }, [setError]);
+  const onDrawerClose = useCallback(
+    () => dispatch(ordersSlice.actions.setOrder(null)),
+    [dispatch]
+  );
 
   const onMoreButtonClick = useCallback(() => {
     setIsOrderMenuVisible(true);
@@ -110,67 +87,25 @@ export default function Admin() {
   }, [setIsOrderMenuVisible]);
 
   useEffect(() => {
-    if (authStatus === "authorized" && ordersFetchStatus === "initial") {
-      setOrdersFetchStatus("fetching");
-
-      api
-        .post(
-          "/admin/orders",
-          {},
-          {
-            params: {
-              token,
-            },
-          }
-        )
-        .then(({ data }) => {
-          setOrders(data);
-          setOrdersFetchStatus("fetched");
-        })
-        .catch(() => {
-          setOrdersFetchStatus("failed");
-        });
+    if (state === "initial") {
+      dispatch(ordersSlice.actions.fetch());
     }
-  }, [authStatus, ordersFetchStatus, setOrdersFetchStatus, token, setOrders]);
+  }, [dispatch, state]);
 
   useEffect(() => {
-    if (ordersFetchStatus === "fetched" && query.order_id) {
+    if (state === "fetched" && query.order_id) {
       const strippedUrl = new URL(location.href);
 
       strippedUrl.searchParams.delete("order_id");
 
       replace(strippedUrl);
 
-      const foundOrder = orders.find(({ id }) => String(id) === query.order_id);
-
-      if (foundOrder) {
-        setOrder(foundOrder);
-      } else {
-        setError("Заказ не найден");
-      }
+      dispatch(ordersSlice.actions.setOrder(query.order_id));
     }
-  }, [query, orders, ordersFetchStatus, replace, setOrder]);
+  }, [state, query, dispatch, replace]);
 
   return (
-    <>
-      <Script
-        src="https://telegram.org/js/telegram-web-app.js"
-        strategy="afterInteractive"
-        onLoad={onApiLoaded}
-      />
-      <Dialog open={Boolean(error)} onClose={onDialogClose} fullWidth>
-        <DialogTitle>Ошибка</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {error}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={onDialogClose}>
-            Закрыть
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <Layout title="Заказы">
       <Menu
         anchorEl={moreButtonRef.current}
         open={isOrderMenuVisible}
@@ -202,36 +137,6 @@ export default function Admin() {
           <ListItemText>Отменить</ListItemText>
         </MenuItem>
       </Menu>
-      <AppBar
-        sx={{
-          mb: 2,
-        }}
-      >
-        <Toolbar>
-          <IconButton size="large" edge="start" color="inherit">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            Заказы
-          </Typography>
-          {authStatus === "initial" ? <CircularProgress /> : null}
-          {authStatus === "unauthorized" ? <LockIcon /> : null}
-          {authStatus === "authorized" ? (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-              }}
-            >
-              <PersonIcon />
-              <Typography variant="h6">
-                {Telegram.WebApp.initDataUnsafe.user.first_name}
-              </Typography>
-            </Box>
-          ) : null}
-        </Toolbar>
-      </AppBar>
       <SwipeableDrawer
         anchor="bottom"
         open={Boolean(order)}
@@ -539,100 +444,86 @@ export default function Admin() {
           </Box>
         ) : null}
       </SwipeableDrawer>
-      <Container sx={{ pt: 10 }}>
-        {authStatus === "initial" ? (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <CircularProgress />
-          </Box>
-        ) : null}
-        {authStatus === "unauthorized" ? (
-          <Alert severity="error">У вас нет доступа к этой странице.</Alert>
-        ) : null}
-        {authStatus === "authorized" ? (
-          <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="right">
-                      <Typography variant="caption" fontWeight="bold">
-                        ID
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="caption" fontWeight="bold">
-                        Создан
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="caption" fontWeight="bold">
-                        Сумма
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="caption" fontWeight="bold">
-                        Статус
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {orders.map((order, index) => (
-                    <TableRow key={order.id} onClick={onOrderClicks[index]}>
-                      <TableCell
-                        align="right"
-                        sx={{
-                          borderBottomColor: "transparent",
-                        }}
-                      >
-                        <Typography variant="body2">{order.id}</Typography>
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        sx={{
-                          borderBottomColor: "transparent",
-                        }}
-                      >
-                        <Typography whiteSpace="nowrap" variant="body2">
-                          {formatDate(new Date(order.createdAt), true)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        sx={{
-                          borderBottomColor: "transparent",
-                        }}
-                      >
-                        <Typography whiteSpace="nowrap" variant="body2">
-                          <Price sum={order.total} />
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        sx={{
-                          borderBottomColor: "transparent",
-                        }}
-                      >
-                        <Typography whiteSpace="nowrap" variant="body2">
-                          {getHumanStatus(order.status)}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {ordersFetchStatus === "initial" ? (
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <CircularProgress />
-              </Box>
-            ) : null}
-            {ordersFetchStatus === "failed" ? (
-              <Alert severity="error">Не удалось получить список заказов</Alert>
-            ) : null}
-          </>
-        ) : null}
-      </Container>
-    </>
+      <TableContainer sx={{ mb: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">
+                <Typography variant="caption" fontWeight="bold">
+                  ID
+                </Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="caption" fontWeight="bold">
+                  Создан
+                </Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="caption" fontWeight="bold">
+                  Сумма
+                </Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="caption" fontWeight="bold">
+                  Статус
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order, index) => (
+              <TableRow key={order.id} onClick={onOrderClicks[index]}>
+                <TableCell
+                  align="right"
+                  sx={{
+                    borderBottomColor: "transparent",
+                  }}
+                >
+                  <Typography variant="body2">{order.id}</Typography>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{
+                    borderBottomColor: "transparent",
+                  }}
+                >
+                  <Typography whiteSpace="nowrap" variant="body2">
+                    {formatDate(new Date(order.createdAt), true)}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{
+                    borderBottomColor: "transparent",
+                  }}
+                >
+                  <Typography whiteSpace="nowrap" variant="body2">
+                    <Price sum={order.total} />
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{
+                    borderBottomColor: "transparent",
+                  }}
+                >
+                  <Typography whiteSpace="nowrap" variant="body2">
+                    {getHumanStatus(order.status)}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {state === "initial" || state === "fetching" ? (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <CircularProgress />
+        </Box>
+      ) : null}
+      {state === "failed" ? (
+        <Alert severity="error">Не удалось получить список заказов</Alert>
+      ) : null}
+    </Layout>
   );
 }

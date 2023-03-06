@@ -20,6 +20,9 @@ import auth, {
   getToken,
 } from "../slices/auth";
 
+import orders, { getOrdersState, maybeFetchOrders } from "../slices/orders";
+
+import ui from "../slices/ui";
 import api from "../../lib/api";
 import get from "lodash/get";
 import { setPassword } from "../actions";
@@ -77,6 +80,7 @@ function* updatePassword({ payload: { key, type, password } }) {
   const queryId = yield select(getQueryId);
 
   try {
+    yield put(ui.actions.setFetching());
     yield call([api, api.post], "/admin/passwords", {
       key,
       type,
@@ -87,9 +91,27 @@ function* updatePassword({ payload: { key, type, password } }) {
     });
   } catch (_) {
   } finally {
+    yield put(ui.actions.setFetching(false));
     get(window, ["Telegram", "WebApp", "close"], function () {
       console.log("close webapp");
     })();
+  }
+}
+
+function* fetchOrders() {
+  try {
+    const token = yield select(getToken);
+
+    const { data: list } = yield call([api, api.get], "/admin/orders", {
+      params: {
+        token,
+      },
+    });
+
+    yield put(orders.actions.fetchSuccess(list));
+  } catch (_) {
+    yield put(orders.actions.fetchFail());
+  } finally {
   }
 }
 
@@ -97,5 +119,6 @@ export default function* root() {
   yield all([
     takeLeading(setApiLoaded, authorize),
     takeLeading(setPassword, updatePassword),
+    takeLeading(orders.actions.fetch, fetchOrders),
   ]);
 }
