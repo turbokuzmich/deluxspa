@@ -78,18 +78,19 @@ function* updatePassword({ payload: { key, type, password } }) {
 
   try {
     yield call([api, api.post], "/admin/passwords", {
-      data: {
-        key,
-        type,
-        password,
-        queryId,
-        userId,
-      },
-      params: {
-        token,
-      },
+      key,
+      type,
+      password,
+      queryId,
+      userId,
+      token,
     });
-  } catch (_) {}
+  } catch (_) {
+  } finally {
+    get(window, ["Telegram", "WebApp", "close"], function () {
+      console.log("close webapp");
+    })();
+  }
 }
 
 export default function* root() {
