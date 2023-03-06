@@ -79,18 +79,14 @@ function* authorize() {
   }
 }
 
-function* updatePassword({ payload: { key, type, password } }) {
+function* updatePassword({ payload }) {
   const token = yield select(getToken);
   const userId = yield select(getUserId);
-  const queryId = yield select(getQueryId);
 
   try {
     yield put(ui.actions.setFetching());
     yield call([api, api.post], "/admin/passwords", {
-      key,
-      type,
-      password,
-      queryId,
+      ...payload,
       userId,
       token,
     });
