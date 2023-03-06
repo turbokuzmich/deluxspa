@@ -137,10 +137,12 @@ function DeluxSpaAdminApp({ Component, ...rest }) {
 
   return (
     <ErrorBoundary>
-      <CssBaseline />
-      <Provider store={store}>
-        <Component {...props.pageProps} />
-      </Provider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Provider store={store}>
+          <Component {...props.pageProps} />
+        </Provider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

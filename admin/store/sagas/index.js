@@ -13,16 +13,26 @@ import {
   spawn,
 } from "redux-saga/effects";
 
+import auth, {
+  setApiLoaded,
+  getQueryId,
+  getUserId,
+  getToken,
+} from "../slices/auth";
+
 import api from "../../lib/api";
 import get from "lodash/get";
-import auth, { setApiLoaded } from "../slices/auth";
+import { setPassword } from "../actions";
 
 function* authorize() {
   if (process.env.NODE_ENV === "development") {
     yield put(
       auth.actions.setAuthorized({
+        userId: 1,
+        queryId: "query-id",
         token: "123",
         firstName: "Дмитрий",
+        lastName: "Андреевич",
       })
     );
   } else {
@@ -33,7 +43,8 @@ function* authorize() {
         {}
       );
 
-      const id = get(initData, ["user", "id"], 0);
+      const queryId = get(initData, ["query_id"], "query-id");
+      const userId = get(initData, ["user", "id"], 0);
       const firstName = get(initData, ["user", "first_name"], "");
       const lastName = get(initData, ["user", "last_name"], "");
 
@@ -45,13 +56,45 @@ function* authorize() {
         data: initData,
       });
 
-      yield put(auth.actions.setAuthorized({ id, token, firstName, lastName }));
+      yield put(
+        auth.actions.setAuthorized({
+          userId,
+          queryId,
+          token,
+          firstName,
+          lastName,
+        })
+      );
     } catch (_) {
       yield put(auth.actions.setUnauthorized());
     }
   }
 }
 
+function* updatePassword({ payload: { key, type, password } }) {
+  const token = yield select(getToken);
+  const userId = yield select(getUserId);
+  const queryId = yield select(getQueryId);
+
+  try {
+    yield call([api, api.post], "/admin/passwords", {
+      data: {
+        key,
+        type,
+        password,
+        queryId,
+        userId,
+      },
+      params: {
+        token,
+      },
+    });
+  } catch (_) {}
+}
+
 export default function* root() {
-  yield all([takeLeading(setApiLoaded, authorize)]);
+  yield all([
+    takeLeading(setApiLoaded, authorize),
+    takeLeading(setPassword, updatePassword),
+  ]);
 }

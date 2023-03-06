@@ -2,7 +2,7 @@ import Layout from "../../admin/components/layout";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import get from "lodash/get";
-import { sendData } from "../../admin/store";
+import { setPassword } from "../../admin/store/actions";
 import { string, object } from "yup";
 import { Formik, Form, Field } from "formik";
 import { TextField as TextInput } from "formik-mui";
@@ -30,15 +30,10 @@ export default function Admin() {
   const type = get(query, "type");
   const key = get(query, "key");
 
-  const onSubmit = useCallback(({ password }) => {
-    const sendData = get(
-      window,
-      ["Telegram", "WebApp", "sendData"],
-      console.log
-    );
-
-    sendData(JSON.stringify({ p: password, t: type, k: key }));
-  }, []);
+  const onSubmit = useCallback(
+    ({ password }) => dispatch(setPassword({ key, type, password })),
+    [dispatch, type, key]
+  );
 
   return (
     <Layout title="Пароли">
