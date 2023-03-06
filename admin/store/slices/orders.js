@@ -1,53 +1,55 @@
-import { createSelector, createSlice, createAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import property from "lodash/property";
-import get from "lodash/get";
 import keyBy from "lodash/keyBy";
 
-export const getOrders = property("orders");
-export const getOrdersList = createSelector(getOrders, property("list"));
-export const getOrdersIds = createSelector(getOrders, property("id"));
-export const getOrdersState = createSelector(getOrders, property("state"));
-export const getOrdersError = createSelector(getOrders, property("error"));
-export const getOrdersSelected = createSelector(
-  getOrders,
-  property("selected")
-);
-export const getOrder = createSelector(
-  getOrdersIds,
-  getOrdersSelected,
-  (ids, selected) => get(ids, selected)
-);
+export const getSlice = property("orders");
+
+export const getOrdersIds = createSelector(getSlice, property("list"));
+export const getOrdersData = createSelector(getSlice, property("id"));
+export const getState = createSelector(getSlice, property("state"));
+export const getOrdersListState = createSelector(getState, property("list"));
+export const getOrdersViewState = createSelector(getState, property("view"));
 
 export default createSlice({
   name: "orders",
   initialState: {
     id: {},
     list: [],
-    state: "initial", // fetching | fetched | failed
-    selected: null,
-    error: "",
+
+    state: {
+      list: "initial",
+      view: {},
+    },
+
+    error: {
+      list: null,
+      view: {},
+    },
   },
   reducers: {
-    fetch(state) {
-      state.state = "fetching";
+    fetchList(state) {
+      state.state.list = "fetching";
     },
-    fetchSuccess(state, { payload }) {
-      state.state = "fetched";
-      state.list = payload;
+    fetchListSuccess(state, { payload }) {
+      state.state.list = "fetched";
+      state.list = payload.map(property("id"));
       state.id = keyBy(payload, property("id"));
-      state.error = "";
+      state.error.list = null;
     },
-    fetchFail(state) {
-      state.state = "error";
+    fetchListFail(state) {
+      state.state.list = "failed";
+      state.error.list = "Ошибка при получении заказов";
       state.list = [];
-      state.error = "Ошибка при получении заказов";
     },
-    setOrder(state, { payload }) {
-      if (payload === null || payload in state.id) {
-        state.selected = payload;
-      } else {
-        state.selected = null;
-      }
+    fetchOrder(state, { payload }) {
+      state.state.view[payload] = "fetching";
+    },
+    fetchOrderSucces(state, { payload }) {
+      state.state.view[payload.id] = "fetched";
+      state.id[payload.id] = payload;
+    },
+    fetchOrderFail(state, { payload }) {
+      state.state.view[payload] = "failed";
     },
   },
 });

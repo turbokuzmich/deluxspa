@@ -1176,8 +1176,18 @@ export const orderStatuses = [
   "pending", // ожидает оплаты от платежного гейта
   "waiting_for_capture", // пока не используется
   "succeeded", // оплачен
-  "canceled", // отменен
   "preparing", // после оплаты готовится к отправке
   "shipping", // передан в транспортную компанию
   "delivered", // доставлен
+  "canceled", // отменен
 ];
+
+export const orderStatusesKeys = orderStatuses.reduce(
+  (keys, status) => ({ ...keys, [status]: status }),
+  {}
+);
+
+export const orderStatusesWeights = orderStatuses.reduce(
+  (keys, status, index) => ({ ...keys, [status]: index }),
+  {}
+);

@@ -11,6 +11,7 @@ import {
   takeLeading,
   takeLatest,
   spawn,
+  takeEvery,
 } from "redux-saga/effects";
 
 import auth, {
@@ -20,7 +21,11 @@ import auth, {
   getToken,
 } from "../slices/auth";
 
-import orders, { getOrdersState, maybeFetchOrders } from "../slices/orders";
+import orders, {
+  getOrdersData,
+  getOrdersState,
+  maybeFetchOrders,
+} from "../slices/orders";
 
 import ui from "../slices/ui";
 import api from "../../lib/api";
@@ -108,10 +113,33 @@ function* fetchOrders() {
       },
     });
 
-    yield put(orders.actions.fetchSuccess(list));
+    yield put(orders.actions.fetchListSuccess(list));
   } catch (_) {
-    yield put(orders.actions.fetchFail());
+    yield put(orders.actions.fetchListFail());
   } finally {
+  }
+}
+
+function* fetchOrder({ payload: id }) {
+  const ordersData = yield select(getOrdersData);
+
+  if (id in ordersData) {
+    yield put(orders.actions.fetchOrderSucces(ordersData[id]));
+  } else {
+    try {
+      const token = yield select(getToken);
+
+      const { data: order } = yield call([api, api.get], "/admin/orders", {
+        params: {
+          id,
+          token,
+        },
+      });
+
+      yield put(orders.actions.fetchOrderSucces(order));
+    } catch (_) {
+      yield put(orders.actions.fetchOrderFail(id));
+    }
   }
 }
 
@@ -119,6 +147,7 @@ export default function* root() {
   yield all([
     takeLeading(setApiLoaded, authorize),
     takeLeading(setPassword, updatePassword),
-    takeLeading(orders.actions.fetch, fetchOrders),
+    takeLeading(orders.actions.fetchList, fetchOrders),
+    takeEvery(orders.actions.fetchOrder, fetchOrder),
   ]);
 }

@@ -5,6 +5,7 @@ import { appWithTranslation } from "next-i18next";
 import { Provider } from "react-redux";
 import { usePageVisibility } from "react-page-visibility";
 import { useEffect } from "react";
+import Layout from "../admin/components/layout";
 import MapLoader from "../components/maploader";
 import ErrorBoundary from "../components/error";
 import environmentSlice, { getIsOnline } from "../store/slices/environment";
@@ -140,7 +141,9 @@ function DeluxSpaAdminApp({ Component, ...rest }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Provider store={store}>
-          <Component {...props.pageProps} />
+          <Layout title={props.pageProps.title}>
+            <Component {...props.pageProps} />
+          </Layout>
         </Provider>
       </ThemeProvider>
     </ErrorBoundary>
