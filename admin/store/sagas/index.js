@@ -23,8 +23,8 @@ import auth, {
 
 import orders, {
   getOrdersData,
-  getOrdersState,
-  maybeFetchOrders,
+  getOrdersFilter,
+  updateOrderStatus,
 } from "../slices/orders";
 
 import ui from "../slices/ui";
@@ -106,11 +106,12 @@ function* updatePassword({ payload: { key, type, password } }) {
 function* fetchOrders() {
   try {
     const token = yield select(getToken);
+    const filter = yield select(getOrdersFilter);
+
+    const base = { token };
 
     const { data: list } = yield call([api, api.get], "/admin/orders", {
-      params: {
-        token,
-      },
+      params: filter === null ? base : { ...base, filter },
     });
 
     yield put(orders.actions.fetchListSuccess(list));
@@ -143,11 +144,36 @@ function* fetchOrder({ payload: id }) {
   }
 }
 
+function* setOrderStatus({ payload: { id, status } }) {
+  const token = yield select(getToken);
+  const ordersData = yield select(getOrdersData);
+  const orderStatus = get(ordersData, [id, "status"]);
+
+  if (status !== orderStatus) {
+    try {
+      const { data: order } = yield call(
+        [api, api.post],
+        "/admin/orders",
+        { status },
+        { params: { id, token } }
+      );
+
+      yield put(orders.actions.fetchOrderSucces(order));
+    } catch (error) {
+      yield put(orders.actions.setOrderStatus({ id, orderStatus }));
+    }
+  }
+}
+
 export default function* root() {
   yield all([
     takeLeading(setApiLoaded, authorize),
     takeLeading(setPassword, updatePassword),
-    takeLeading(orders.actions.fetchList, fetchOrders),
     takeEvery(orders.actions.fetchOrder, fetchOrder),
+    takeEvery(updateOrderStatus, setOrderStatus),
+    takeLatest(
+      [orders.actions.fetchList, orders.actions.setFilter],
+      fetchOrders
+    ),
   ]);
 }

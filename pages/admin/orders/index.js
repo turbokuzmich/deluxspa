@@ -1,6 +1,8 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CircularProgress from "@mui/material/CircularProgress";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,11 +14,16 @@ import Price from "../../../components/price";
 import A from "@mui/material/Link";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "next/link";
-import { useEffect, useMemo } from "react";
+import Menu from "@mui/material/Menu";
+import MenuList from "@mui/material/MenuList";
+import MenuItem from "@mui/material/MenuItem";
+import { orderStatuses } from "../../../constants";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { formatDate } from "../../../lib/helpers/date";
 import { getHumanStatus } from "../../../lib/helpers/order";
 import { useTheme } from "@mui/material";
 import ordersSlice, {
+  getOrdersFilter,
   getOrdersIds,
   getOrdersData,
   getOrdersListState,
@@ -29,9 +36,25 @@ export default function Admin() {
 
   const dispatch = useDispatch();
 
+  const filterButtonRef = useRef();
+
+  const [isFilterMenuVisible, setIsFilterMenuVisible] = useState(false);
+
   const ordersIds = useSelector(getOrdersIds);
   const ordersData = useSelector(getOrdersData);
   const state = useSelector(getOrdersListState);
+  const filter = useSelector(getOrdersFilter);
+
+  const filterItems = useMemo(
+    () =>
+      [{ title: "Все", value: null }].concat(
+        orderStatuses.map((status) => ({
+          title: getHumanStatus(status),
+          value: status,
+        }))
+      ),
+    []
+  );
 
   const {
     palette: {
@@ -39,9 +62,28 @@ export default function Admin() {
     },
   } = useTheme();
 
+  const onFilterButtonClick = useCallback(
+    () => setIsFilterMenuVisible(true),
+    [setIsFilterMenuVisible]
+  );
+
   const onOrderClicks = useMemo(
     () => ordersIds.map((id) => () => push(`/admin/orders/${id}`)),
     [ordersIds, push]
+  );
+
+  const onFilterClicks = useMemo(
+    () =>
+      filterItems.map(({ value }) => () => {
+        dispatch(ordersSlice.actions.setFilter(value));
+        onFilterMenuClose();
+      }),
+    [filterItems, dispatch, onFilterMenuClose]
+  );
+
+  const onFilterMenuClose = useCallback(
+    () => setIsFilterMenuVisible(false),
+    [setIsFilterMenuVisible]
   );
 
   useEffect(() => {
@@ -58,6 +100,31 @@ export default function Admin() {
         </Link>
         <Typography color="text.primary">Заказы</Typography>
       </Breadcrumbs>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          onClick={onFilterButtonClick}
+          size="small"
+          variant="outlined"
+          ref={filterButtonRef}
+          disableElevation
+          endIcon={<KeyboardArrowDownIcon />}
+        >
+          {filter === null ? "Все" : getHumanStatus(filter)}
+        </Button>
+      </Box>
+      <Menu
+        anchorEl={filterButtonRef.current}
+        open={isFilterMenuVisible}
+        onClose={onFilterMenuClose}
+      >
+        <MenuList dense>
+          {filterItems.map(({ title, value }, index) => (
+            <MenuItem key={value} onClick={onFilterClicks[index]}>
+              {title}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
       <TableContainer sx={{ mb: 2 }}>
         <Table>
           <TableHead>

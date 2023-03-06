@@ -2,6 +2,7 @@ import { useEffect, useMemo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOrdersData,
+  updateOrderStatus,
   getOrdersViewState,
 } from "../../../admin/store/slices/orders";
 import {
@@ -78,6 +79,15 @@ export default function Order({ id }) {
     [status]
   );
 
+  const onMenuItemsClicks = useMemo(
+    () =>
+      availableStatuses.map(({ value }) => () => {
+        dispatch(updateOrderStatus({ id, status: value }));
+        onOrderMenuClose();
+      }),
+    [id, dispatch, availableStatuses, onOrderMenuClose]
+  );
+
   const [isOrderMenuVisible, setIsOrderMenuVisible] = useState(false);
 
   const onEditButtonClick = useCallback(() => {
@@ -129,11 +139,11 @@ export default function Order({ id }) {
             onClose={onOrderMenuClose}
           >
             <MenuList>
-              {availableStatuses.map(({ title, value }) => [
+              {availableStatuses.map(({ title, value }, index) => [
                 value === orderStatusesKeys.canceled ? (
                   <Divider key={`${value}-divider`} />
                 ) : null,
-                <MenuItem key={value} onClick={onOrderMenuClose}>
+                <MenuItem key={value} onClick={onMenuItemsClicks[index]}>
                   <ListItemIcon>{statusIcons[value]}</ListItemIcon>
                   <ListItemText>{title}</ListItemText>
                 </MenuItem>,
