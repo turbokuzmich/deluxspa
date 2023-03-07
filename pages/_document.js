@@ -3,11 +3,6 @@ import Document, { Html, Head, Main, NextScript } from "next/document";
 import { CacheProvider } from "@emotion/react";
 import createEmotionServer from "@emotion/server/create-instance";
 import createCache from "@emotion/cache";
-import initBot from "../lib/backend/bot";
-
-initBot();
-
-import "../lib/backend/cron";
 
 export default class DeluxSpaDocument extends Document {
   render() {
