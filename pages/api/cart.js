@@ -2,12 +2,6 @@ import get from "lodash/get";
 import withSession from "../../lib/backend/session";
 import { csrf } from "../../lib/backend/csrf";
 
-// TODO move
-import "../../lib/backend/cron";
-import runBot from "../../lib/backend/bot";
-
-runBot();
-
 async function getCart(req, res) {
   await withSession(
     async function (session) {
