@@ -2,11 +2,11 @@ import withSession, { getSessionId } from "../../lib/backend/session";
 import { createPayment } from "../../lib/backend/yookassa";
 import t from "../../lib/helpers/i18n";
 import * as yup from "yup";
-import { sendNewOrderEmail } from "../../lib/backend/letters";
 import { calculate } from "../../lib/backend/cdek";
-import { notifyOfNewOrder } from "../../lib/backend/bot";
 import { csrf } from "../../lib/backend/csrf";
+import { sendOrder } from "../../lib/backend/queue";
 import omit from "lodash/omit";
+import noop from "lodash/noop";
 import memoize from "lodash/memoize";
 import sequelize, {
   Order,
@@ -88,7 +88,7 @@ async function doCheckout(req, res) {
 
     const url = await createPayment(order);
 
-    await Promise.all([sendNewOrderEmail(order), notifyOfNewOrder(order)]);
+    sendOrder(order).then(noop).catch(noop);
 
     res.status(200).json({ url });
   } catch (error) {
