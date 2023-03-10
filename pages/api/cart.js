@@ -140,18 +140,20 @@ const handlers = {
     const name = get(input, "name", "");
     const entity = get(input, "entity", "");
 
-    await api.bot.sendMessage(uid, `Пароль от ${name} установлен`, {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "Посмотреть",
-              callback_data: ["password", entity, key].join(","),
-            },
+    api.registerAutoDestroy(
+      await api.bot.sendMessage(uid, `Пароль от ${name} установлен`, {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Посмотреть",
+                callback_data: ["password", entity, key].join(","),
+              },
+            ],
           ],
-        ],
-      },
-    });
+        },
+      })
+    );
   }),
   "neon-beard-download": withApi(async function (api, input) {
     const chatIds = await getChatIds();
