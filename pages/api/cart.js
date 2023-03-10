@@ -113,6 +113,27 @@ const handlers = {
       )
     );
   }),
+  "deluxspa-new-feedback": withApi(async function (api, input) {
+    const chatIds = await getChatIds();
+    const key = get(input, "key");
+
+    await Promise.all(
+      chatIds.map((chatId) =>
+        api.bot.sendMessage(chatId, "Новый вопрос на сайте Delux SPA", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Посмотреть",
+                  callback_data: ["feedback", "view", key].join(),
+                },
+              ],
+            ],
+          },
+        })
+      )
+    );
+  }),
   "neon-beard-download": withApi(async function (api, input) {
     const chatIds = await getChatIds();
 
