@@ -134,6 +134,27 @@ const handlers = {
       )
     );
   }),
+  "deluxspa-password-update": withApi(async function (api, input) {
+    const chatIds = await getChatIds();
+
+    const uid = get(input, "uid", "");
+    const key = get(input, "key", "");
+    const name = get(input, "name", "");
+    const entity = get(input, "entity", "");
+
+    await bot.sendMessage(uid, `Пароль от ${name} установлен`, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Посмотреть",
+              callback_data: ["password", entity, key].join(","),
+            },
+          ],
+        ],
+      },
+    });
+  }),
   "neon-beard-download": withApi(async function (api, input) {
     const chatIds = await getChatIds();
 
