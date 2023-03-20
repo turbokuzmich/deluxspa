@@ -4,7 +4,6 @@ import Layout from "../../../components/layout";
 import Items from "../../../components/items";
 import Submenu from "../../../components/submenu";
 import Category from "../../../components/category";
-import generativeBackground from "../../../lib/helpers/background";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import {
@@ -25,13 +24,7 @@ export default function CategoryView({ id }) {
     <Layout title={t(category.title)}>
       <Category
         {...category}
-        sx={{
-          background: generativeBackground(color),
-          position: "relative",
-          category: {
-            pt: "80px",
-          },
-        }}
+        color={color}
         addonBefore={
           <Submenu
             selected={id}

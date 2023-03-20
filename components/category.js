@@ -2,11 +2,9 @@ import get from "lodash/get";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Background from "./background";
 import { useTranslation } from "next-i18next";
-
-const defaultSx = {
-  category: {},
-};
+import { useRef } from "react";
 
 const categoryStyleOverride = {
   body_massage_oil: {
@@ -41,20 +39,23 @@ export default function Category({
   id,
   title,
   image,
+  color,
   addonBefore,
   description,
-  sx = defaultSx,
 }) {
   const { t } = useTranslation();
-  const { category: categorySx, ...containerSx } = sx;
+
+  const containerRef = useRef();
 
   return (
     <Box
+      ref={containerRef}
       sx={{
-        backgroundColor: "background.paper",
-        ...containerSx,
+        position: "relative",
+        backgroundColor: color ? color : "background.paper",
       }}
     >
+      <Background color={color} parentRef={containerRef} />
       {addonBefore}
       <Container
         sx={{
@@ -67,7 +68,7 @@ export default function Category({
           display: "flex",
           gap: 4,
           position: "relative",
-          ...categorySx,
+          pt: "80px",
           ...get(categoryStyleOverride, id, {}),
         }}
       >
@@ -110,15 +111,6 @@ export default function Category({
               ))
             : null}
         </Box>
-        <Box
-          sx={{
-            width: "50%",
-            display: {
-              xs: "none",
-              md: "initial",
-            },
-          }}
-        />
       </Container>
     </Box>
   );
