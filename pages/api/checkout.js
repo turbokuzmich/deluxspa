@@ -69,7 +69,7 @@ async function doCheckout(req, res) {
 
   try {
     const [{ total_sum: delivery }, subtotal] = await Promise.all([
-      await calculate(orderData.city, orderData.address),
+      await calculate(orderData.city, orderData.address, cartItems),
       await session.getCartTotal(),
     ]);
 

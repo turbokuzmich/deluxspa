@@ -213,8 +213,10 @@ async function updateCart(req, res) {
   const session = await withSession(
     async function (session) {
       const { id, variant: variantStr, qty = 1, append = false } = req.body;
+
       const variant = parseInt(variantStr, 10);
       const items = get(session, "items", []);
+
       const itemsIndex = items.findIndex(
         ({ itemId, variantId }) => itemId === id && variantId === variant
       );
