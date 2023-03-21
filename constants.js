@@ -204,16 +204,19 @@ const oils = [
         120: {
           price: 350,
           volume: 120,
+          weight: 130,
           image: "/images/items/mint_breeze_120.jpg",
         },
         1000: {
           price: 990,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/mint_breeze_1000.jpg",
         },
         3000: {
           price: 2590,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/mint_breeze_3000.jpg",
         },
       },
@@ -241,16 +244,19 @@ const oils = [
         120: {
           price: 350,
           volume: 120,
+          weight: 130,
           image: "/images/items/bio_120.jpg",
         },
         1000: {
           price: 990,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/bio_1000.jpg",
         },
         3000: {
           price: 2590,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/bio_3000.jpg",
         },
       },
@@ -278,16 +284,19 @@ const oils = [
         120: {
           price: 350,
           volume: 120,
+          weight: 130,
           image: "/images/items/lemongrass_120.jpg",
         },
         1000: {
           price: 990,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/lemongrass_1000.jpg",
         },
         3000: {
           price: 2590,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/lemongrass_3000.jpg",
         },
       },
@@ -314,16 +323,19 @@ const oils = [
         120: {
           price: 490,
           volume: 120,
+          weight: 130,
           image: "/images/items/bubble_gum_120.jpg",
         },
         1000: {
           price: 1690,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/bubble_gum_1000.jpg",
         },
         3000: {
           price: 4590,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/bubble_gum_3000.jpg",
         },
       },
@@ -359,11 +371,13 @@ const oils = [
         120: {
           price: 550,
           volume: 120,
+          weight: 130,
           image: "/images/items/extra_slim_120.jpg",
         },
         1000: {
           price: 1990,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/extra_slim_1000.jpg",
         },
       },
@@ -390,11 +404,13 @@ const oils = [
         120: {
           price: 490,
           volume: 120,
+          weight: 130,
           image: "/images/items/lemon_cake_120.jpg",
         },
         1000: {
           price: 1690,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/lemon_cake_1000.jpg",
         },
       },
@@ -429,11 +445,13 @@ const oils = [
         120: {
           price: 590,
           volume: 120,
+          weight: 125,
           image: "/images/items/lemon_pepper_120.jpg",
         },
         1000: {
           price: 2290,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/lemon_pepper_1000.jpg",
         },
       },
@@ -458,11 +476,13 @@ const oils = [
         120: {
           price: 450,
           volume: 120,
+          weight: 130,
           image: "/images/items/solar_orange_120.jpg",
         },
         3000: {
           price: 3490,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/solar_orange_3000.jpg",
         },
       },
@@ -487,6 +507,7 @@ const oils = [
         120: {
           price: 690,
           volume: 120,
+          weight: 130,
           image: "/images/items/kenyan_coffee_120.jpg",
         },
       },
@@ -511,6 +532,7 @@ const oils = [
         120: {
           price: 890,
           volume: 120,
+          weight: 130,
           image: "/images/items/mantra_120.jpg",
         },
       },
@@ -533,6 +555,7 @@ const oils = [
         120: {
           price: 550,
           volume: 120,
+          weight: 130,
           image: "/images/items/citrus_freshness_120.jpg",
         },
       },
@@ -555,6 +578,7 @@ const oils = [
         120: {
           price: 590,
           volume: 120,
+          weight: 130,
           image: "/images/items/orange_cinnamon_120.jpg",
         },
       },
@@ -585,6 +609,7 @@ const oils = [
         120: {
           price: 790,
           volume: 120,
+          weight: 130,
           image: "/images/items/extra_slim_ultimate_120.jpg",
         },
       },
@@ -615,6 +640,7 @@ const oils = [
         120: {
           price: 590,
           volume: 120,
+          weight: 125,
           image: "/images/items/patchouli_mint_120.jpg",
         },
       },
@@ -639,6 +665,7 @@ const oils = [
         120: {
           price: 690,
           volume: 120,
+          weight: 125,
           image: "/images/items/lavender_120.jpg",
         },
       },
@@ -663,6 +690,7 @@ const oils = [
         120: {
           price: 790,
           volume: 120,
+          weight: 125,
           image: "/images/items/floral_120.jpg",
         },
       },
@@ -687,6 +715,7 @@ const oils = [
         120: {
           price: 790,
           volume: 120,
+          weight: 125,
           image: "/images/items/evening_primrose_120.jpg",
         },
       },
@@ -710,6 +739,7 @@ const oils = [
         1000: {
           price: 2190,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/lime_cinnamon_1000.jpg",
         },
       },
@@ -736,21 +766,25 @@ const bodyScrubs = [
         1000: {
           price: 1290,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/scrub_mint_breeze_1000.jpg",
         },
         2000: {
           price: 2390,
           volume: 2000,
+          weight: 2100,
           image: "/images/items/scrub_mint_breeze_1000.jpg",
         },
         3000: {
           price: 3390,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/scrub_mint_breeze_1000.jpg",
         },
         5000: {
           price: 5190,
           volume: 5000,
+          weight: 5100,
           image: "/images/items/scrub_mint_breeze_1000.jpg",
         },
       },
@@ -774,21 +808,25 @@ const bodyScrubs = [
         1000: {
           price: 1990,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/scrub_extra_slim_1000.jpg",
         },
         2000: {
           price: 3590,
           volume: 2000,
+          weight: 2100,
           image: "/images/items/scrub_extra_slim_1000.jpg",
         },
         3000: {
           price: 4990,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/scrub_extra_slim_1000.jpg",
         },
         5000: {
           price: 6990,
           volume: 5000,
+          weight: 5100,
           image: "/images/items/scrub_extra_slim_1000.jpg",
         },
       },
@@ -812,21 +850,25 @@ const bodyScrubs = [
         1000: {
           price: 1290,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/scrub_gluhwein_1000.jpg",
         },
         2000: {
           price: 2390,
           volume: 2000,
+          weight: 2100,
           image: "/images/items/scrub_gluhwein_1000.jpg",
         },
         3000: {
           price: 3390,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/scrub_gluhwein_1000.jpg",
         },
         5000: {
           price: 5190,
           volume: 5000,
+          weight: 5100,
           image: "/images/items/scrub_gluhwein_1000.jpg",
         },
       },
@@ -850,21 +892,25 @@ const bodyScrubs = [
         1000: {
           price: 1290,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/scrub_lemon_cake_1000.jpg",
         },
         2000: {
           price: 2390,
           volume: 2000,
+          weight: 2100,
           image: "/images/items/scrub_lemon_cake_1000.jpg",
         },
         3000: {
           price: 3390,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/scrub_lemon_cake_1000.jpg",
         },
         5000: {
           price: 5190,
           volume: 5000,
+          weight: 5100,
           image: "/images/items/scrub_lemon_cake_1000.jpg",
         },
       },
@@ -888,21 +934,25 @@ const bodyScrubs = [
         1000: {
           price: 1290,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/scrub_bubble_gum_1000.jpg",
         },
         2000: {
           price: 2390,
           volume: 2000,
+          weight: 2100,
           image: "/images/items/scrub_bubble_gum_1000.jpg",
         },
         3000: {
           price: 3390,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/scrub_bubble_gum_1000.jpg",
         },
         5000: {
           price: 5190,
           volume: 5000,
+          weight: 5100,
           image: "/images/items/scrub_bubble_gum_1000.jpg",
         },
       },
@@ -926,21 +976,25 @@ const bodyScrubs = [
         1000: {
           price: 1290,
           volume: 1000,
+          weight: 1100,
           image: "/images/items/scrub_mocca_1000.jpg",
         },
         2000: {
           price: 2390,
           volume: 2000,
+          weight: 2100,
           image: "/images/items/scrub_mocca_1000.jpg",
         },
         3000: {
           price: 3390,
           volume: 3000,
+          weight: 3100,
           image: "/images/items/scrub_mocca_1000.jpg",
         },
         5000: {
           price: 5190,
           volume: 5000,
+          weight: 5100,
           image: "/images/items/scrub_mocca_1000.jpg",
         },
       },
