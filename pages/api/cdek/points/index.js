@@ -1,6 +1,5 @@
-import { Point } from "../../../lib/backend/sequelize";
+import { Point } from "../../../../lib/backend/sequelize";
 import get from "lodash/get";
-import omit from "lodash/omit";
 
 export default async function points(req, res) {
   const city = get(req, "query.city", null);
