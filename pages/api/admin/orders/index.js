@@ -1,8 +1,8 @@
-import { Order, OrderItem } from "../../../lib/backend/sequelize";
+import { Order, OrderItem } from "../../../../lib/backend/sequelize";
 import omit from "lodash/omit";
 import get from "lodash/get";
-import { orderStatuses } from "../../../constants";
-import { restricted } from "../../../lib/middleware/admin";
+import { orderStatuses } from "../../../../constants";
+import { restricted } from "../../../../lib/middleware/admin";
 
 export default restricted(async function orders(req, res) {
   const id = get(req, ["query", "id"], null);
