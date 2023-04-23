@@ -297,6 +297,22 @@ export default function Order({ id }) {
                     <Typography>{order.code}</Typography>
                   </TableCell>
                 </TableRow>
+                <TableRow>
+                  <TableCell
+                    component="th"
+                    sx={{ borderBottomColor: "transparent", pl: 0 }}
+                  >
+                    <Typography fontWeight="bold">ID доставки</Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ borderBottomColor: "transparent", pr: 0 }}
+                  >
+                    <Typography>
+                      {order.cdekOrderId ? order.cdekOrderId : "—"}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
