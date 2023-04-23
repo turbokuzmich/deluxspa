@@ -88,6 +88,16 @@ export default function Order({ id }) {
     [id, dispatch, availableStatuses, onOrderStatusesMenuClose]
   );
 
+  const [isCdekMenuVisible, setIsCdekMenuVisible] = useState(false);
+
+  const onCdekMenuOpen = useCallback(() => {
+    setIsCdekMenuVisible(false);
+  }, [setIsCdekMenuVisible]);
+
+  const onCdekMenuClose = useCallback(() => {
+    setIsCdekMenuVisible(false);
+  }, [setIsCdekMenuVisible]);
+
   const [isOrderMenuVisible, setIsOrderMenuVisible] = useState(false);
 
   const onOrderMenuOpen = useCallback(() => {
@@ -108,6 +118,11 @@ export default function Order({ id }) {
   const onEditStatusClick = useCallback(() => {
     setIsOrderMenuVisible(false);
     setIsOrderStatusesMenuVisible(true);
+  }, []);
+
+  const onBindCdekClick = useCallback(() => {
+    setIsOrderMenuVisible(false);
+    setIsCdekMenuVisible(true);
   }, []);
 
   const onOrderStatusesMenuOpen = useCallback(() => {
@@ -150,12 +165,22 @@ export default function Order({ id }) {
           </Breadcrumbs>
           <SwipeableDrawer
             anchor="bottom"
+            open={isCdekMenuVisible}
+            onOpen={onCdekMenuOpen}
+            onClose={onCdekMenuClose}
+          >
+            obanze
+          </SwipeableDrawer>
+          <SwipeableDrawer
+            anchor="bottom"
             open={isOrderMenuVisible}
             onOpen={onOrderMenuOpen}
             onClose={onOrderMenuClose}
           >
             <MenuList>
-              <ListItemText>Привязать СДЭК</ListItemText>
+              <MenuItem onClick={onBindCdekClick}>
+                <ListItemText>Привязать СДЭК</ListItemText>
+              </MenuItem>
               {availableStatuses.length ? (
                 <MenuItem onClick={onEditStatusClick}>
                   <ListItemText>Изменить статус</ListItemText>
