@@ -5,7 +5,8 @@ import { appWithTranslation } from "next-i18next";
 import { Provider } from "react-redux";
 import { usePageVisibility } from "react-page-visibility";
 import { useEffect } from "react";
-import Layout from "../admin/components/layout";
+import AdminLayout from "../admin/components/layout";
+import Layout from "../components/layout";
 import MapLoader from "../components/maploader";
 import ErrorBoundary from "../components/error";
 import environmentSlice, { getIsOnline } from "../store/slices/environment";
@@ -17,7 +18,6 @@ import {
   ThemeProvider,
   responsiveFontSizes,
 } from "@mui/material/styles";
-import a from "next/router";
 
 import "../styles/global.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -126,7 +126,9 @@ function DeluxSpaClientApp({ Component, ...rest }) {
         <MapLoader dispatch={dispatch} />
         <CssBaseline />
         <Provider store={store}>
-          <Component {...props.pageProps} />
+          <Layout {...props.pageProps}>
+            <Component {...props.pageProps} />
+          </Layout>
         </Provider>
       </ThemeProvider>
     </ErrorBoundary>
@@ -141,9 +143,9 @@ function DeluxSpaAdminApp({ Component, ...rest }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Provider store={store}>
-          <Layout title={props.pageProps.title}>
+          <AdminLayout title={props.pageProps.title}>
             <Component {...props.pageProps} />
-          </Layout>
+          </AdminLayout>
         </Provider>
       </ThemeProvider>
     </ErrorBoundary>

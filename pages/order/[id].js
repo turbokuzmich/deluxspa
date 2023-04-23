@@ -11,7 +11,6 @@ import A from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Price from "../../components/price";
 import Typography from "@mui/material/Typography";
-import Layout from "../../components/layout";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -44,151 +43,142 @@ export default function ViewOrder({
   // TODO вы можете отслеживать заказ при помощи бота
   // TODO вы можете оставить нам свою электронную почту, чтобы получать уведомления
   return (
-    <Layout title={t("page-title-order")}>
-      <Container>
-        <Box
-          sx={{
-            pt: 8,
-          }}
-        >
-          {error ? (
+    <Container>
+      <Box
+        sx={{
+          pt: 8,
+        }}
+      >
+        {error ? (
+          <Typography
+            variant="h3"
+            sx={{ textTransform: "uppercase" }}
+            paragraph
+          >
+            {t("order-not-found-title")}
+          </Typography>
+        ) : (
+          <>
             <Typography
               variant="h3"
               sx={{ textTransform: "uppercase" }}
               paragraph
             >
-              {t("order-not-found-title")}
+              {t("order-title")} {externalId}
             </Typography>
-          ) : (
-            <>
-              <Typography
-                variant="h3"
-                sx={{ textTransform: "uppercase" }}
-                paragraph
-              >
-                {t("order-title")} {externalId}
-              </Typography>
-              <Typography fontWeight="bold">{t("order-status")}</Typography>
-              <Typography paragraph>
-                {t(`order-status-${status}`)}{" "}
-                {cdek && status === orderStatusesKeys.shipping ? (
-                  <CdekStatus cdek={cdek} />
-                ) : null}
-              </Typography>
-              <Typography fontWeight="bold">{t("order-address")}</Typography>
-              <Typography paragraph>
-                «{name}» по адресу {address}
-              </Typography>
-              <Typography variant="h4" paragraph>
-                {t("order-items-title")}
-              </Typography>
-              <TableContainer sx={{ mb: 8 }}>
-                <Table>
-                  <TableBody>
-                    {items.map((item) => (
-                      <TableRow
-                        key={`${item.title_en}-${item.brief_en}-${item.capacity_en}`}
-                      >
-                        <TableCell>
-                          <Typography>{item[`brief${suffix}`]}</Typography>
-                          <Typography variant="h5" textTransform="uppercase">
-                            {item[`title${suffix}`]},{" "}
-                            {item[`capacity${suffix}`]}
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          sx={{ verticalAlign: "bottom" }}
-                        >
-                          <Typography variant="h5">
-                            {item.qty} x <Price sum={item.price} />
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          sx={{ verticalAlign: "bottom" }}
-                        >
-                          <Typography variant="h5">
-                            <Price sum={item.total} />
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    <TableRow>
+            <Typography fontWeight="bold">{t("order-status")}</Typography>
+            <Typography paragraph>
+              {t(`order-status-${status}`)}{" "}
+              {cdek && status === orderStatusesKeys.shipping ? (
+                <CdekStatus cdek={cdek} />
+              ) : null}
+            </Typography>
+            <Typography fontWeight="bold">{t("order-address")}</Typography>
+            <Typography paragraph>
+              «{name}» по адресу {address}
+            </Typography>
+            <Typography variant="h4" paragraph>
+              {t("order-items-title")}
+            </Typography>
+            <TableContainer sx={{ mb: 8 }}>
+              <Table>
+                <TableBody>
+                  {items.map((item) => (
+                    <TableRow
+                      key={`${item.title_en}-${item.brief_en}-${item.capacity_en}`}
+                    >
                       <TableCell>
-                        <Typography>доставка</Typography>
+                        <Typography>{item[`brief${suffix}`]}</Typography>
                         <Typography variant="h5" textTransform="uppercase">
-                          СДЭК
+                          {item[`title${suffix}`]}, {item[`capacity${suffix}`]}
                         </Typography>
                       </TableCell>
-                      <TableCell
-                        align="right"
-                        sx={{ verticalAlign: "bottom" }}
-                      ></TableCell>
                       <TableCell align="right" sx={{ verticalAlign: "bottom" }}>
                         <Typography variant="h5">
-                          <Price sum={delivery} />
+                          {item.qty} x <Price sum={item.price} />
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right" sx={{ verticalAlign: "bottom" }}>
+                        <Typography variant="h5">
+                          <Price sum={item.total} />
                         </Typography>
                       </TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ borderBottom: "none" }}></TableCell>
-                      <TableCell sx={{ borderBottom: "none" }}></TableCell>
-                      <TableCell
-                        align="right"
-                        sx={{ verticalAlign: "bottom", borderBottom: "none" }}
-                      >
-                        <Typography variant="h5" fontWeight="700">
-                          <Price sum={total} />
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Typography variant="h5" paragraph>
-                Если у вас остались вопросы&hellip;
-              </Typography>
-              <Typography paragraph>
-                Если у Вас остались вопросы относительно заказа или нашей
-                работы, пожалуйста, позвоните или напишите нам:
-              </Typography>
-              <Grid container sx={{ mb: 8 }}>
-                <Grid item xs={6}>
-                  <A
-                    href="tel:+79263853751"
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                    }}
-                  >
-                    <LocalPhoneIcon fontSize="large" />
-                    <WhatsAppIcon fontSize="large" />
-                    <Typography component="span" variant="h5" fontWeight="bold">
-                      +7 926 385 3751
-                    </Typography>
-                  </A>
-                </Grid>
-                <Grid item xs={6}>
-                  <A
-                    href="mailto:office@deluxspa.ru"
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                    }}
-                  >
-                    <AlternateEmailIcon fontSize="large" />
-                    <Typography component="span" variant="h5" fontWeight="bold">
-                      office@deluxspa.ru
-                    </Typography>
-                  </A>
-                </Grid>
+                  ))}
+                  <TableRow>
+                    <TableCell>
+                      <Typography>доставка</Typography>
+                      <Typography variant="h5" textTransform="uppercase">
+                        СДЭК
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ verticalAlign: "bottom" }}
+                    ></TableCell>
+                    <TableCell align="right" sx={{ verticalAlign: "bottom" }}>
+                      <Typography variant="h5">
+                        <Price sum={delivery} />
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ borderBottom: "none" }}></TableCell>
+                    <TableCell sx={{ borderBottom: "none" }}></TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ verticalAlign: "bottom", borderBottom: "none" }}
+                    >
+                      <Typography variant="h5" fontWeight="700">
+                        <Price sum={total} />
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Typography variant="h5" paragraph>
+              Если у вас остались вопросы&hellip;
+            </Typography>
+            <Typography paragraph>
+              Если у Вас остались вопросы относительно заказа или нашей работы,
+              пожалуйста, позвоните или напишите нам:
+            </Typography>
+            <Grid container sx={{ mb: 8 }}>
+              <Grid item xs={6}>
+                <A
+                  href="tel:+79263853751"
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                  }}
+                >
+                  <LocalPhoneIcon fontSize="large" />
+                  <WhatsAppIcon fontSize="large" />
+                  <Typography component="span" variant="h5" fontWeight="bold">
+                    +7 926 385 3751
+                  </Typography>
+                </A>
               </Grid>
-            </>
-          )}
-        </Box>
-      </Container>
-    </Layout>
+              <Grid item xs={6}>
+                <A
+                  href="mailto:office@deluxspa.ru"
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                  }}
+                >
+                  <AlternateEmailIcon fontSize="large" />
+                  <Typography component="span" variant="h5" fontWeight="bold">
+                    office@deluxspa.ru
+                  </Typography>
+                </A>
+              </Grid>
+            </Grid>
+          </>
+        )}
+      </Box>
+    </Container>
   );
 }
 
@@ -276,6 +266,7 @@ export async function getServerSideProps({ locale, params: { id } }) {
       cdek: cdek
         ? pick(get(cdek, "entity"), ["cdek_number", "statuses"])
         : null,
+      titleKey: "page-title-order",
     },
   };
 }

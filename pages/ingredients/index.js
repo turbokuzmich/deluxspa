@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Layout from "../../components/layout";
 import Grid from "@mui/material/Grid";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -666,60 +665,58 @@ export default function Ingredients() {
   const { t } = useTranslation();
 
   return (
-    <Layout title={t("page-title-ingredients")}>
-      <Container>
-        <Box
+    <Container>
+      <Box
+        sx={{
+          pt: {
+            xs: 4,
+            md: 8,
+          },
+          pb: {
+            xs: 4,
+            md: 8,
+          },
+        }}
+      >
+        <Typography
+          variant="h3"
           sx={{
-            pt: {
-              xs: 4,
-              md: 8,
-            },
-            pb: {
-              xs: 4,
-              md: 8,
-            },
+            textTransform: "uppercase",
+            mb: 4,
           }}
         >
-          <Typography
-            variant="h3"
-            sx={{
-              textTransform: "uppercase",
-              mb: 4,
-            }}
-          >
-            {t("menu-ingredients")}
-          </Typography>
-          <Grid
-            rowSpacing={{
-              xs: 2,
-              md: 4,
-            }}
-            columnSpacing={8}
-            container
-          >
-            {tempIngredients.map(([title, description]) => (
-              <Grid key={title} md={6} item>
-                <Typography
-                  variant="h5"
-                  className="title"
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {title}
-                </Typography>
-                <Typography
-                  className="brief"
-                  dangerouslySetInnerHTML={{
-                    __html: description,
-                  }}
-                ></Typography>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </Container>
-    </Layout>
+          {t("menu-ingredients")}
+        </Typography>
+        <Grid
+          rowSpacing={{
+            xs: 2,
+            md: 4,
+          }}
+          columnSpacing={8}
+          container
+        >
+          {tempIngredients.map(([title, description]) => (
+            <Grid key={title} md={6} item>
+              <Typography
+                variant="h5"
+                className="title"
+                sx={{
+                  textTransform: "uppercase",
+                }}
+              >
+                {title}
+              </Typography>
+              <Typography
+                className="brief"
+                dangerouslySetInnerHTML={{
+                  __html: description,
+                }}
+              ></Typography>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Container>
   );
 }
 
@@ -760,6 +757,7 @@ export default function Ingredients() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
+      titleKey: "page-title-ingredients",
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };

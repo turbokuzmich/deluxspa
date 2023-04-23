@@ -3,7 +3,6 @@ import Number from "../../components/number";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Layout from "../../components/layout";
 import Image from "../../components/image";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
@@ -230,374 +229,349 @@ export default function Cart() {
 
   if ([CartState.initial, CartState.fetching].includes(state)) {
     return (
-      <Layout>
-        <Container>
-          <Box sx={{ pt: 8 }}>
-            <Typography variant="h3" paragraph>
-              Корзина
-            </Typography>
-            <Typography>
-              Через мгновение вы сможете оформить ваши покупки
-            </Typography>
-          </Box>
-        </Container>
-      </Layout>
+      <Container>
+        <Box sx={{ pt: 8 }}>
+          <Typography variant="h3" paragraph>
+            Корзина
+          </Typography>
+          <Typography>
+            Через мгновение вы сможете оформить ваши покупки
+          </Typography>
+        </Box>
+      </Container>
     );
   }
 
   if (items.length === 0) {
     return (
-      <Layout>
-        <Container>
-          <Box sx={{ pt: 8 }}>
-            <Typography variant="h3" paragraph>
-              Корзина пуста
-            </Typography>
-            <Typography>
-              <Link href="/catalog" passHref>
-                <A>{t("cart-page-back-to-catalog")}</A>
-              </Link>
-            </Typography>
-          </Box>
-        </Container>
-      </Layout>
+      <Container>
+        <Box sx={{ pt: 8 }}>
+          <Typography variant="h3" paragraph>
+            Корзина пуста
+          </Typography>
+          <Typography>
+            <Link href="/catalog" passHref>
+              <A>{t("cart-page-back-to-catalog")}</A>
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
     );
   }
 
   return (
-    <>
-      <Layout>
-        <Container>
-          <Box sx={{ pt: 8 }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-              }}
-            >
-              <Typography variant="h3" paragraph>
-                {t("cart-page-title")}
+    <Container>
+      <Box sx={{ pt: 8 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+          }}
+        >
+          <Typography variant="h3" paragraph>
+            {t("cart-page-title")}
+          </Typography>
+          <Typography variant="h5">
+            <Link href="/catalog" passHref>
+              <A>{t("cart-page-back-to-catalog")}</A>
+            </Link>
+          </Typography>
+        </Box>
+        {state === CartState.fetched ? (
+          <Card elevation={0} square>
+            <CardContent>
+              <Typography variant="h4" paragraph>
+                {t("cart-page-items-title")}
               </Typography>
-              <Typography variant="h5">
-                <Link href="/catalog" passHref>
-                  <A>{t("cart-page-back-to-catalog")}</A>
-                </Link>
-              </Typography>
-            </Box>
-            {state === CartState.fetched ? (
-              <Card elevation={0} square>
-                <CardContent>
-                  <Typography variant="h4" paragraph>
-                    {t("cart-page-items-title")}
-                  </Typography>
-                  <Box
-                    sx={{
-                      gap: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    {items.map((item, index) => {
-                      const catalogItem = getItemById(item.itemId);
-                      const variant = catalogItem.variants.byId[item.variantId];
-                      const [capacity, unitKey] = formatCapacity(
-                        item.variantId,
-                        catalogItem.unit
-                      );
+              <Box
+                sx={{
+                  gap: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {items.map((item, index) => {
+                  const catalogItem = getItemById(item.itemId);
+                  const variant = catalogItem.variants.byId[item.variantId];
+                  const [capacity, unitKey] = formatCapacity(
+                    item.variantId,
+                    catalogItem.unit
+                  );
 
-                      return (
-                        <Box
-                          key={`${item.itemId}-${item.variantId}`}
-                          sx={{
-                            gap: 4,
-                            display: "flex",
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              maxWidth: 100,
-                              flexGrow: 0,
-                              flexShrink: 0,
-                            }}
-                          >
+                  return (
+                    <Box
+                      key={`${item.itemId}-${item.variantId}`}
+                      sx={{
+                        gap: 4,
+                        display: "flex",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          maxWidth: 100,
+                          flexGrow: 0,
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Link href={`/catalog/item/${catalogItem.id}`} passHref>
+                          <A sx={{ display: "block" }}>
+                            <Image
+                              src={variant.image}
+                              alt={catalogItem.title}
+                              sx={{
+                                maxWidth: "100%",
+                                userSelect: "none",
+                                display: "block",
+                              }}
+                            />
+                          </A>
+                        </Link>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexGrow: 1,
+                          flexShrink: 1,
+                          flexDirection: "column",
+                          pt: 1,
+                          pb: 1,
+                        }}
+                      >
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Typography textTransform="uppercase" variant="body2">
+                            {t(catalogItem.brief)}
+                          </Typography>
+                          <Typography textTransform="uppercase" variant="h6">
                             <Link
                               href={`/catalog/item/${catalogItem.id}`}
                               passHref
                             >
-                              <A sx={{ display: "block" }}>
-                                <Image
-                                  src={variant.image}
-                                  alt={catalogItem.title}
-                                  sx={{
-                                    maxWidth: "100%",
-                                    userSelect: "none",
-                                    display: "block",
-                                  }}
-                                />
-                              </A>
+                              <A>{t(catalogItem.title)}</A>
                             </Link>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexGrow: 1,
-                              flexShrink: 1,
-                              flexDirection: "column",
-                              pt: 1,
-                              pb: 1,
-                            }}
-                          >
-                            <Box sx={{ flexGrow: 1 }}>
-                              <Typography
-                                textTransform="uppercase"
-                                variant="body2"
-                              >
-                                {t(catalogItem.brief)}
-                              </Typography>
-                              <Typography
-                                textTransform="uppercase"
-                                variant="h6"
-                              >
-                                <Link
-                                  href={`/catalog/item/${catalogItem.id}`}
-                                  passHref
-                                >
-                                  <A>{t(catalogItem.title)}</A>
-                                </Link>
-                              </Typography>
-                            </Box>
-                            <Box>
-                              <Typography>
-                                {capacity} {t(unitKey)}
-                              </Typography>
-                            </Box>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "flex-start",
-                              justifyContent: "flex-start",
-                            }}
-                          >
-                            <NumbericStepper
-                              value={item.qty}
-                              inc={onChanges[index].inc}
-                              dec={onChanges[index].dec}
-                            />
-                            <Button
-                              onClick={onChanges[index].del}
-                              variant="outlined"
-                              color="secondary"
-                              size="medium"
-                              sx={{
-                                ml: 2,
-                                pl: 0,
-                                pr: 0,
-                                width: 42,
-                                minWidth: 0,
-                              }}
-                            >
-                              <DeleteIcon />
-                            </Button>
-                            <Typography
-                              component="div"
-                              variant="h6"
-                              textAlign="right"
-                              sx={{
-                                minWidth: 120,
-                              }}
-                            >
-                              <Price sum={getItemTotal(item)} />
-                            </Typography>
-                          </Box>
+                          </Typography>
                         </Box>
-                      );
-                    })}
-                  </Box>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Button size="large" variant="contained" onClick={toDelivery}>
-                    {t("cart-page-button-shipping")}
-                  </Button>
-                  <Typography variant="h5">
-                    {t("cart-page-subtotal")}: <Price sum={subtotal} />
-                  </Typography>
-                </CardActions>
-              </Card>
-            ) : (
-              <Card elevation={0} sx={{ mb: 1 }} square>
-                <CardContent
-                  sx={{
-                    gap: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    ":last-child": {
-                      pb: 2,
-                    },
-                  }}
-                >
-                  <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                    {t("cart-page-items-title")}
-                  </Typography>
-                  <Typography variant="h6">
-                    <Number value={count} />{" "}
-                    {decline(
-                      count,
-                      [
-                        t("cart-page-items-1"),
-                        t("cart-page-items-2"),
-                        t("cart-page-items-5"),
-                      ],
-                      locale
-                    )}{" "}
-                    {t("cart-page-for")} <Price sum={subtotal} />
-                  </Typography>
-                  <Button variant="contained" size="medium" onClick={toItems}>
-                    {t("cart-page-button-change")}
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-            {state === CartState.delivery ? (
-              <Formik
-                initialValues={formValues}
-                onSubmit={toPayment}
-                validationSchema={deliveryValidationSchema}
-                enableReinitialize
-                validateOnMount
-              >
-                <Card elevation={0} square>
-                  <CardContent>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        alignItems: "center",
-                        mb: 2,
-                      }}
-                    >
-                      <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                        {t("cart-page-shipping-title")}
-                      </Typography>
-                      {point && calculation ? (
-                        <Typography variant="h6">
-                          В пункт «{point.name}» на сумму{" "}
-                          <Price sum={calculation.total_sum} /> (
-                          {calculation.period_min} – {calculation.period_max}{" "}
-                          {decline(calculation.period_max, [
-                            "день",
-                            "дня",
-                            "дней",
-                          ])}
-                          )
-                        </Typography>
-                      ) : null}
-                    </Box>
-                    <Form>
+                        <Box>
+                          <Typography>
+                            {capacity} {t(unitKey)}
+                          </Typography>
+                        </Box>
+                      </Box>
                       <Box
                         sx={{
                           display: "flex",
-                          gap: 2,
-                          mb: 2,
+                          alignItems: "flex-start",
+                          justifyContent: "flex-start",
                         }}
                       >
-                        <PhoneInput inputRef={phoneFieldRef} />
-                        <Field
-                          component={TextInput}
-                          label={t("cart-page-email")}
-                          autoComplete="off"
-                          name="email"
-                          fullWidth
+                        <NumbericStepper
+                          value={item.qty}
+                          inc={onChanges[index].inc}
+                          dec={onChanges[index].dec}
                         />
+                        <Button
+                          onClick={onChanges[index].del}
+                          variant="outlined"
+                          color="secondary"
+                          size="medium"
+                          sx={{
+                            ml: 2,
+                            pl: 0,
+                            pr: 0,
+                            width: 42,
+                            minWidth: 0,
+                          }}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                        <Typography
+                          component="div"
+                          variant="h6"
+                          textAlign="right"
+                          sx={{
+                            minWidth: 120,
+                          }}
+                        >
+                          <Price sum={getItemTotal(item)} />
+                        </Typography>
                       </Box>
-                      <Box sx={{ mb: 2 }}>
-                        <Autocomplete
-                          disablePortal
-                          autoComplete
-                          value={city}
-                          filterOptions={identity}
-                          onInputChange={onTitleInputChange}
-                          onChange={onCitySelected}
-                          options={citySuggestions}
-                          noOptionsText="Выберите город"
-                          isOptionEqualToValue={isOptionEqualToValue}
-                          renderOption={(props, option) => (
-                            <li {...props} key={option.value}>
-                              {option.label}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <TextField {...params} label="Город" fullWidth />
-                          )}
-                          sx={{ mb: 1 }}
-                        />
-                        {city ? (
-                          <>
-                            <Box
-                              ref={mapsContainerRef}
-                              sx={{
-                                height: { xs: 200, md: 400 },
-                              }}
-                            ></Box>
-                          </>
-                        ) : null}
-                      </Box>
-                      <Field
-                        component={TextInput}
-                        label={t("cart-page-comment")}
-                        autoComplete="off"
-                        name="comment"
-                        rows={4}
-                        multiline
-                        fullWidth
-                      />
-                    </Form>
-                  </CardContent>
-                  <CardActions sx={{ p: 2 }}>
-                    <ToPaymentButton />
-                  </CardActions>
-                </Card>
-              </Formik>
-            ) : null}
-            {state === CartState.payment ? (
-              <>
-                <Card elevation={0} square>
-                  <CardContent
+                    </Box>
+                  );
+                })}
+              </Box>
+            </CardContent>
+            <CardActions
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Button size="large" variant="contained" onClick={toDelivery}>
+                {t("cart-page-button-shipping")}
+              </Button>
+              <Typography variant="h5">
+                {t("cart-page-subtotal")}: <Price sum={subtotal} />
+              </Typography>
+            </CardActions>
+          </Card>
+        ) : (
+          <Card elevation={0} sx={{ mb: 1 }} square>
+            <CardContent
+              sx={{
+                gap: 2,
+                display: "flex",
+                alignItems: "center",
+                ":last-child": {
+                  pb: 2,
+                },
+              }}
+            >
+              <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                {t("cart-page-items-title")}
+              </Typography>
+              <Typography variant="h6">
+                <Number value={count} />{" "}
+                {decline(
+                  count,
+                  [
+                    t("cart-page-items-1"),
+                    t("cart-page-items-2"),
+                    t("cart-page-items-5"),
+                  ],
+                  locale
+                )}{" "}
+                {t("cart-page-for")} <Price sum={subtotal} />
+              </Typography>
+              <Button variant="contained" size="medium" onClick={toItems}>
+                {t("cart-page-button-change")}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+        {state === CartState.delivery ? (
+          <Formik
+            initialValues={formValues}
+            onSubmit={toPayment}
+            validationSchema={deliveryValidationSchema}
+            enableReinitialize
+            validateOnMount
+          >
+            <Card elevation={0} square>
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "center",
+                    mb: 2,
+                  }}
+                >
+                  <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                    {t("cart-page-shipping-title")}
+                  </Typography>
+                  {point && calculation ? (
+                    <Typography variant="h6">
+                      В пункт «{point.name}» на сумму{" "}
+                      <Price sum={calculation.total_sum} /> (
+                      {calculation.period_min} – {calculation.period_max}{" "}
+                      {decline(calculation.period_max, ["день", "дня", "дней"])}
+                      )
+                    </Typography>
+                  ) : null}
+                </Box>
+                <Form>
+                  <Box
                     sx={{
-                      gap: 2,
                       display: "flex",
-                      alignItems: "center",
-                      ":last-child": {
-                        pb: 2,
-                      },
+                      gap: 2,
+                      mb: 2,
                     }}
                   >
-                    <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                      Доставка
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      size="medium"
-                      onClick={toDelivery}
-                    >
-                      Изменить
-                    </Button>
-                  </CardContent>
-                </Card>
-              </>
-            ) : null}
-          </Box>
-        </Container>
-      </Layout>
-    </>
+                    <PhoneInput inputRef={phoneFieldRef} />
+                    <Field
+                      component={TextInput}
+                      label={t("cart-page-email")}
+                      autoComplete="off"
+                      name="email"
+                      fullWidth
+                    />
+                  </Box>
+                  <Box sx={{ mb: 2 }}>
+                    <Autocomplete
+                      disablePortal
+                      autoComplete
+                      value={city}
+                      filterOptions={identity}
+                      onInputChange={onTitleInputChange}
+                      onChange={onCitySelected}
+                      options={citySuggestions}
+                      noOptionsText="Выберите город"
+                      isOptionEqualToValue={isOptionEqualToValue}
+                      renderOption={(props, option) => (
+                        <li {...props} key={option.value}>
+                          {option.label}
+                        </li>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Город" fullWidth />
+                      )}
+                      sx={{ mb: 1 }}
+                    />
+                    {city ? (
+                      <>
+                        <Box
+                          ref={mapsContainerRef}
+                          sx={{
+                            height: { xs: 200, md: 400 },
+                          }}
+                        ></Box>
+                      </>
+                    ) : null}
+                  </Box>
+                  <Field
+                    component={TextInput}
+                    label={t("cart-page-comment")}
+                    autoComplete="off"
+                    name="comment"
+                    rows={4}
+                    multiline
+                    fullWidth
+                  />
+                </Form>
+              </CardContent>
+              <CardActions sx={{ p: 2 }}>
+                <ToPaymentButton />
+              </CardActions>
+            </Card>
+          </Formik>
+        ) : null}
+        {state === CartState.payment ? (
+          <>
+            <Card elevation={0} square>
+              <CardContent
+                sx={{
+                  gap: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  ":last-child": {
+                    pb: 2,
+                  },
+                }}
+              >
+                <Typography variant="h4" sx={{ flexGrow: 1 }}>
+                  Доставка
+                </Typography>
+                <Button variant="contained" size="medium" onClick={toDelivery}>
+                  Изменить
+                </Button>
+              </CardContent>
+            </Card>
+          </>
+        ) : null}
+      </Box>
+    </Container>
   );
 }
 

@@ -1,11 +1,9 @@
 import get from "lodash/get";
 import { useMemo } from "react";
-import Layout from "../../../components/layout";
 import Items from "../../../components/items";
 import Submenu from "../../../components/submenu";
 import Category from "../../../components/category";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
 import {
   getCategoryById,
   getCategoryColorById,
@@ -13,22 +11,13 @@ import {
 } from "../../../lib/helpers/catalog";
 
 export default function CategoryView({ id }) {
-  const { t } = useTranslation();
-
   const category = useMemo(() => getCategoryById(id), [id]);
   const parent = useMemo(() => getCategoryParentById(id), [id]);
   const color = useMemo(() => getCategoryColorById(id), [id]);
   const items = useMemo(() => get(category, "items", []), [category]);
 
   return (
-    <Layout
-      title={t(category.title)}
-      description={
-        category.description
-          ? category.description.map((key) => t(key)).join(". ")
-          : null
-      }
-    >
+    <>
       <Category
         {...category}
         color={color}
@@ -47,14 +36,18 @@ export default function CategoryView({ id }) {
         }
       />
       <Items items={items} />
-    </Layout>
+    </>
   );
 }
 
 export async function getServerSideProps({ locale, params: { id } }) {
+  const category = getCategoryById(id);
+
   return {
     props: {
       id,
+      titleKey: category.title,
+      descriptionKey: category.description ? category.description : null,
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };

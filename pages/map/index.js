@@ -2,7 +2,6 @@ import { useEffect, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Layout from "../../components/layout";
 import A from "@mui/material/Link";
 import { isAPILoaded } from "../../store/slices/geo";
 import { map as retailers } from "../../constants";
@@ -73,45 +72,37 @@ export default function DeluxSpaMap() {
   }, [isReady, onApiReady]);
 
   return (
-    <>
-      <Layout title={t("page-title-map")}>
-        <Container
-          sx={{
-            pt: {
-              xs: 4,
-              md: 8,
-            },
-            pb: {
-              xs: 4,
-              md: 8,
-            },
-          }}
-        >
-          <Typography
-            variant="h3"
-            sx={{ textTransform: "uppercase" }}
-            paragraph
-          >
-            {t("menu-map")}
-          </Typography>
-          <Typography paragraph>{t("map-call")}</Typography>
-          <Typography variant="h5" paragraph>
-            <A href="tel:+74956659015">+7 (495) 665 9015</A>
-          </Typography>
-          <Typography paragraph>{t("map-email")}</Typography>
-          <Typography variant="h5" paragraph>
-            <A href="mailto:office@deluxspa.ru">office@deluxspa.ru</A>
-          </Typography>
-          <Typography paragraph>{t("map-partner")}</Typography>
-          <Box
-            ref={mapsContainerRef}
-            sx={{
-              height: { xs: 400, md: 600 },
-            }}
-          ></Box>
-        </Container>
-      </Layout>
-    </>
+    <Container
+      sx={{
+        pt: {
+          xs: 4,
+          md: 8,
+        },
+        pb: {
+          xs: 4,
+          md: 8,
+        },
+      }}
+    >
+      <Typography variant="h3" sx={{ textTransform: "uppercase" }} paragraph>
+        {t("menu-map")}
+      </Typography>
+      <Typography paragraph>{t("map-call")}</Typography>
+      <Typography variant="h5" paragraph>
+        <A href="tel:+74956659015">+7 (495) 665 9015</A>
+      </Typography>
+      <Typography paragraph>{t("map-email")}</Typography>
+      <Typography variant="h5" paragraph>
+        <A href="mailto:office@deluxspa.ru">office@deluxspa.ru</A>
+      </Typography>
+      <Typography paragraph>{t("map-partner")}</Typography>
+      <Box
+        ref={mapsContainerRef}
+        sx={{
+          height: { xs: 400, md: 600 },
+        }}
+      ></Box>
+    </Container>
   );
 }
 
@@ -153,6 +144,7 @@ function renderRetailerBalloonBody({
 export async function getStaticProps({ locale }) {
   return {
     props: {
+      titleKey: "page-title-map",
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };

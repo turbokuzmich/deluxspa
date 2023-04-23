@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Container from "@mui/material/Container";
 import { useRouter } from "next/router";
-import Layout from "../../../components/layout";
 import Image from "../../../components/image";
 import Submenu from "../../../components/submenu";
 import Typography from "@mui/material/Typography";
@@ -117,153 +116,148 @@ export default function Item({ id, auxiliaryIds }) {
   );
 
   return (
-    <Layout
-      title={`${t(item.title)} (${t(item.brief)})`}
-      description={t(item.description.join(". "))}
-    >
-      <>
-        <Submenu />
-        <Container
+    <>
+      <Submenu />
+      <Container
+        sx={{
+          mb: 4,
+          gap: {
+            md: 6,
+          },
+          display: "flex",
+          flexDirection: {
+            xs: "column",
+            md: "row",
+          },
+        }}
+      >
+        <Box
           sx={{
-            mb: 4,
-            gap: {
-              md: 6,
+            width: {
+              md: "50%",
             },
+            flexShrink: 0,
+            flexGrow: 0,
+            mt: 4,
             display: "flex",
-            flexDirection: {
-              xs: "column",
-              md: "row",
+            position: "relative",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            fontSize: "120px",
+          }}
+        >
+          <Image
+            src={images[imageIndex].image}
+            alt={t(item.title)}
+            sx={{ maxWidth: "100%", userSelect: "none" }}
+          />
+          {images.length > 1 ? (
+            <ButtonGroup
+              color="secondary"
+              variant="contained"
+              orientation="vertical"
+              sx={(theme) => ({
+                position: "absolute",
+                top: theme.spacing(2),
+                right: theme.spacing(2),
+              })}
+            >
+              {images.map(({ variants }, index) => {
+                const { unit } = item;
+                const [variant] = variants;
+                const { volume } = item.variants.byId[variant];
+                const [capacity, unitKey] = formatCapacity(volume, unit);
+                const hasMore = variants.length > 1;
+
+                return (
+                  <Button
+                    key={index}
+                    size="large"
+                    onClick={onImageChanges[index]}
+                    color={index === imageIndex ? "primary" : "secondary"}
+                  >
+                    {hasMore ? `${t("price_from")} ` : null}
+                    <Number value={capacity} />
+                    &nbsp;{t(unitKey)}
+                  </Button>
+                );
+              })}
+            </ButtonGroup>
+          ) : null}
+        </Box>
+        <Box
+          sx={{
+            width: {
+              md: "50%",
+            },
+            flexShrink: 0,
+            flexGrow: 0,
+            pt: {
+              xs: 2,
+              md: 4,
             },
           }}
         >
-          <Box
-            sx={{
-              width: {
-                md: "50%",
-              },
-              flexShrink: 0,
-              flexGrow: 0,
-              mt: 4,
-              display: "flex",
-              position: "relative",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              fontSize: "120px",
-            }}
+          <Typography variant="h6">{t(item.brief)}</Typography>
+          <Typography
+            variant="h4"
+            sx={{ textTransform: "uppercase" }}
+            paragraph
           >
-            <Image
-              src={images[imageIndex].image}
-              alt={t(item.title)}
-              sx={{ maxWidth: "100%", userSelect: "none" }}
-            />
-            {images.length > 1 ? (
-              <ButtonGroup
-                color="secondary"
-                variant="contained"
-                orientation="vertical"
-                sx={(theme) => ({
-                  position: "absolute",
-                  top: theme.spacing(2),
-                  right: theme.spacing(2),
-                })}
-              >
-                {images.map(({ variants }, index) => {
+            {t(item.title)}
+          </Typography>
+          <Typography component="div" paragraph>
+            <Table>
+              <TableBody>
+                {item.variants.list.map((variant) => {
                   const { unit } = item;
-                  const [variant] = variants;
-                  const { volume } = item.variants.byId[variant];
+                  const { price, volume } = item.variants.byId[variant];
                   const [capacity, unitKey] = formatCapacity(volume, unit);
-                  const hasMore = variants.length > 1;
 
                   return (
-                    <Button
-                      key={index}
-                      size="large"
-                      onClick={onImageChanges[index]}
-                      color={index === imageIndex ? "primary" : "secondary"}
-                    >
-                      {hasMore ? `${t("price_from")} ` : null}
-                      <Number value={capacity} />
-                      &nbsp;{t(unitKey)}
-                    </Button>
+                    <TableRow key={variant}>
+                      <TableCell component="th" width="100%">
+                        <Typography>
+                          <Number value={capacity} /> {t(unitKey)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography>
+                          <Price sum={price} />
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <NumbericStepper
+                          value={qtys[variant]}
+                          dec={onQtyChanges[variant].dec}
+                          inc={onQtyChanges[variant].inc}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          startIcon={<ShoppingCartIcon />}
+                          variant="contained"
+                          color="secondary"
+                          size="medium"
+                          onClick={onBuys[variant]}
+                        >
+                          Купить
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </ButtonGroup>
-            ) : null}
-          </Box>
-          <Box
-            sx={{
-              width: {
-                md: "50%",
-              },
-              flexShrink: 0,
-              flexGrow: 0,
-              pt: {
-                xs: 2,
-                md: 4,
-              },
-            }}
-          >
-            <Typography variant="h6">{t(item.brief)}</Typography>
-            <Typography
-              variant="h4"
-              sx={{ textTransform: "uppercase" }}
-              paragraph
-            >
-              {t(item.title)}
-            </Typography>
-            <Typography component="div" paragraph>
-              <Table>
-                <TableBody>
-                  {item.variants.list.map((variant) => {
-                    const { unit } = item;
-                    const { price, volume } = item.variants.byId[variant];
-                    const [capacity, unitKey] = formatCapacity(volume, unit);
-
-                    return (
-                      <TableRow key={variant}>
-                        <TableCell component="th" width="100%">
-                          <Typography>
-                            <Number value={capacity} /> {t(unitKey)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography>
-                            <Price sum={price} />
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <NumbericStepper
-                            value={qtys[variant]}
-                            dec={onQtyChanges[variant].dec}
-                            inc={onQtyChanges[variant].inc}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            startIcon={<ShoppingCartIcon />}
-                            variant="contained"
-                            color="secondary"
-                            size="medium"
-                            onClick={onBuys[variant]}
-                          >
-                            Купить
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </Typography>
-            <Categories categories={categories} />
-            <Consumption item={item} />
-            <Composition item={item} />
-            <Description item={item} />
-            <Auxiliary auxiliary={auxiliary} />
-          </Box>
-        </Container>
-      </>
-    </Layout>
+              </TableBody>
+            </Table>
+          </Typography>
+          <Categories categories={categories} />
+          <Consumption item={item} />
+          <Composition item={item} />
+          <Description item={item} />
+          <Auxiliary auxiliary={auxiliary} />
+        </Box>
+      </Container>
+    </>
   );
 }
 
@@ -503,9 +497,13 @@ export const getServerSideProps = setup(async function ({
   locale,
   params: { id },
 }) {
+  const item = getItemById(id);
+
   return {
     props: {
       id,
+      titleKey: item.title,
+      descriptionKey: item.description,
       auxiliaryIds: getItemAuxiliaryItemsIdsById(id),
       ...(await serverSideTranslations(locale, ["common"])),
     },
