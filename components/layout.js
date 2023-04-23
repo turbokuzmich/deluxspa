@@ -4,12 +4,13 @@ import Header from "./header";
 import Footer from "./footer";
 import Notifications from "./notifications";
 
-export default function Layout({ children, title = "Delux SPA" }) {
+export default function Layout({ children, title = "Delux SPA", description }) {
   return (
     <>
       <Head>
         <title>{title}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content={description ? description : title} />
       </Head>
       <Notifications />
       <Box

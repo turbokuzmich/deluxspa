@@ -21,7 +21,14 @@ export default function CategoryView({ id }) {
   const items = useMemo(() => get(category, "items", []), [category]);
 
   return (
-    <Layout title={t(category.title)}>
+    <Layout
+      title={t(category.title)}
+      description={
+        category.description
+          ? category.description.map((key) => t(key)).join(". ")
+          : null
+      }
+    >
       <Category
         {...category}
         color={color}

@@ -117,7 +117,10 @@ export default function Item({ id, auxiliaryIds }) {
   );
 
   return (
-    <Layout title={`${t(item.title)} (${t(item.brief)})`}>
+    <Layout
+      title={`${t(item.title)} (${t(item.brief)})`}
+      description={t(item.description.join(". "))}
+    >
       <>
         <Submenu />
         <Container

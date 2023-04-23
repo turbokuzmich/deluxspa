@@ -350,6 +350,7 @@ export default function About() {
 
 export const getServerSideProps = setup(async function (props) {
   const { locale } = props;
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

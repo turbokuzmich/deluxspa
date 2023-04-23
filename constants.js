@@ -440,7 +440,7 @@ const oils = [
       "собранный профессиональными аромакологами сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. масло высокого качества, не&nbsp;комедогенно и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120"/*, "1000"*/],
+      list: ["120" /*, "1000"*/],
       byId: {
         120: {
           price: 590,
@@ -1002,8 +1002,6 @@ const bodyScrubs = [
   },
 ];
 
-const bodyScrubsIds = bodyScrubs.map(property("id"));
-
 export const catalogItems = [...oils, ...bodyScrubs];
 
 export const catalogTree = [
@@ -1084,7 +1082,14 @@ export const catalogTree = [
         image: "/images/categories/scrub_for_body.png",
         description: ["catalog-category-body-scrub-description"],
         type: "category",
-        items: bodyScrubsIds,
+        items: [
+          "body_scrub_mint_breeze",
+          "body_scrub_extra_slim",
+          "body_scrub_gluhwein",
+          "body_scrub_lemon_cake",
+          "body_scrub_bubble_gum",
+          "body_scrub_mocca",
+        ],
       },
     ],
   },

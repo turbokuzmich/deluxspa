@@ -1,3 +1,17 @@
+# *
 User-agent: *
 Allow: /
+
+# *
+User-agent: *
+Disallow: /admin
+Disallow: /admin/*
 Disallow: /cart
+Disallow: /order
+Disallow: /order/*
+
+# Host
+Host: https://deluxspa.ru
+
+# Sitemaps
+Sitemap: https://deluxspa.ru/sitemap.xml
