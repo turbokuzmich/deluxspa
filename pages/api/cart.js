@@ -2,12 +2,14 @@ import get from "lodash/get";
 import withSession from "../../lib/backend/session";
 import { csrf } from "../../lib/backend/csrf";
 import initBot, { withApi } from "../../lib/backend/bot";
+import { Order } from "../../lib/backend/sequelize";
 import { getChatIds } from "../../lib/backend/bot/auth";
 import { subscribe } from "../../lib/backend/queue";
 import createFormatter from "../../lib/helpers/markdown";
 import { format } from "../../lib/helpers/numeral";
 import { formatPhone } from "../../lib/helpers/phone";
 import { getOrderViewUrl } from "../../lib/helpers/bot";
+import { sendNewOrderEmail } from "../../lib/backend/letters";
 
 import "../../lib/backend/cron";
 
@@ -49,45 +51,54 @@ const handlers = {
       )
     );
   }),
-  "deluxspa-new-order": withApi(async function (api, input) {
-    const chatIds = await getChatIds();
+  "deluxspa-new-order": [
+    async function (data) {
+      const order = await Order.findByPk(get(data, ["order", "id"]));
 
-    const id = get(input, ["order", "id"]);
-    const phone = get(input, ["order", "phone"]);
-    const email = get(input, ["order", "email"]);
-    const total = get(input, ["order", "total"]);
+      if (order) {
+        await sendNewOrderEmail(order);
+      }
+    },
+    withApi(async function (api, input) {
+      const chatIds = await getChatIds();
 
-    const text = createFormatter()
-      .bold(`На DeluxSPA новый заказ №${id}`)
-      .paragraph()
-      .italic(`Сумма: ${format(total)}₽`)
-      .newline()
-      .italic(`Телефон: ${formatPhone(phone)}`);
+      const id = get(input, ["order", "id"]);
+      const phone = get(input, ["order", "phone"]);
+      const email = get(input, ["order", "email"]);
+      const total = get(input, ["order", "total"]);
 
-    if (email) {
-      text.newline().italic(`Email: ${email}`);
-    }
+      const text = createFormatter()
+        .bold(`На DeluxSPA новый заказ №${id}`)
+        .paragraph()
+        .italic(`Сумма: ${format(total)}₽`)
+        .newline()
+        .italic(`Телефон: ${formatPhone(phone)}`);
 
-    await Promise.all(
-      chatIds.map((chatId) =>
-        api.bot.sendMessage(chatId, text.toString(), {
-          parse_mode: "MarkdownV2",
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "Посмотреть",
-                  web_app: {
-                    url: getOrderViewUrl(id),
+      if (email) {
+        text.newline().italic(`Email: ${email}`);
+      }
+
+      await Promise.all(
+        chatIds.map((chatId) =>
+          api.bot.sendMessage(chatId, text.toString(), {
+            parse_mode: "MarkdownV2",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "Посмотреть",
+                    web_app: {
+                      url: getOrderViewUrl(id),
+                    },
                   },
-                },
+                ],
               ],
-            ],
-          },
-        })
-      )
-    );
-  }),
+            },
+          })
+        )
+      );
+    }),
+  ],
   "deluxspa-new-order-status": withApi(async function (api, input) {
     const chatIds = await getChatIds();
 
@@ -183,7 +194,9 @@ const handlers = {
 subscribe(async function (type, data, message) {
   if (type in handlers) {
     try {
-      await handlers[type](data);
+      await Promise.all(
+        [].concat(handlers[type]).map((handler) => handler(data))
+      );
       return true;
     } catch (error) {
       console.log(error);
