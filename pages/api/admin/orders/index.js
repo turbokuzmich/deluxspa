@@ -3,6 +3,8 @@ import omit from "lodash/omit";
 import get from "lodash/get";
 import { orderStatuses } from "../../../../constants";
 import { restricted } from "../../../../lib/middleware/admin";
+import { sendOrderStatus } from "../../../../lib/backend/queue";
+import { getHumanStatus } from "../../../../lib/helpers/order";
 
 export default restricted(async function orders(req, res) {
   const id = get(req, ["query", "id"], null);
@@ -21,6 +23,8 @@ export default restricted(async function orders(req, res) {
 
       if (orderStatuses.includes(status)) {
         await order.update({ status });
+
+        await sendOrderStatus(order.id, getHumanStatus(status));
 
         res
           .status(200)

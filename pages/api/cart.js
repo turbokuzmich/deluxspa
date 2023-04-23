@@ -9,7 +9,10 @@ import createFormatter from "../../lib/helpers/markdown";
 import { format } from "../../lib/helpers/numeral";
 import { formatPhone } from "../../lib/helpers/phone";
 import { getOrderViewUrl } from "../../lib/helpers/bot";
-import { sendNewOrderEmail } from "../../lib/backend/letters";
+import {
+  sendNewOrderEmail,
+  sendOrderStatusEmail,
+} from "../../lib/backend/letters";
 
 import "../../lib/backend/cron";
 
@@ -55,7 +58,7 @@ const handlers = {
     async function (data) {
       const order = await Order.findByPk(get(data, ["order", "id"]));
 
-      if (order) {
+      if (order && order.email) {
         await sendNewOrderEmail(order);
       }
     },
@@ -99,31 +102,40 @@ const handlers = {
       );
     }),
   ],
-  "deluxspa-new-order-status": withApi(async function (api, input) {
-    const chatIds = await getChatIds();
+  "deluxspa-new-order-status": [
+    async function (data) {
+      const order = await Order.findByPk(get(data, ["id"]));
 
-    const id = get(input, "id");
-    const status = get(input, "status");
+      if (order && order.email) {
+        await sendOrderStatusEmail(order);
+      }
+    },
+    withApi(async function (api, input) {
+      const chatIds = await getChatIds();
 
-    await Promise.all(
-      chatIds.map((chatId) =>
-        bot.sendMessage(chatId, `Новый статус заказа №${id}: ${status}`, {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "Посмотреть",
-                  web_app: {
-                    url: getOrderViewUrl(id),
+      const id = get(input, "id");
+      const status = get(input, "status");
+
+      await Promise.all(
+        chatIds.map((chatId) =>
+          bot.sendMessage(chatId, `Новый статус заказа №${id}: ${status}`, {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "Посмотреть",
+                    web_app: {
+                      url: getOrderViewUrl(id),
+                    },
                   },
-                },
+                ],
               ],
-            ],
-          },
-        })
-      )
-    );
-  }),
+            },
+          })
+        )
+      );
+    }),
+  ],
   "deluxspa-new-feedback": withApi(async function (api, input) {
     const chatIds = await getChatIds();
     const key = get(input, "key");
