@@ -1,7 +1,10 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import { orderByIm } from "../../lib/backend/cdek";
 import { Order } from "../../lib/backend/sequelize";
+import { formatRU } from "../../lib/helpers/date";
+import first from "lodash/first";
 import get from "lodash/get";
 import pick from "lodash/pick";
 import A from "@mui/material/Link";
@@ -19,6 +22,7 @@ import Grid from "@mui/material/Grid";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import { orderStatusesKeys } from "../../constants";
 
 export default function ViewOrder({
   error,
@@ -29,7 +33,9 @@ export default function ViewOrder({
   total,
   delivery,
   items,
+  cdek,
 }) {
+  console.log(cdek);
   const { t } = useTranslation();
   const { locale } = useRouter();
 
@@ -63,7 +69,12 @@ export default function ViewOrder({
                 {t("order-title")} {externalId}
               </Typography>
               <Typography fontWeight="bold">{t("order-status")}</Typography>
-              <Typography paragraph>{t(`order-status-${status}`)}</Typography>
+              <Typography paragraph>
+                {t(`order-status-${status}`)}{" "}
+                {cdek && status === orderStatusesKeys.shipping ? (
+                  <CdekStatus cdek={cdek} />
+                ) : null}
+              </Typography>
               <Typography fontWeight="bold">{t("order-address")}</Typography>
               <Typography paragraph>
                 «{name}» по адресу {address}
@@ -181,6 +192,29 @@ export default function ViewOrder({
   );
 }
 
+function CdekStatus({ cdek }) {
+  const { date_time, name } = first(cdek.statuses);
+  const date = formatRU(new Date(date_time));
+
+  return (
+    <Typography
+      component="span"
+      sx={{
+        textTransform: "lowercase",
+      }}
+    >
+      (
+      <A
+        href={`https://www.cdek.ru/ru/tracking?order_id=${cdek.cdek_number}`}
+        target="_blank"
+      >
+        {name} {date}
+      </A>
+      )
+    </Typography>
+  );
+}
+
 export async function getServerSideProps({ locale, params: { id } }) {
   const props = {
     id,
@@ -201,7 +235,10 @@ export async function getServerSideProps({ locale, params: { id } }) {
     return { props: { ...props, error: true } };
   }
 
-  const items = await order.getOrderItems();
+  const [items, cdek] = await Promise.all([
+    order.getOrderItems(),
+    order.cdekOrderId ? orderByIm(order.cdekOrderId) : Promise.resolve(null),
+  ]);
 
   // FIXME
   // res.status(200).json({
@@ -236,6 +273,9 @@ export async function getServerSideProps({ locale, params: { id } }) {
           "total",
         ])
       ),
+      cdek: cdek
+        ? pick(get(cdek, "entity"), ["cdek_number", "statuses"])
+        : null,
     },
   };
 }

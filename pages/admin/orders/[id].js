@@ -267,10 +267,13 @@ export default function Order({ id }) {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography variant="h4" paragraph>
-                    Поиск заказа
+                  <Typography variant="h4" textAlign="center" paragraph>
+                    Привязка заказа СДЭК
                   </Typography>
-                  <Typography>Привязать заказ в СДЭК по номеру</Typography>
+                  <Typography textAlign="center">
+                    Вы можете найти заказ на доставку по полю «номер ИМ», а
+                    затем привязать его к заказу на сайте
+                  </Typography>
                 </Box>
               ) : null}
               {cdekSearchStatus === "fetching" ? (
@@ -283,8 +286,11 @@ export default function Order({ id }) {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography variant="h4" paragraph>
+                  <Typography variant="h4" textAlign="center" paragraph>
                     Ищем заказ
+                  </Typography>
+                  <Typography textAlign="center">
+                    Это может занять некоторое время
                   </Typography>
                 </Box>
               ) : null}
@@ -298,10 +304,12 @@ export default function Order({ id }) {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography variant="h4" paragraph>
+                  <Typography variant="h4" textAlign="center" paragraph>
                     Ошибка
                   </Typography>
-                  <Typography>Повторите запрос позже</Typography>
+                  <Typography textAlign="center">
+                    Пожалуйста, повторите запрос позже
+                  </Typography>
                 </Box>
               ) : null}
               {cdekSearchStatus === "notfound" ? (
@@ -314,10 +322,12 @@ export default function Order({ id }) {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography variant="h4" paragraph>
+                  <Typography variant="h4" textAlign="center" paragraph>
                     Заказ не найден
                   </Typography>
-                  <Typography>Уточните номер в личном кабинете СДЭК</Typography>
+                  <Typography textAlign="center">
+                    Пожалуйста, уточните номер ИМ в личном кабинете СДЭК{" "}
+                  </Typography>
                 </Box>
               ) : null}
               {cdekSearchStatus === "found" ? (
@@ -549,22 +559,22 @@ export default function Order({ id }) {
                     <Typography>{order.code}</Typography>
                   </TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell
-                    component="th"
-                    sx={{ borderBottomColor: "transparent", pl: 0 }}
-                  >
-                    <Typography fontWeight="bold">ID доставки</Typography>
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ borderBottomColor: "transparent", pr: 0 }}
-                  >
-                    <Typography>
-                      {order.cdekOrderId ? order.cdekOrderId : "—"}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
+                {order.cdekOrderId ? (
+                  <TableRow>
+                    <TableCell
+                      component="th"
+                      sx={{ borderBottomColor: "transparent", pl: 0 }}
+                    >
+                      <Typography fontWeight="bold">ID доставки</Typography>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ borderBottomColor: "transparent", pr: 0 }}
+                    >
+                      <Typography>{order.cdekOrderId}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : null}
               </TableBody>
             </Table>
           </TableContainer>
