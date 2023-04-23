@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import saga from "./sagas";
 import ui from "./slices/ui";
+import cdek from "./slices/cdek";
 import auth from "./slices/auth";
 import orders from "./slices/orders";
 import createSagaMiddleware from "redux-saga";
@@ -13,6 +14,7 @@ function makeStore() {
       [ui.name]: ui.reducer,
       [auth.name]: auth.reducer,
       [orders.name]: orders.reducer,
+      [cdek.name]: cdek.reducer,
     },
   };
 

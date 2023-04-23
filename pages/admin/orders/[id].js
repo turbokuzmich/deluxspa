@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback, useState } from "react";
+import { useEffect, useMemo, useCallback, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOrdersData,
@@ -9,10 +9,18 @@ import {
   getHumanStatus,
   getAvailableStatusesForStatus,
 } from "../../../lib/helpers/order";
+import cdek, {
+  getCdekOrder,
+  getCdekInfoSearch,
+  isCdekInfoSearchValid,
+  getCdekInfoSearchStatus,
+  getCdekInfoBindStatus,
+} from "../../../admin/store/slices/cdek";
 import { orderStatusesKeys, orderStatusesWeights } from "../../../constants";
 import { formatDate } from "../../../lib/helpers/date";
 import { formatPhone } from "../../../lib/helpers/phone";
 import get from "lodash/get";
+import first from "lodash/first";
 import orders from "../../../admin/store/slices/orders";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -23,6 +31,8 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
 import Price from "../../../components/price";
 import A from "@mui/material/Link";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -41,6 +51,7 @@ import Divider from "@mui/material/Divider";
 import EditIcon from "@mui/icons-material/Edit";
 import Fab from "@mui/material/Fab";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Button from "@mui/material/Button";
 
 const statusIcons = {
   [orderStatusesKeys.created]: <AccessTimeFilledIcon fontSize="small" />,
@@ -58,8 +69,15 @@ const statusIcons = {
 export default function Order({ id }) {
   const dispatch = useDispatch();
 
+  const cdekSearchFieldRef = useRef();
+
   const states = useSelector(getOrdersViewState);
   const datas = useSelector(getOrdersData);
+  const cdekSearch = useSelector(getCdekInfoSearch);
+  const cdekSearchStatus = useSelector(getCdekInfoSearchStatus);
+  const cdekBindStatus = useSelector(getCdekInfoBindStatus);
+  const cdekOrder = useSelector(getCdekOrder);
+  const isCdekSearchValid = useSelector(isCdekInfoSearchValid);
 
   const state = useMemo(() => get(states, id, "initial"), [states, id]);
   const order = useMemo(() => get(datas, id), [datas, id]);
@@ -91,7 +109,7 @@ export default function Order({ id }) {
   const [isCdekMenuVisible, setIsCdekMenuVisible] = useState(false);
 
   const onCdekMenuOpen = useCallback(() => {
-    setIsCdekMenuVisible(false);
+    setIsCdekMenuVisible(true);
   }, [setIsCdekMenuVisible]);
 
   const onCdekMenuClose = useCallback(() => {
@@ -121,9 +139,11 @@ export default function Order({ id }) {
   }, []);
 
   const onBindCdekClick = useCallback(() => {
+    dispatch(cdek.actions.reset());
+
     setIsOrderMenuVisible(false);
     setIsCdekMenuVisible(true);
-  }, []);
+  }, [dispatch]);
 
   const onOrderStatusesMenuOpen = useCallback(() => {
     setIsOrderStatusesMenuVisible(false);
@@ -133,11 +153,37 @@ export default function Order({ id }) {
     setIsOrderStatusesMenuVisible(false);
   }, [setIsOrderStatusesMenuVisible]);
 
+  const onCdekIdChange = useCallback(
+    (event) => dispatch(cdek.actions.changeSearch(event.target.value)),
+    [dispatch]
+  );
+
+  const onCdekSearch = useCallback(
+    () => dispatch(cdek.actions.search()),
+    [dispatch]
+  );
+
+  const onBindCdek = useCallback(
+    () => dispatch(cdek.actions.bindOrder(id)),
+    [id, dispatch]
+  );
+
   useEffect(() => {
     if (state === "initial") {
       dispatch(orders.actions.fetchOrder(id));
     }
   }, [dispatch, state, id]);
+
+  useEffect(() => {
+    if (cdekBindStatus === "bound") {
+      onCdekMenuClose();
+    }
+  }, [cdekBindStatus, onCdekMenuClose]);
+
+  const canChangeStatus = availableStatuses.length > 0;
+  const canBindCdek = status === orderStatusesKeys.shipping;
+
+  const isEditable = canChangeStatus || canBindCdek;
 
   return (
     <>
@@ -147,6 +193,7 @@ export default function Order({ id }) {
             onClick={onEditButtonClick}
             color="primary"
             sx={{
+              display: isEditable ? "initial" : "none",
               position: "fixed",
               bottom: 20,
               right: 20,
@@ -168,8 +215,155 @@ export default function Order({ id }) {
             open={isCdekMenuVisible}
             onOpen={onCdekMenuOpen}
             onClose={onCdekMenuClose}
+            ModalProps={{
+              keepMounted: false,
+            }}
           >
-            obanze
+            <Box
+              sx={{
+                p: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  mb: 4,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  inputRef={cdekSearchFieldRef}
+                  disabled={cdekSearchStatus === "fetching"}
+                  onChange={onCdekIdChange}
+                  value={cdekSearch}
+                  label="Номер заказа в СДЭК (поле «номер ИМ»)"
+                  margin="normal"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LocalShippingIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <Button
+                  onClick={onCdekSearch}
+                  disabled={
+                    !isCdekSearchValid || cdekSearchStatus === "fetching"
+                  }
+                  variant="outlined"
+                  size="large"
+                  fullWidth
+                >
+                  Искать
+                </Button>
+              </Box>
+              {cdekSearchStatus === "initial" ? (
+                <Box
+                  sx={{
+                    height: 282,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="h4" paragraph>
+                    Поиск заказа
+                  </Typography>
+                  <Typography>Привязать заказ в СДЭК по номеру</Typography>
+                </Box>
+              ) : null}
+              {cdekSearchStatus === "fetching" ? (
+                <Box
+                  sx={{
+                    height: 282,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="h4" paragraph>
+                    Ищем заказ
+                  </Typography>
+                </Box>
+              ) : null}
+              {cdekSearchStatus === "failed" ? (
+                <Box
+                  sx={{
+                    height: 282,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="h4" paragraph>
+                    Ошибка
+                  </Typography>
+                  <Typography>Повторите запрос позже</Typography>
+                </Box>
+              ) : null}
+              {cdekSearchStatus === "notfound" ? (
+                <Box
+                  sx={{
+                    height: 282,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="h4" paragraph>
+                    Заказ не найден
+                  </Typography>
+                  <Typography>Уточните номер в личном кабинете СДЭК</Typography>
+                </Box>
+              ) : null}
+              {cdekSearchStatus === "found" ? (
+                <Box sx={{ height: 282 }}>
+                  <Typography variant="h4" paragraph>
+                    Заказ №{cdekOrder.entity.cdek_number}
+                  </Typography>
+                  <Typography fontWeight="bold">Получатель</Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                    paragraph
+                  >
+                    {cdekOrder.entity.delivery_detail.recipient_name}
+                  </Typography>
+                  <Typography fontWeight="bold">Адрес</Typography>
+                  <Typography
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                    paragraph
+                  >
+                    {cdekOrder.entity.to_location.address}
+                  </Typography>
+                  <Typography fontWeight="bold">Статус</Typography>
+                  <Typography paragraph>
+                    {first(cdekOrder.entity.statuses).name}
+                  </Typography>
+                  <Button
+                    onClick={onBindCdek}
+                    disabled={cdekBindStatus === "binding"}
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Привязать
+                  </Button>
+                </Box>
+              ) : null}
+            </Box>
           </SwipeableDrawer>
           <SwipeableDrawer
             anchor="bottom"
@@ -178,10 +372,12 @@ export default function Order({ id }) {
             onClose={onOrderMenuClose}
           >
             <MenuList>
-              <MenuItem onClick={onBindCdekClick}>
-                <ListItemText>Привязать СДЭК</ListItemText>
-              </MenuItem>
-              {availableStatuses.length ? (
+              {canBindCdek ? (
+                <MenuItem onClick={onBindCdekClick}>
+                  <ListItemText>Привязать СДЭК</ListItemText>
+                </MenuItem>
+              ) : null}
+              {canChangeStatus ? (
                 <MenuItem onClick={onEditStatusClick}>
                   <ListItemText>Изменить статус</ListItemText>
                 </MenuItem>

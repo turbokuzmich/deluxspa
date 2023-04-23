@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 import {
   all,
   call,
@@ -26,6 +28,8 @@ import orders, {
   getOrdersFilter,
   updateOrderStatus,
 } from "../slices/orders";
+
+import cdek, { getCdekInfoSearch, getCdekOrder } from "../slices/cdek";
 
 import ui from "../slices/ui";
 import api from "../../lib/api";
@@ -161,12 +165,57 @@ function* setOrderStatus({ payload: { id, status } }) {
   }
 }
 
+function* searchCdekOrder() {
+  const search = yield select(getCdekInfoSearch);
+  const token = yield select(getToken);
+
+  try {
+    const { data } = yield call([api, api.get], "/admin/cdek/search", {
+      params: { search, token },
+    });
+
+    yield put(cdek.actions.found(data));
+  } catch (error) {
+    if (error instanceof AxiosError && error.response.status === 404) {
+      yield put(cdek.actions.notFound());
+    } else {
+      yield put(cdek.actions.failed());
+    }
+  }
+}
+
+function* bindCdekOrder({ payload }) {
+  const cdekOrder = yield select(getCdekOrder);
+  const token = yield select(getToken);
+
+  try {
+    const { data } = yield call(
+      [api, api.post],
+      "/admin/orders/cdek",
+      {
+        order: payload,
+        cdek: cdekOrder.entity.number,
+      },
+      {
+        params: { token },
+      }
+    );
+
+    yield put(cdek.actions.bound());
+    yield put(orders.actions.fetchOrderSucces(data));
+  } catch (error) {
+    yield put(cdek.actions.failed());
+  }
+}
+
 export default function* root() {
   yield all([
     takeLeading(setApiLoaded, authorize),
     takeLeading(setPassword, updatePassword),
     takeEvery(orders.actions.fetchOrder, fetchOrder),
     takeEvery(updateOrderStatus, setOrderStatus),
+    takeLatest(cdek.actions.search, searchCdekOrder),
+    takeLatest(cdek.actions.bindOrder, bindCdekOrder),
     takeLatest(
       [orders.actions.fetchList, orders.actions.setFilter],
       fetchOrders
