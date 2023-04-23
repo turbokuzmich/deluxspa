@@ -1,8 +1,9 @@
+import property from "lodash/property";
 import get from "lodash/get";
 import withSession from "../../lib/backend/session";
 import { csrf } from "../../lib/backend/csrf";
 import initBot, { withApi } from "../../lib/backend/bot";
-import { Order } from "../../lib/backend/sequelize";
+import { Order } from "../../lib/backend/sequelize"; // FIXME нужно использовать сервис
 import { getChatIds } from "../../lib/backend/bot/auth";
 import { subscribe } from "../../lib/backend/queue";
 import createFormatter from "../../lib/helpers/markdown";
@@ -118,7 +119,7 @@ const handlers = {
 
       await Promise.all(
         chatIds.map((chatId) =>
-          bot.sendMessage(chatId, `Новый статус заказа №${id}: ${status}`, {
+          api.bot.sendMessage(chatId, `Новый статус заказа №${id}: ${status}`, {
             reply_markup: {
               inline_keyboard: [
                 [
@@ -136,6 +137,29 @@ const handlers = {
       );
     }),
   ],
+  "deluxspa-inactive-orders": withApi(async function (api, input) {
+    const ids = get(input, "orders", []).map(property("id"));
+    const chatIds = await getChatIds();
+
+    const message = "Пожалуйста, актуализируйте статусы некоторых заказов";
+
+    const reply_markup = {
+      inline_keyboard: ids.map((id) => [
+        {
+          text: `Заказ №${id}`,
+          web_app: {
+            url: getOrderViewUrl(id),
+          },
+        },
+      ]),
+    };
+
+    await Promise.all(
+      chatIds.map((chatId) =>
+        api.bot.sendMessage(chatId, message, { reply_markup })
+      )
+    );
+  }),
   "deluxspa-new-feedback": withApi(async function (api, input) {
     const chatIds = await getChatIds();
     const key = get(input, "key");
