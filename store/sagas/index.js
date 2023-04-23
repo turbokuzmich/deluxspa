@@ -125,11 +125,25 @@ export function* handlePayment() {
   try {
     const info = yield select(getDeliveryInfo);
 
-    const {
-      data: { url },
-    } = yield call([api, api.post], "/checkout", info);
+    const { data } = yield call([api, api.post], "/checkout", info);
 
-    location.href = url;
+    const form = document.createElement("form");
+
+    form.action = "https://pay.modulbank.ru/pay";
+    form.method = "post";
+
+    Object.entries(data).forEach(([key, value]) => {
+      const input = document.createElement("input");
+
+      input.type = "hidden";
+      input.name = key;
+      input.value = value;
+
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
   } catch (_) {
     yield put(
       showErrorNotification(

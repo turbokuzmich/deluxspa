@@ -1,5 +1,6 @@
 import withSession, { getSessionId } from "../../lib/backend/session";
-import { createPayment } from "../../lib/backend/yookassa";
+// import { createPayment } from "../../lib/backend/yookassa";
+import { getPayment } from "../../lib/backend/modulbank";
 import t from "../../lib/helpers/i18n";
 import * as yup from "yup";
 import { calculate } from "../../lib/backend/cdek";
@@ -86,11 +87,11 @@ async function doCheckout(req, res) {
 
     await orderTransaction.commit();
 
-    const url = await createPayment(order);
+    // const url = await createPayment(order);
 
     sendOrder(order).then(noop).catch(noop);
 
-    res.status(200).json({ url });
+    res.status(200).json(getPayment(order));
   } catch (error) {
     console.log(error);
     await orderTransaction.rollback();
@@ -100,7 +101,7 @@ async function doCheckout(req, res) {
 }
 
 async function finalizeCheckout(req, res) {
-  const { s, order: id, locale = "ru" } = req.query;
+  const { s, order: id, transaction_id, locale = "ru" } = req.query;
 
   const order = await Order.getByExternalId(id);
 
@@ -111,6 +112,8 @@ async function finalizeCheckout(req, res) {
   if (!order.validateHmac(s)) {
     return res.status(400).json({});
   }
+
+  await order.update({ paymentId: transaction_id, status: "pending" });
 
   await withSession(
     async function (session) {
