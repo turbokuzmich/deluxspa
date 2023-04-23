@@ -13,9 +13,6 @@ module.exports = {
       {
         userAgent: "*",
         allow: "/",
-      },
-      {
-        userAgent: "*",
         disallow: ["/admin", "/admin/*", "/cart", "/order", "/order/*"],
       },
     ],
