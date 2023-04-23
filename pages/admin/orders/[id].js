@@ -79,20 +79,16 @@ export default function Order({ id }) {
     [status]
   );
 
-  const onMenuItemsClicks = useMemo(
+  const onStatusClick = useMemo(
     () =>
       availableStatuses.map(({ value }) => () => {
         dispatch(updateOrderStatus({ id, status: value }));
-        onOrderMenuClose();
+        onOrderStatusesMenuClose();
       }),
-    [id, dispatch, availableStatuses, onOrderMenuClose]
+    [id, dispatch, availableStatuses, onOrderStatusesMenuClose]
   );
 
   const [isOrderMenuVisible, setIsOrderMenuVisible] = useState(false);
-
-  const onEditButtonClick = useCallback(() => {
-    setIsOrderMenuVisible(true);
-  }, [setIsOrderMenuVisible]);
 
   const onOrderMenuOpen = useCallback(() => {
     setIsOrderMenuVisible(false);
@@ -101,6 +97,26 @@ export default function Order({ id }) {
   const onOrderMenuClose = useCallback(() => {
     setIsOrderMenuVisible(false);
   }, [setIsOrderMenuVisible]);
+
+  const [isOrderStatusesMenuVisible, setIsOrderStatusesMenuVisible] =
+    useState(false);
+
+  const onEditButtonClick = useCallback(() => {
+    setIsOrderMenuVisible(true);
+  }, [setIsOrderMenuVisible]);
+
+  const onEditStatusClick = useCallback(() => {
+    setIsOrderMenuVisible(false);
+    setIsOrderStatusesMenuVisible(true);
+  }, []);
+
+  const onOrderStatusesMenuOpen = useCallback(() => {
+    setIsOrderStatusesMenuVisible(false);
+  }, [setIsOrderStatusesMenuVisible]);
+
+  const onOrderStatusesMenuClose = useCallback(() => {
+    setIsOrderStatusesMenuVisible(false);
+  }, [setIsOrderStatusesMenuVisible]);
 
   useEffect(() => {
     if (state === "initial") {
@@ -139,11 +155,26 @@ export default function Order({ id }) {
             onClose={onOrderMenuClose}
           >
             <MenuList>
+              <ListItemText>Привязать СДЭК</ListItemText>
+              {availableStatuses.length ? (
+                <MenuItem onClick={onEditStatusClick}>
+                  <ListItemText>Изменить статус</ListItemText>
+                </MenuItem>
+              ) : null}
+            </MenuList>
+          </SwipeableDrawer>
+          <SwipeableDrawer
+            anchor="bottom"
+            open={isOrderStatusesMenuVisible}
+            onOpen={onOrderStatusesMenuOpen}
+            onClose={onOrderStatusesMenuClose}
+          >
+            <MenuList>
               {availableStatuses.map(({ title, value }, index) => [
                 value === orderStatusesKeys.canceled ? (
                   <Divider key={`${value}-divider`} />
                 ) : null,
-                <MenuItem key={value} onClick={onMenuItemsClicks[index]}>
+                <MenuItem key={value} onClick={onStatusClick[index]}>
                   <ListItemIcon>{statusIcons[value]}</ListItemIcon>
                   <ListItemText>{title}</ListItemText>
                 </MenuItem>,
