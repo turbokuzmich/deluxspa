@@ -5,7 +5,6 @@ export default function TCBLoader() {
     <Script
       src="https://forma.tinkoff.ru/static/onlineScript.js"
       strategy="afterInteractive"
-      onLoad={onApiLoaded}
     />
   );
 }
