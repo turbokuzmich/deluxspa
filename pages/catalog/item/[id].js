@@ -243,7 +243,7 @@ export default function Item({ id, auxiliaryIds }) {
                           size="medium"
                           onClick={onBuys[variant]}
                         >
-                          Купить
+                          Оплатить
                         </Button>
                       </TableCell>
                     </TableRow>
