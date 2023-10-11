@@ -8,7 +8,10 @@ import Number from "./number";
 import { catalogItems, capacities } from "../constants";
 import Price from "./price";
 import { useTranslation } from "next-i18next";
-import { getItemFirstPreviewImage, formatCapacity } from "../lib/helpers/catalog";
+import {
+  getItemFirstPreviewImage,
+  formatCapacity,
+} from "../lib/helpers/catalog";
 import first from "lodash/first";
 import last from "lodash/last";
 

@@ -26,6 +26,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useDispatch } from "react-redux";
 import { setup } from "../../../lib/backend/csrf";
 import cartSlice from "../../../store/slices/cart";
+import TCBLoader from "../../../components/tcbloader";
 import {
   getItemById,
   formatCapacity,
@@ -117,6 +118,7 @@ export default function Item({ id, auxiliaryIds }) {
 
   return (
     <>
+      <TCBLoader />
       <Submenu />
       <Container
         sx={{
