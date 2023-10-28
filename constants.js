@@ -164,6 +164,27 @@ export const compositionItems = {
   pistachio_oil: {
     title: "органическое масло фисташки",
   },
+  apricot_oil: {
+    title: "масло абрикосовой косточки",
+  },
+  sunflower_oil: {
+    title: "масло подсолнечника",
+  },
+  tobacco_oil: {
+    title: "эфирное масло табака",
+  },
+  vanilla_aroma: {
+    title: "ароматическая основа ванили",
+  },
+  green_tea: {
+    title: "экстракт зеленого чая",
+  },
+  lime_oil: {
+    title: "эфирное масло лайма",
+  },
+  cinnamon_oil: {
+    title: "эфирное масло корицы",
+  },
 };
 
 export const compositionItemsGridOrder = [
@@ -182,7 +203,127 @@ export const consumptionTitles = {
   back: "consumption-back",
 };
 
+// oil_jojoba 1000 нет описания
 const oils = [
+  {
+    id: "oil_white_tea",
+    title: "catalog-item-oil-white-tea",
+    brief: "catalog-brief-massage-body-oil",
+    composition: [
+      "almond_oil",
+      "apricot_oil",
+      "sunflower_oil",
+      "jojoba_oil",
+      "vitamin_e",
+      "wheat_oil",
+      "green_tea",
+      "aroma_composition",
+    ],
+    unit: "ml",
+    consumption: {
+      common: "20–30 мл",
+      back: "10–15 мл",
+    },
+    description: [
+      "Обладает высоким скольжением, хорошей сцепкой с&nbsp;руками массажиста. Увлажняет, питает, защищает, стимулирует регенерацию, плодотворно влияет на&nbsp;состояние кожи. Обладает расслабляющим действием на&nbsp;нервную систему. Нежный флюр благородно обволакивает пространство. Эффективно как антиоксидант поскольку содержит в&nbsp;составе экстракт зеленого чая.",
+    ],
+    variants: {
+      list: ["120", "1000"],
+      byId: {
+        120: {
+          price: 350,
+          volume: 120,
+          weight: 130,
+          image: "/images/items/white_tea_120.jpg",
+        },
+        1000: {
+          price: 990,
+          volume: 1000,
+          weight: 1100,
+          image: "/images/items/white_tea_1000.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "oil_tobacco_vanilla",
+    title: "catalog-item-oil-tobacco-vanilla",
+    brief: "catalog-brief-massage-body-oil",
+    composition: [
+      "almond_oil",
+      "apricot_oil",
+      "sunflower_oil",
+      "jojoba_oil",
+      "vitamin_e",
+      "wheat_oil",
+      "tobacco_oil",
+      "vanilla_aroma",
+    ],
+    unit: "ml",
+    consumption: {
+      common: "20–30 мл",
+      back: "10–15 мл",
+    },
+    description: [
+      "Обладает хорошим скольжением, достаточно уверенным сцеплением для проведения процедуры массажа, увлажняет и&nbsp;питает кожу, насыщает ее&nbsp;витаминами. Нежный аромат раскрывается в&nbsp;элегантных оттенках ароматов табачных листьев и&nbsp;ванили, расслабляет нервную систему, умиротворяет, создает приятый ароматический флюр в&nbsp;помещении.",
+    ],
+    variants: {
+      list: ["120", "1000"],
+      byId: {
+        120: {
+          price: 350,
+          volume: 120,
+          weight: 130,
+          image: "/images/items/tobacco_vanilla_120.jpg",
+        },
+        1000: {
+          price: 990,
+          volume: 1000,
+          weight: 1100,
+          image: "/images/items/tobacco_vanilla_1000.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "oil_blue_daisy",
+    title: "catalog-item-oil-blue-daisy",
+    brief: "catalog-brief-massage-body-oil",
+    composition: [
+      "almond_oil",
+      "apricot_oil",
+      "sunflower_oil",
+      "jojoba_oil",
+      "vitamin_e",
+      "wheat_oil",
+      "blue_daisy_oil",
+    ],
+    unit: "ml",
+    consumption: {
+      common: "20–30 мл",
+      back: "10–15 мл",
+    },
+    description: [
+      "Обладает успокаивающем действием на&nbsp;нервную систему, увлажняет и&nbsp;питает кожу, восстанавливает ее&nbsp;структуру, помогает бороться со&nbsp;стрессом, снимает тревожность.",
+    ],
+    variants: {
+      list: ["120", "1000"],
+      byId: {
+        120: {
+          price: 350,
+          volume: 120,
+          weight: 130,
+          image: "/images/items/blue_daisy_120.jpg",
+        },
+        1000: {
+          price: 990,
+          volume: 1000,
+          weight: 1100,
+          image: "/images/items/blue_daisy_1000.jpg",
+        },
+      },
+    },
+  },
   {
     id: "oil_mint_breeze",
     title: "catalog-item-oil-mint-breeze",
@@ -550,13 +691,19 @@ const oils = [
       "Насыщенный жирнокислотный состав содержит комплекс антиоскидантов, питает и&nbsp;омолаживает кожу.",
     ],
     variants: {
-      list: ["120"],
+      list: ["120", "1000"],
       byId: {
         120: {
           price: 550,
           volume: 120,
           weight: 130,
           image: "/images/items/citrus_freshness_120.jpg",
+        },
+        1000: {
+          price: 2000,
+          volume: 1000,
+          weight: 1100,
+          image: "/images/items/citrus_freshness_1000.jpg",
         },
       },
     },
@@ -604,13 +751,19 @@ const oils = [
       "Сбалансированный состав ухаживает и&nbsp;питает кожу, делая её&nbsp;шелковистой и&nbsp;ухоженной.&nbsp;и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120"],
+      list: ["120", "1000"],
       byId: {
         120: {
           price: 790,
           volume: 120,
           weight: 130,
           image: "/images/items/extra_slim_ultimate_120.jpg",
+        },
+        1000: {
+          price: 2190,
+          volume: 1000,
+          weight: 1100,
+          image: "/images/items/extra_slim_ultimate_1000.jpg",
         },
       },
     },
@@ -725,7 +878,16 @@ const oils = [
     id: "oil_lime_cinnamon",
     title: "catalog-item-oil-lime-cinnamon",
     brief: "catalog-brief-massage-body-oil",
-    composition: [],
+    composition: [
+      "almond_oil",
+      "apricot_oil",
+      "sunflower_oil",
+      "jojoba_oil",
+      "vitamin_e",
+      "wheat_oil",
+      "lime_oil",
+      "cinnamon_oil",
+    ],
     unit: "ml",
     description: [
       "Потрясющий коктейль из&nbsp;цитрусов и&nbsp;специй. В&nbsp;меру сладкий, свежий и&nbsp;пикантный аромат, понравится всем без исключения. Активный липолиз, лимфодренирующее действие и&nbsp;разогрев.",
