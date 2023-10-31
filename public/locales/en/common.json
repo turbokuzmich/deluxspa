@@ -99,6 +99,9 @@
   "catalog-item-oil-blue-daisy": "blue daisy",
   "catalog-item-oil-tobacco-vanilla": "tobacco & vanilla",
   "catalog-item-oil-white-tea": "white tea",
+  "catalog-item-butter-white-tea": "white tea",
+  "catalog-item-butter-tobacco-vanilla": "tobacco & vanilla",
+  "catalog-item-butter-tropical-mango": "tropical mango",
 
   "catalog-category-massage-oil": "Massage oil",
   "catalog-category-body-massage-oil": "Oil for body",
@@ -123,6 +126,7 @@
   "catalog-brief-massage-hair-oil": "massage oil for hair growth and shine",
   "catalog-brief-massage-face-oil": "massage oil for face",
   "catalog-brief-body-scrub": "body scrub",
+  "catalog-brief-butter": "body butter",
   "catalog-unit-ml": "ml",
   "catalog-unit-l": "l",
   "catalog-unit-g": "g",

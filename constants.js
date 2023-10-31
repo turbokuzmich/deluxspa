@@ -231,13 +231,13 @@ const oils = [
       list: ["120", "1000"],
       byId: {
         120: {
-          price: 350,
+          price: 590,
           volume: 120,
           weight: 130,
           image: "/images/items/white_tea_120.jpg",
         },
         1000: {
-          price: 990,
+          price: 2500,
           volume: 1000,
           weight: 1100,
           image: "/images/items/white_tea_1000.jpg",
@@ -271,13 +271,13 @@ const oils = [
       list: ["120", "1000"],
       byId: {
         120: {
-          price: 350,
+          price: 590,
           volume: 120,
           weight: 130,
           image: "/images/items/tobacco_vanilla_120.jpg",
         },
         1000: {
-          price: 990,
+          price: 2500,
           volume: 1000,
           weight: 1100,
           image: "/images/items/tobacco_vanilla_1000.jpg",
@@ -310,13 +310,13 @@ const oils = [
       list: ["120", "1000"],
       byId: {
         120: {
-          price: 350,
+          price: 590,
           volume: 120,
           weight: 130,
           image: "/images/items/blue_daisy_120.jpg",
         },
         1000: {
-          price: 990,
+          price: 2500,
           volume: 1000,
           weight: 1100,
           image: "/images/items/blue_daisy_1000.jpg",
@@ -907,6 +907,69 @@ const oils = [
       },
     },
   },
+  {
+    id: "butter_white_tea",
+    title: "catalog-item-butter-white-tea",
+    brief: "catalog-brief-butter",
+    composition: [],
+    unit: "g",
+    description: [
+      "Обладает хорошими органолептическими свойствами, замечательно увлажняет, питает и&nbsp;насыщает кожу ценными маслами и&nbsp;ненасыщенными жирными кислотами. Восстанавливает гидролипидный барьер кожи, дезодорирует и&nbsp;смягчает кожу. Обладает антивозрастным действием. Экстракт зленого чая является мощным антиоксидантом.",
+    ],
+    variants: {
+      list: ["250"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/butter_white_tea_250.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "butter_tobacco_vanilla",
+    title: "catalog-item-butter-tobacco-vanilla",
+    brief: "catalog-brief-butter",
+    composition: [],
+    unit: "g",
+    description: [
+      "Превосходные органолептические свойства, увлажнение и&nbsp;питание кожи. Стимулирует регенерацию, обновляет и&nbsp;восстанавливает гидролипидный барьер кожи. Нежный аромат листьев табака и&nbsp;ванили помогают получить истинное удовольствие и&nbsp;успокаивают нервную систему. Натуральные растительные экстракты оказывают антиоксидантные действия и&nbsp;борются с&nbsp;возрастными изменениями. Великолепная структура баттера позволяет наносить крем даже перед выходом на&nbsp;улицу и&nbsp;использовать данное средство для завершения любых СПА процедур и&nbsp;в&nbsp;уходе за&nbsp;телом.",
+    ],
+    variants: {
+      list: ["250"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/butter_tobacco_vanilla_250.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "butter_tropical_mango",
+    title: "catalog-item-butter-tropical-mango",
+    brief: "catalog-brief-butter",
+    composition: [],
+    unit: "g",
+    description: [
+      "Прекрасная текстура питает и&nbsp;насыщает кожу полиненасыщенными и&nbsp;насыщенными жирными кислотами. Восстанавливает гидролипидный барьер, способствует регенерации эпидермиса. Входящие в&nbsp;состав питательные масла&nbsp;Ши и&nbsp;манго насыщают кожу витаминами, стимулируют её&nbsp;упругость и&nbsp;гладкость.",
+    ],
+    variants: {
+      list: ["250"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/butter_tropical_mango_250.jpg",
+        },
+      },
+    },
+  },
 ];
 
 const bodyScrubs = [
@@ -1180,6 +1243,9 @@ export const catalogTree = [
         description: ["catalog-category-body-massage-oil-description"],
         type: "category",
         items: [
+          "oil_white_tea",
+          "oil_tobacco_vanilla",
+          "oil_blue_daisy",
           "oil_mint_breeze",
           "oil_bio",
           "oil_lemongrass",
@@ -1194,6 +1260,9 @@ export const catalogTree = [
           "oil_extra_slim_ultimate",
           "oil_lime_cinnamon",
           "oil_lemon_pepper",
+          "butter_white_tea",
+          "butter_tobacco_vanilla",
+          "butter_tropical_mango",
         ],
       },
       {

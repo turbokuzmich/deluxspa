@@ -99,6 +99,9 @@
   "catalog-item-oil-blue-daisy": "голубая ромашка",
   "catalog-item-oil-tobacco-vanilla": "табак и ваниль",
   "catalog-item-oil-white-tea": "белый чай",
+  "catalog-item-butter-white-tea": "белый чай",
+  "catalog-item-butter-tobacco-vanilla": "табак и ваниль",
+  "catalog-item-butter-tropical-mango": "тропическое манго",
 
   "catalog-category-massage-oil": "Массажные масла",
   "catalog-category-body-massage-oil": "Масла для тела и массажа",
@@ -123,6 +126,7 @@
   "catalog-brief-massage-hair-oil": "масло для роста волос и блеска",
   "catalog-brief-massage-face-oil": "масло для лица",
   "catalog-brief-body-scrub": "скраб для тела",
+  "catalog-brief-butter": "баттер для тела",
   "catalog-unit-ml": "мл",
   "catalog-unit-l": "л",
   "catalog-unit-g": "г",
