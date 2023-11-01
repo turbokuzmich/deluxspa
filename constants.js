@@ -899,7 +899,7 @@ const oils = [
       list: ["1000"],
       byId: {
         1000: {
-          price: 2190,
+          price: 2500,
           volume: 1000,
           weight: 1100,
           image: "/images/items/lime_cinnamon_1000.jpg",
