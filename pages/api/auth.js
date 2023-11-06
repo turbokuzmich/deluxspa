@@ -17,6 +17,18 @@ const getEmailSchema = memoize(() =>
       .string()
       .required(t("cart-page-email-incorrect"))
       .email(t("cart-page-email-incorrect")),
+    country: yup
+      .string()
+      .nullable()
+      .optional()
+      .matches(/^\d+$/, "Укажите код страны")
+      .max(3, "Укажите код страны"),
+    phone: yup
+      .string()
+      .nullable()
+      .optional()
+      .matches(/^\d+$/, "Укажите номер телефона")
+      .max(11, "Укажите номер телефона"),
   })
 );
 
@@ -53,10 +65,13 @@ const getPatchSchema = memoize(() =>
 );
 
 async function sendVerificationCode(req, res) {
-  const { email } = await getEmailSchema().validate(get(req, "body", {}), {
-    strict: true,
-    stripUnknown: true,
-  });
+  const { email, country, phone } = await getEmailSchema().validate(
+    get(req, "body", {}),
+    {
+      strict: true,
+      stripUnknown: true,
+    }
+  );
 
   const challengedAt = new Date();
   const { secret } = generateSecret({ name: email });
@@ -65,7 +80,7 @@ async function sendVerificationCode(req, res) {
   await runWithSession(
     async (session) => {
       session.secret = secret;
-      session.email = email;
+      session.auth = { email, country, phone };
       session.challengedAt = challengedAt;
     },
     req,
@@ -74,10 +89,30 @@ async function sendVerificationCode(req, res) {
 
   await sendSignupEmail(email, token);
 
-  res.status(200).json({});
+  res.status(200).json({ token });
 }
 
-async function findOrCreateUser(email) {
+async function findOrCreateUser({ email, country, phone }) {
+  if (country && phone) {
+    const phoneUser = await User.findOne({
+      where: { country, phone },
+    });
+
+    const emailUser = await User.findOne({ where: { email } });
+
+    if (emailUser) {
+      return null;
+    } else if (phoneUser.email) {
+      return phoneUser.email === email ? phoneUser : null;
+    } else {
+      await phoneUser.update({
+        email,
+      });
+
+      return phoneUser;
+    }
+  }
+
   const existingUser = await User.findOne({ where: { email } });
 
   if (existingUser) {
@@ -90,6 +125,16 @@ async function findOrCreateUser(email) {
   }
 }
 
+function getSessionAuthData(session) {
+  try {
+    const { email, country, phone } = JSON.parse(session.auth);
+
+    return { email, country, phone };
+  } catch (error) {
+    return { email: null, country: null, phone: null };
+  }
+}
+
 async function verifyCode(req, res) {
   const { email, code } = await getCodeSchema().validate(get(req, "body", {}), {
     strict: true,
@@ -98,7 +143,9 @@ async function verifyCode(req, res) {
 
   await runWithSession(
     async (session) => {
-      if (session.email !== email) {
+      const auth = getSessionAuthData(session);
+
+      if (auth.email !== email) {
         return res
           .status(400)
           .json({ error: "Неправильный электронный адрес" });
@@ -115,14 +162,18 @@ async function verifyCode(req, res) {
         return res.status(400).json({ error: "Неправильный проверочный код" });
       }
 
-      const user = await findOrCreateUser(email);
+      const user = await findOrCreateUser(auth);
 
-      session.email = null;
-      session.secret = null;
-      session.challengedAt = null;
-      session.UserId = user.id;
+      if (user) {
+        session.auth = null;
+        session.secret = null;
+        session.challengedAt = null;
+        session.UserId = user.id;
 
-      res.status(200).json({ user: user.sessionData });
+        res.status(200).json({ user: user.sessionData });
+      } else {
+        res.status(400).json({ error: "Некорректный электронный адрес" });
+      }
     },
     req,
     res

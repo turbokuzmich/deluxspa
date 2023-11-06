@@ -18,6 +18,11 @@ export const getAuthIsFetching = createSelector(getAuth, property("fetching"));
 export const getAuthState = createSelector(getAuth, property("state"));
 export const getAuthForm = createSelector(getAuth, property("authForm"));
 export const getAuthFormEmail = createSelector(getAuthForm, property("email"));
+export const getAuthFormCountry = createSelector(
+  getAuthForm,
+  property("country")
+);
+export const getAuthFormPhone = createSelector(getAuthForm, property("phone"));
 export const getAuthFormCode = createSelector(getAuthForm, property("code"));
 export const getAuthFormState = createSelector(getAuthForm, property("state"));
 export const getAuthFormError = createSelector(getAuthForm, property("error"));
@@ -79,6 +84,8 @@ export default createSlice({
     fetching: false,
     authForm: {
       email: "",
+      country: null,
+      phone: null,
       code: "",
       state: AuthFormState.email,
       error: null,
@@ -94,8 +101,10 @@ export default createSlice({
       const newUser = { ...state.user, ...user };
       state.user = newUser;
     },
-    setAuthFormEmail(state, { payload: email }) {
+    setAuthFormEmail(state, { payload: { email, country, phone } }) {
       state.authForm.email = email;
+      state.authForm.country = country;
+      state.authForm.phone = phone;
       state.authForm.code = "";
       state.authForm.state = AuthFormState.code;
       state.authForm.error = null;
@@ -106,6 +115,8 @@ export default createSlice({
     },
     resetAuthForm(state) {
       state.authForm.email = "";
+      state.authForm.country = null;
+      state.authForm.phone = null;
       state.authForm.code = "";
       state.authForm.state = AuthFormState.email;
       state.authForm.error = null;

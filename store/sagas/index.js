@@ -19,7 +19,9 @@ import notificationsSlice, {
 } from "../slices/notifications";
 import authSlice, {
   getAuthFormCode,
+  getAuthFormCountry,
   getAuthFormEmail,
+  getAuthFormPhone,
   getAuthIsFetching,
   getAuthProfileValues,
 } from "../slices/auth";
@@ -389,9 +391,11 @@ export function* findNearestCity() {
 
 export function* sendAuthCode() {
   const email = yield select(getAuthFormEmail);
+  const country = yield select(getAuthFormCountry);
+  const phone = yield select(getAuthFormPhone);
 
   try {
-    yield call([api, api.post], "/auth", { email });
+    yield call([api, api.post], "/auth", { email, country, phone });
     yield put(
       showSuccessNotification(`На адрес ${email} отправлен код авторизации`)
     );

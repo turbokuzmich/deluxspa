@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import { maybeGetSession } from "../../lib/backend/session";
+import { useRouter } from "next/router";
 import authSlice, {
   AuthFormState,
   getAuthFormCodeValues,
@@ -22,12 +23,31 @@ import authSlice, {
 
 export default function Auth() {
   const { t } = useTranslation();
+  const { query } = useRouter();
+
   const dispatch = useDispatch();
 
   const authFormState = useSelector(getAuthFormState);
   const authFormEmail = useSelector(getAuthFormEmail);
   const emailFormValues = useSelector(getAuthFormEmailValues);
   const codeFormValues = useSelector(getAuthFormCodeValues);
+
+  const phoneSchema = useMemo(
+    () =>
+      yup.object().shape({
+        country: yup
+          .string()
+          .required()
+          .matches(/^\d+$/, "Укажите код страны")
+          .max(3, "Укажите код страны"),
+        phone: yup
+          .string()
+          .required()
+          .matches(/^\d+$/, "Укажите номер телефона")
+          .max(11, "Укажите номер телефона"),
+      }),
+    []
+  );
 
   const emailSchema = useMemo(
     () =>
@@ -36,6 +56,16 @@ export default function Auth() {
           .string()
           .required(t("cart-page-email-incorrect"))
           .email(t("cart-page-email-incorrect")),
+        country: yup
+          .string()
+          .optional()
+          .matches(/^\d+$/, "Укажите код страны")
+          .max(3, "Укажите код страны"),
+        phone: yup
+          .string()
+          .optional()
+          .matches(/^\d+$/, "Укажите номер телефона")
+          .max(11, "Укажите номер телефона"),
       }),
     [t]
   );
@@ -52,11 +82,22 @@ export default function Auth() {
     []
   );
 
+  const { country, phone } = useMemo(() => {
+    try {
+      return phoneSchema.validateSync(query, {
+        strict: true,
+        stripUnknown: true,
+      });
+    } catch (error) {
+      return { country: null, phone: null };
+    }
+  }, [query, phoneSchema]);
+
   const onEmailSubmit = useCallback(
     ({ email }) => {
-      dispatch(authSlice.actions.setAuthFormEmail(email));
+      dispatch(authSlice.actions.setAuthFormEmail({ email, country, phone }));
     },
-    [dispatch]
+    [dispatch, phone, country]
   );
 
   const onCodeSubmit = useCallback(
