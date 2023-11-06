@@ -1,6 +1,13 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import fromPairs from "lodash/fromPairs";
 import property from "lodash/property";
+import auth, {
+  getAuthState,
+  getAuthUserPhone,
+  getAuthUserCountry,
+  getAuthUserEmail,
+  AuthState,
+} from "./auth";
 
 const geoCodingStatuses = ["initial", "failed", "insufficient", "ok"];
 export const GeoCodingStatus = fromPairs(
@@ -9,8 +16,27 @@ export const GeoCodingStatus = fromPairs(
 
 export const getDelivery = (state) => state.delivery;
 
-export const getDeliveryPhone = createSelector(getDelivery, property("phone"));
-export const getDeliveryEmail = createSelector(getDelivery, property("email"));
+export const getDeliveryPhone = createSelector(
+  getDelivery,
+  getAuthState,
+  getAuthUserPhone,
+  getAuthUserCountry,
+  (delivery, auth, phone, country) =>
+    delivery.phone ||
+    (auth === AuthState.authorized && phone && country
+      ? `+${country}${phone}`
+      : ``) ||
+    ""
+);
+export const getDeliveryEmail = createSelector(
+  getDelivery,
+  getAuthState,
+  getAuthUserEmail,
+  (delivery, auth, email) =>
+    delivery.email ||
+    (auth === AuthState.authorized && email ? email : "") ||
+    ""
+);
 export const getDeliveryLat = createSelector(getDelivery, property("lat"));
 export const getDeliveryLng = createSelector(getDelivery, property("lng"));
 

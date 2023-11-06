@@ -44,7 +44,8 @@ import cartSlice, {
   getCartItems,
   getCartItemsCount,
   getItemTotal,
-  getCartSubtotal,
+  getDiscount,
+  getCartSubtotalWithDiscount,
 } from "../../store/slices/cart";
 
 export default function Cart() {
@@ -53,7 +54,7 @@ export default function Cart() {
   const dispatch = useDispatch();
   const items = useSelector(getCartItems);
   const count = useSelector(getCartItemsCount);
-  const subtotal = useSelector(getCartSubtotal);
+  const subtotal = useSelector(getCartSubtotalWithDiscount);
   const state = useSelector(getCartState);
   const formValues = useSelector(getDeliveryFormValues);
   const phoneFieldRef = useRef(null);
@@ -62,6 +63,7 @@ export default function Cart() {
   const points = useSelector(getDeliveryPoints);
   const point = useSelector(getDeliveryPoint);
   const calculation = useSelector(getDeliveryCalculation);
+  const discount = useSelector(getDiscount);
 
   const mapsContainerRef = useRef();
   const map = useRef();
@@ -73,7 +75,7 @@ export default function Cart() {
           .string()
           .trim()
           .required(t("cart-page-phone-number-empty"))
-          .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
+          .matches(/^\+?\d{9,13}$/, t("cart-page-phone-number-incorrect")),
         email: yup.string().email(t("cart-page-email-incorrect")),
       }),
     [t]
@@ -421,7 +423,10 @@ export default function Cart() {
                   {t("cart-page-button-shipping")}
                 </Button>
                 <Typography variant="h5">
-                  {t("cart-page-subtotal")}: <Price sum={subtotal} />
+                  {discount > 0
+                    ? `${t("cart-page-subtotal-discount")} ${discount}%`
+                    : t("cart-page-subtotal")}
+                  : <Price sum={subtotal} />
                 </Typography>
               </CardActions>
             </Card>
@@ -502,7 +507,14 @@ export default function Cart() {
                         mb: 2,
                       }}
                     >
-                      <PhoneInput inputRef={phoneFieldRef} />
+                      {/* <PhoneInput inputRef={phoneFieldRef} /> */}
+                      <Field
+                        component={TextInput}
+                        label={t("cart-page-phone")}
+                        autoComplete="off"
+                        name="phone"
+                        fullWidth
+                      />
                       <Field
                         component={TextInput}
                         label={t("cart-page-email")}

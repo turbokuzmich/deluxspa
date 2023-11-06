@@ -1500,9 +1500,11 @@ export const orderStatusesWeights = orderStatuses.reduce(
   {}
 );
 
-export const defaultUserDiscount = 0.05;
-
 export const userType = {
   physical: "Физическое лицо",
   legal: "Юридическое лицо",
 };
+
+export const discountPercentPrice = 2500;
+
+export const maxDiscount = 40;

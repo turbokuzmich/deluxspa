@@ -13,6 +13,7 @@ import sequelize, {
   OrderItem,
   Session,
   CartItem,
+  User,
 } from "../../lib/backend/sequelize";
 
 const getOrderValidators = memoize(() => {
@@ -21,7 +22,7 @@ const getOrderValidators = memoize(() => {
       .string()
       .trim()
       .required(t("cart-page-phone-number-empty"))
-      .matches(/^\d{10}$/, t("cart-page-phone-number-incorrect")),
+      .matches(/^\+?\d{9,13}$/, t("cart-page-phone-number-incorrect")),
     code: yup.string().trim().required(),
     city: yup.number().required(),
     name: yup.string().trim().required(),
@@ -34,11 +35,15 @@ const getOrderValidators = memoize(() => {
 });
 
 function sanitize(orderData) {
-  if (orderData.email === "") {
-    return omit(orderData, "email");
+  let sanitized = { ...orderData };
+
+  if (sanitized.email === "") {
+    sanitized = omit(sanitized, "email");
   }
 
-  return orderData;
+  sanitized.phone = sanitized.phone.replace("+", "");
+
+  return sanitized;
 }
 
 async function doCheckout(req, res) {
@@ -57,7 +62,7 @@ async function doCheckout(req, res) {
 
   const session = await Session.findOne({
     where: { SessionId: id.unwrap() },
-    include: [CartItem],
+    include: [CartItem, User],
   });
 
   if (!session || session.CartItems.length === 0) {
@@ -68,16 +73,23 @@ async function doCheckout(req, res) {
   const orderTransaction = await sequelize.transaction();
 
   try {
-    const [{ total_sum: delivery }, subtotal] = await Promise.all([
-      await calculate(orderData.city, orderData.address, cartItems),
-      await session.getCartTotal(),
-    ]);
+    const [{ total_sum: delivery }, subtotal, subtotalWithDiscount, discount] =
+      await Promise.all([
+        await calculate(orderData.city, orderData.address, cartItems),
+        await session.getCartTotal(),
+        await session.getCartTotalWithDiscount(),
+        await session.getDiscount(),
+      ]);
+
+    console.log(subtotal, discount, subtotalWithDiscount);
 
     const order = await Order.create({
       ...orderData,
+      discount,
       subtotal,
       delivery,
-      total: subtotal + delivery,
+      total: subtotalWithDiscount + delivery,
+      UserId: session.User?.id ?? null,
     });
 
     await OrderItem.bulkCreate(

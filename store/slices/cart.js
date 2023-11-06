@@ -3,6 +3,11 @@ import { getItemById } from "../../lib/helpers/catalog";
 import property from "lodash/property";
 import get from "lodash/get";
 import fromPairs from "lodash/fromPairs";
+import {
+  getDiscount as calculateDiscount,
+  getSubtotal,
+} from "../../lib/helpers/order";
+import { AuthState, getAuthState, getAuthUserDiscount } from "./auth";
 
 const cartStates = [
   "initial",
@@ -34,6 +39,32 @@ export const getCartSubtotal = createSelector(getCartItems, (items) =>
   )
 );
 
+export const getDiscount = createSelector(
+  getAuthState,
+  getAuthUserDiscount,
+  getCartSubtotal,
+  getCartItemsCount,
+  (auth, discount, subtotal, count) =>
+    calculateDiscount(
+      count,
+      subtotal,
+      auth === AuthState.authorized ? discount : 0
+    )
+);
+
+export const getCartSubtotalWithDiscount = createSelector(
+  getCartItems,
+  getDiscount,
+  (items, discount) =>
+    getSubtotal(
+      items.map(({ itemId, variantId, qty }) => ({
+        price: getItemById(itemId).variants.byId[variantId].price,
+        qty,
+      })),
+      discount
+    )
+);
+
 export const getItemTotal = ({ itemId, variantId, qty }) =>
   qty * getItemById(itemId).variants.byId[variantId].price;
 
@@ -49,10 +80,8 @@ export const getItemTotalById =
 
 export const getItemTotalByIndex =
   (index) =>
-  ({ items }) => {
-    console.log(items[index]);
-    return getItemTotal(items[index]);
-  };
+  ({ items }) =>
+    getItemTotal(items[index]);
 
 export default createSlice({
   name: "cart",
