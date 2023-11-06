@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LangSwitcher from "./langswitcher";
 import CartLink from "./cartlink";
+import AuthLink from "./authlink";
 import * as Color from "color";
 import { mainMenu } from "../constants";
 import { useRouter } from "next/router";
@@ -113,6 +114,7 @@ export default function Header() {
             />
           </IconButton>
           <CartLink />
+          <AuthLink />
         </Box>
         <Menu
           anchorEl={anchorEl}
@@ -199,12 +201,13 @@ export default function Header() {
             display: {
               xs: "none",
               md: "flex",
-              gap: 10,
+              gap: 0,
             },
           }}
         >
           <LangSwitcher />
           <CartLink />
+          <AuthLink />
         </Box>
       </Container>
     </Box>

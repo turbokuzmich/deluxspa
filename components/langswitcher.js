@@ -30,7 +30,11 @@ export default function LangSwitcher() {
   );
 
   return (
-    <Typography>
+    <Typography
+      sx={{
+        mr: 2,
+      }}
+    >
       <Link
         data-lang="ru"
         href="/"

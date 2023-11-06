@@ -1499,3 +1499,10 @@ export const orderStatusesWeights = orderStatuses.reduce(
   (keys, status, index) => ({ ...keys, [status]: index }),
   {}
 );
+
+export const defaultUserDiscount = 0.05;
+
+export const userType = {
+  physical: "Физическое лицо",
+  legal: "Юридическое лицо",
+};

@@ -2,6 +2,7 @@ import api from "../../lib/frontend/api";
 import get from "lodash/get";
 import geoSlice, { isAPILoaded, getUserCity } from "../slices/geo";
 import cartSlice from "../slices/cart";
+import router from "next/router";
 import deliverySlice, {
   getDeliveryCity,
   getDeliveryAddress,
@@ -16,6 +17,12 @@ import notificationsSlice, {
   getAutoHideNotifications,
   getDueNotifications,
 } from "../slices/notifications";
+import authSlice, {
+  getAuthFormCode,
+  getAuthFormEmail,
+  getAuthIsFetching,
+  getAuthProfileValues,
+} from "../slices/auth";
 import {
   all,
   call,
@@ -30,6 +37,7 @@ import {
   takeLatest,
   spawn,
 } from "redux-saga/effects";
+import { AxiosError } from "axios";
 
 export function* getItemsSaga() {
   try {
@@ -292,11 +300,42 @@ export function* watchNotifications() {
   }
 }
 
+export function* checkSession() {
+  try {
+    const {
+      data: { responds, user },
+    } = yield call([api, api.get], "/session");
+
+    const isFetching = yield select(getAuthIsFetching);
+    if (!isFetching) {
+      yield put(authSlice.actions.setUser(user));
+    }
+
+    if (responds.length) {
+      yield call([api, api.delete], "/feedback", {
+        params: {
+          key: responds.map(({ key }) => key).join(","),
+        },
+      });
+
+      for (const response of responds) {
+        yield put(
+          showSuccessNotification(response.response, false, {
+            title: response.message,
+          })
+        );
+      }
+    }
+  } catch (error) {}
+}
+
 export function* watchSession() {
   const checkInterval = parseInt(
     process.env.NEXT_PUBLIC_API_SESSION_CHECK_INTERVAL,
     10
   );
+
+  yield call(checkSession);
 
   while (true) {
     if ((yield select(getIsVisible)) === false) {
@@ -311,27 +350,7 @@ export function* watchSession() {
       continue;
     }
 
-    try {
-      const {
-        data: { responds },
-      } = yield call([api, api.get], "/feedback");
-
-      if (responds.length) {
-        yield call([api, api.delete], "/feedback", {
-          params: {
-            key: responds.map(({ key }) => key).join(","),
-          },
-        });
-
-        for (const response of responds) {
-          yield put(
-            showSuccessNotification(response.response, false, {
-              title: response.message,
-            })
-          );
-        }
-      }
-    } catch (error) {}
+    yield call(checkSession);
 
     yield delay(checkInterval);
   }
@@ -368,6 +387,72 @@ export function* findNearestCity() {
   yield put(geoSlice.actions.setUserCity(city));
 }
 
+export function* sendAuthCode() {
+  const email = yield select(getAuthFormEmail);
+
+  try {
+    yield call([api, api.post], "/auth", { email });
+    yield put(
+      showSuccessNotification(`На адрес ${email} отправлен код авторизации`)
+    );
+  } catch (error) {
+    yield put(
+      showErrorNotification(
+        "Что-то пошло не так. Пожалуйста, попробуйте позже."
+      )
+    );
+  }
+}
+
+export function* verifyAuthCode() {
+  const email = yield select(getAuthFormEmail);
+  const code = yield select(getAuthFormCode);
+
+  try {
+    const {
+      data: { user },
+    } = yield call([api, api.post], "/auth", { email, code });
+
+    yield put(authSlice.actions.setUser(user));
+    yield put(authSlice.actions.resetAuthForm());
+    yield router.push({ pathname: "/profile" }, "/profile");
+    yield put(showSuccessNotification("Вы успешно авторизовались"));
+  } catch (error) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.status === 400 &&
+      error.response?.data?.error
+    ) {
+      yield put(showErrorNotification(error.response?.data?.error));
+    }
+
+    yield put(
+      showErrorNotification(
+        "Что-то пошло не так. Пожалуйста, попробуйте позже."
+      )
+    );
+  }
+}
+
+export function* patchUser() {
+  const user = yield select(getAuthProfileValues);
+
+  try {
+    yield call([api, api.put], "/auth", user);
+    yield put(showSuccessNotification("Информация обновлена"));
+  } catch (error) {
+    yield put(
+      showErrorNotification(
+        "Что-то пошло не так. Пожалуйста, попробуйте позже."
+      )
+    );
+  }
+}
+
+export function* logout() {
+  yield call([api, api.delete], "/auth");
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(cartSlice.actions.changeItem, changeItemSaga),
@@ -387,6 +472,10 @@ export default function* rootSaga() {
     takeLatest(deliverySlice.actions.setCity, fetchCdekPointsSuggestions),
     takeLatest(deliverySlice.actions.setPoint, calculateCdekTariff),
     takeLeading(feedbackSlice.actions.submit, sendFeedback),
+    takeLatest(authSlice.actions.setAuthFormEmail, sendAuthCode),
+    takeLatest(authSlice.actions.setAuthFormCode, verifyAuthCode),
+    takeLatest(authSlice.actions.patchUser, patchUser),
+    takeLatest(authSlice.actions.logout, logout),
   ]);
 
   yield call(getItemsSaga);
