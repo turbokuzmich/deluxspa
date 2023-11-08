@@ -198,7 +198,7 @@ async function patch(req, res) {
 
   await runIfHasSession(
     async (session) => {
-      if (session?.user?.id) {
+      if (!session?.user?.id) {
         return res.status(404).json({});
       }
 
