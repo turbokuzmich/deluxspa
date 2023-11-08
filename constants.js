@@ -238,8 +238,8 @@ const oils = [
         },
         700: {
           price: 2500,
-          volume: 1000,
-          weight: 1100,
+          volume: 700,
+          weight: 800,
           image: "/images/items/white_tea_1000.jpg",
         },
       },
@@ -278,8 +278,8 @@ const oils = [
         },
         700: {
           price: 2500,
-          volume: 1000,
-          weight: 1100,
+          volume: 700,
+          weight: 800,
           image: "/images/items/tobacco_vanilla_1000.jpg",
         },
       },
@@ -317,8 +317,8 @@ const oils = [
         },
         700: {
           price: 2500,
-          volume: 1000,
-          weight: 1100,
+          volume: 700,
+          weight: 800,
           image: "/images/items/blue_daisy_1000.jpg",
         },
       },

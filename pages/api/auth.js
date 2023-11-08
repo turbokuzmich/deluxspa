@@ -89,7 +89,7 @@ async function sendVerificationCode(req, res) {
 
   await sendSignupEmail(email, token);
 
-  res.status(200).json({ token });
+  res.status(200).json({});
 }
 
 async function findOrCreateUser({ email, country, phone }) {
@@ -198,14 +198,14 @@ async function patch(req, res) {
 
   await runIfHasSession(
     async (session) => {
-      if (!session.user || !session.user.id) {
-        return void res.status(404).json({});
+      if (session?.user?.id) {
+        return res.status(404).json({});
       }
 
       const user = await User.findByPk(session.user.id);
 
       if (!user) {
-        return void res.status(404).json({});
+        return res.status(404).json({});
       }
 
       await user.update(patchData);
