@@ -8,7 +8,6 @@ import { getChatIds } from "../../lib/backend/bot/auth";
 import { subscribe } from "../../lib/backend/queue";
 import createFormatter from "../../lib/helpers/markdown";
 import { format } from "../../lib/helpers/numeral";
-import { formatPhone } from "../../lib/helpers/phone";
 import { getOrderViewUrl } from "../../lib/helpers/bot";
 import {
   sendNewOrderEmail,
@@ -31,7 +30,7 @@ const handlers = {
       .paragraph()
       .italic(`Сумма: ${format(total)}₽`)
       .newline()
-      .italic(`Телефон: ${formatPhone(phone)}`);
+      .italic(`Телефон: ${phone}`);
 
     if (email) {
       text.newline().italic(`Email: ${email}`);
@@ -76,7 +75,7 @@ const handlers = {
         .paragraph()
         .italic(`Сумма: ${format(total)}₽`)
         .newline()
-        .italic(`Телефон: ${formatPhone(phone)}`);
+        .italic(`Телефон: ${phone}`);
 
       if (email) {
         text.newline().italic(`Email: ${email}`);

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useCallback, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
+import orders, {
   getOrdersData,
   updateOrderStatus,
   getOrdersViewState,
@@ -18,10 +18,8 @@ import cdek, {
 } from "../../../admin/store/slices/cdek";
 import { orderStatusesKeys, orderStatusesWeights } from "../../../constants";
 import { formatDate } from "../../../lib/helpers/date";
-import { formatPhone } from "../../../lib/helpers/phone";
 import get from "lodash/get";
 import first from "lodash/first";
-import orders from "../../../admin/store/slices/orders";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
@@ -519,9 +517,7 @@ export default function Order({ id }) {
                     sx={{ borderBottomColor: "transparent", pr: 0 }}
                   >
                     <Typography>
-                      <A href={`tel:+7${order.phone}`}>
-                        {formatPhone(order.phone)}
-                      </A>
+                      <A href={`tel:${order.phone}`}>{order.phone}</A>
                     </Typography>
                   </TableCell>
                 </TableRow>
