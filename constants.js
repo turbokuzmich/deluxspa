@@ -1244,22 +1244,10 @@ const gels = [
       "Активные ингредиенты: водоросли Fucus vesiculosus, экстракт плюща, экстракт иглицы шиповатой, кофеин, L-Карнитин, коллаген, никотиновая кислота (витамин&nbsp;РР), капcаицин.",
     ],
     variants: {
-      list: ["250", "500", "1000"],
+      list: ["250"],
       byId: {
         250: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-          image: "/images/items/thermogel.jpg",
-        },
-        500: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-          image: "/images/items/thermogel.jpg",
-        },
-        1000: {
-          price: 990,
+          price: 900,
           volume: 250,
           weight: 350,
           image: "/images/items/thermogel.jpg",
@@ -1280,20 +1268,10 @@ const gels = [
       "Активные ингредиенты: ментол, камфара, экстракт эвкалипта, эфирное масло апельсина горького.",
     ],
     variants: {
-      list: ["250", "500", "1000"],
+      list: ["250"],
       byId: {
         250: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-        },
-        500: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-        },
-        1000: {
-          price: 990,
+          price: 900,
           volume: 250,
           weight: 350,
         },
