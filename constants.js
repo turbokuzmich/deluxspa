@@ -907,69 +907,6 @@ const oils = [
       },
     },
   },
-  {
-    id: "butter_white_tea",
-    title: "catalog-item-butter-white-tea",
-    brief: "catalog-brief-butter",
-    composition: [],
-    unit: "g",
-    description: [
-      "Обладает хорошими органолептическими свойствами, замечательно увлажняет, питает и&nbsp;насыщает кожу ценными маслами и&nbsp;ненасыщенными жирными кислотами. Восстанавливает гидролипидный барьер кожи, дезодорирует и&nbsp;смягчает кожу. Обладает антивозрастным действием. Экстракт зленого чая является мощным антиоксидантом.",
-    ],
-    variants: {
-      list: ["250"],
-      byId: {
-        250: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-          image: "/images/items/butter_white_tea_250.jpg",
-        },
-      },
-    },
-  },
-  {
-    id: "butter_tobacco_vanilla",
-    title: "catalog-item-butter-tobacco-vanilla",
-    brief: "catalog-brief-butter",
-    composition: [],
-    unit: "g",
-    description: [
-      "Превосходные органолептические свойства, увлажнение и&nbsp;питание кожи. Стимулирует регенерацию, обновляет и&nbsp;восстанавливает гидролипидный барьер кожи. Нежный аромат листьев табака и&nbsp;ванили помогают получить истинное удовольствие и&nbsp;успокаивают нервную систему. Натуральные растительные экстракты оказывают антиоксидантные действия и&nbsp;борются с&nbsp;возрастными изменениями. Великолепная структура баттера позволяет наносить крем даже перед выходом на&nbsp;улицу и&nbsp;использовать данное средство для завершения любых СПА процедур и&nbsp;в&nbsp;уходе за&nbsp;телом.",
-    ],
-    variants: {
-      list: ["250"],
-      byId: {
-        250: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-          image: "/images/items/butter_tobacco_vanilla_250.jpg",
-        },
-      },
-    },
-  },
-  {
-    id: "butter_tropical_mango",
-    title: "catalog-item-butter-tropical-mango",
-    brief: "catalog-brief-butter",
-    composition: [],
-    unit: "g",
-    description: [
-      "Прекрасная текстура питает и&nbsp;насыщает кожу полиненасыщенными и&nbsp;насыщенными жирными кислотами. Восстанавливает гидролипидный барьер, способствует регенерации эпидермиса. Входящие в&nbsp;состав питательные масла&nbsp;Ши и&nbsp;манго насыщают кожу витаминами, стимулируют её&nbsp;упругость и&nbsp;гладкость.",
-    ],
-    variants: {
-      list: ["250"],
-      byId: {
-        250: {
-          price: 990,
-          volume: 250,
-          weight: 350,
-          image: "/images/items/butter_tropical_mango_250.jpg",
-        },
-      },
-    },
-  },
 ];
 
 const bodyScrubs = [
@@ -1227,7 +1164,145 @@ const bodyScrubs = [
   },
 ];
 
-export const catalogItems = [...oils, ...bodyScrubs];
+const creams = [
+  {
+    id: "butter_white_tea",
+    title: "catalog-item-butter-white-tea",
+    brief: "catalog-brief-butter",
+    composition: [],
+    unit: "g",
+    description: [
+      "Обладает хорошими органолептическими свойствами, замечательно увлажняет, питает и&nbsp;насыщает кожу ценными маслами и&nbsp;ненасыщенными жирными кислотами. Восстанавливает гидролипидный барьер кожи, дезодорирует и&nbsp;смягчает кожу. Обладает антивозрастным действием. Экстракт зленого чая является мощным антиоксидантом.",
+    ],
+    variants: {
+      list: ["250"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/butter_white_tea_250.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "butter_tobacco_vanilla",
+    title: "catalog-item-butter-tobacco-vanilla",
+    brief: "catalog-brief-butter",
+    composition: [],
+    unit: "g",
+    description: [
+      "Превосходные органолептические свойства, увлажнение и&nbsp;питание кожи. Стимулирует регенерацию, обновляет и&nbsp;восстанавливает гидролипидный барьер кожи. Нежный аромат листьев табака и&nbsp;ванили помогают получить истинное удовольствие и&nbsp;успокаивают нервную систему. Натуральные растительные экстракты оказывают антиоксидантные действия и&nbsp;борются с&nbsp;возрастными изменениями. Великолепная структура баттера позволяет наносить крем даже перед выходом на&nbsp;улицу и&nbsp;использовать данное средство для завершения любых СПА процедур и&nbsp;в&nbsp;уходе за&nbsp;телом.",
+    ],
+    variants: {
+      list: ["250"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/butter_tobacco_vanilla_250.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "butter_tropical_mango",
+    title: "catalog-item-butter-tropical-mango",
+    brief: "catalog-brief-butter",
+    composition: [],
+    unit: "g",
+    description: [
+      "Прекрасная текстура питает и&nbsp;насыщает кожу полиненасыщенными и&nbsp;насыщенными жирными кислотами. Восстанавливает гидролипидный барьер, способствует регенерации эпидермиса. Входящие в&nbsp;состав питательные масла&nbsp;Ши и&nbsp;манго насыщают кожу витаминами, стимулируют её&nbsp;упругость и&nbsp;гладкость.",
+    ],
+    variants: {
+      list: ["250"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/butter_tropical_mango_250.jpg",
+        },
+      },
+    },
+  },
+];
+
+const gels = [
+  {
+    id: "gel_thermo",
+    title: "catalog-item-thermogel",
+    brief: "catalog-category-thermogel",
+    composition: [],
+    unit: "g",
+    description: [
+      "Борется с&nbsp;целлюлитом и&nbsp;локальными жировыми отложениями, а&nbsp;также является отличным средством для профилактики целлюлита и&nbsp;для поддерживания эффекта после антицеллюлитного курса процедур.",
+      "Саморазогревающаяся эмульсия с&nbsp;мощным антицеллюлитным эффектом. Дает незамедлительный видимый результат. Благодаря широкому спектру активных компонентов обладает липолитическим, дренирующим, тонизирующим и&nbsp;сосудорасширяющим действиями. Уменьшает отёчность, вызванную скоплением застойной жидкости в&nbsp;организме, чтимулирует липолитичечские процессы в&nbsp;подкожно-жировом слое.",
+      "Наносить в&nbsp;качестве антицеллюлитного обёртывания в&nbsp;програмее &laquo;Лёд и&nbsp;Плямя&raquo; в&nbsp;качестве разогревающего геля под плёнку (простынь либо стрейч плёнка) на&nbsp;30&nbsp;минут, далее удалить остатки геля и&nbsp;нанести Крио гель. Как самостоятельное уходовое антицеллюлитное средство наносить 2-3 раза в&nbsp;неделю на&nbsp;проблемные зоны.",
+      "Активные ингредиенты: водоросли Fucus vesiculosus, экстракт плюща, экстракт иглицы шиповатой, кофеин, L-Карнитин, коллаген, никотиновая кислота (витамин&nbsp;РР), капcаицин.",
+    ],
+    variants: {
+      list: ["250", "500", "1000"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/thermogel.jpg",
+        },
+        500: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/thermogel.jpg",
+        },
+        1000: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+          image: "/images/items/thermogel.jpg",
+        },
+      },
+    },
+  },
+  {
+    id: "gel_cryo",
+    title: "catalog-item-cryogel",
+    brief: "catalog-category-cryogel",
+    composition: [],
+    unit: "g",
+    description: [
+      "Тонизирует, возвращает расширенные сосуды в&nbsp;норму, способствует лимфооттоку и&nbsp;является эффекктивным лимфотонизирующим средством, одновременно служит прекрасным завершением процедуры &laquo;Лёд и&nbsp;Пламя&raquo;. Стимулирует активные липолитические процессы и&nbsp;оказывыает охлаждающее действие, благодаря входящим в&nbsp;состав активным компонентам. Выраженный флебопротекторный эффект, для местного наружного применения.",
+      "Это легкий гель, содержащий ментол, камфару и&nbsp;эвкалипт. Освежает, улучшает микроциркуляцию, снимает усталость и&nbsp;ощущение тяжести в&nbsp;ногах, укрепляет стенки сосудов, тонизирует вены. Применяется при синдроме &laquo;тяжелых ног&raquo;, а&nbsp;также как активное липодренирующее средство и&nbsp;в&nbsp;программах для похудения.",
+      "Наносится тонким слоем по&nbsp;направлению лимфатического и&nbsp;венозного оттока.",
+      "Активные ингредиенты: ментол, камфара, экстракт эвкалипта, эфирное масло апельсина горького.",
+    ],
+    variants: {
+      list: ["250", "500", "1000"],
+      byId: {
+        250: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+        },
+        500: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+        },
+        1000: {
+          price: 990,
+          volume: 250,
+          weight: 350,
+        },
+      },
+    },
+  },
+];
+
+export const catalogItems = [...oils, ...creams, ...gels, ...bodyScrubs];
 
 export const catalogTree = [
   {
@@ -1260,9 +1335,6 @@ export const catalogTree = [
           "oil_extra_slim_ultimate",
           "oil_lime_cinnamon",
           "oil_lemon_pepper",
-          "butter_white_tea",
-          "butter_tobacco_vanilla",
-          "butter_tropical_mango",
         ],
       },
       {
@@ -1282,6 +1354,48 @@ export const catalogTree = [
         description: ["catalog-category-hair-massage-oil-description"],
         type: "category",
         items: ["oil_lemon_pepper", "oil_patchouli_mint"],
+      },
+    ],
+  },
+  {
+    id: "cream",
+    title: "catalog-category-cream",
+    type: "category",
+    categories: [
+      {
+        id: "butter",
+        title: "catalog-category-butter",
+        parent: "cream",
+        type: "category",
+        hideOnPanes: true,
+        items: [
+          "butter_white_tea",
+          "butter_tobacco_vanilla",
+          "butter_tropical_mango",
+        ],
+      },
+    ],
+  },
+  {
+    id: "gel",
+    title: "catalog-category-gel",
+    type: "category",
+    categories: [
+      {
+        id: "thermogel",
+        title: "catalog-category-thermogel",
+        parent: "gel",
+        type: "category",
+        hideOnPanes: true,
+        items: ["gel_thermo"],
+      },
+      {
+        id: "cryogel",
+        title: "catalog-category-cryogel",
+        parent: "gel",
+        type: "category",
+        hideOnPanes: true,
+        items: ["gel_cryo"],
       },
     ],
   },
@@ -1349,16 +1463,6 @@ export const catalogTree = [
       },
     ],
   },
-];
-
-export const categoriesDispayedOnPane = [
-  ["massage_oil", "body_massage_oil"],
-  ["massage_oil", "face_massage_oil"],
-  ["massage_oil", "hair_massage_oil"],
-  ["scrub", "scrub_for_face"],
-  ["scrub", "scrub_for_body"],
-  ["aromatherapy", "aromatherapy_for_home"],
-  ["aromatherapy", "essential_oil"],
 ];
 
 export const map = [

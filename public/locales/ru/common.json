@@ -105,6 +105,8 @@
   "catalog-item-butter-white-tea": "белый чай",
   "catalog-item-butter-tobacco-vanilla": "табак и ваниль",
   "catalog-item-butter-tropical-mango": "тропическое манго",
+  "catalog-item-thermogel": "Термо-гель для похудения",
+  "catalog-item-cryogel": "Крио-гель дренирующий",
 
   "catalog-category-massage-oil": "Массажные масла",
   "catalog-category-body-massage-oil": "Масла для тела и массажа",
@@ -124,6 +126,11 @@
   "catalog-category-oil-aromatherapy-description": "Органические эфирные масла для аромакологии и&nbsp;приготовления собственных эфиромасличных коктейлей, а&nbsp;также для создания крафтовой и&nbsp;селективной парфюмерии. Отобранные сортовые масла от&nbsp;известных производителей качественных и&nbsp;натуральных эфиров.",
   "catalog-category-home-aromatherapy": "Ароматерапия для дома",
   "catalog-category-home-aromatherapy-description": "Аура и&nbsp;сенсорика в&nbsp;сбалансированных эфиромасличных арома-коктейлях, диффузорах, спреях для помещений и&nbsp;белья создаст неповторимый почерк и&nbsp;станет отличительной особенностью вашего салона, а&nbsp;также наполнит гармонией ваш дом.",
+  "catalog-category-cream": "Кремы",
+  "catalog-category-butter": "Баттеры",
+  "catalog-category-gel": "Гели",
+  "catalog-category-thermogel": "Термогели",
+  "catalog-category-cryogel": "Криогели",
 
   "catalog-brief-massage-body-oil": "масло для массажа и ухода за телом",
   "catalog-brief-massage-hair-oil": "масло для роста волос и блеска",

@@ -5,7 +5,7 @@ import A from "@mui/material/Link";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import * as Color from "color";
-import { getCategoriesWithItems } from "../lib/helpers/catalog";
+import { getCategoriesDisplayedOnPanes } from "../lib/helpers/catalog";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "next-i18next";
 
@@ -124,7 +124,7 @@ export default function CategoriesPane() {
           },
         })}
       >
-        {getCategoriesWithItems().map((category, index) => {
+        {getCategoriesDisplayedOnPanes().map((category, index) => {
           const backgroundColor =
             backgroundColors[index % backgroundColors.length];
 

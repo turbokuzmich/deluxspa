@@ -105,6 +105,8 @@
   "catalog-item-butter-white-tea": "white tea",
   "catalog-item-butter-tobacco-vanilla": "tobacco & vanilla",
   "catalog-item-butter-tropical-mango": "tropical mango",
+  "catalog-item-thermogel": "slimming thermo gel",
+  "catalog-item-cryogel": "draining cryo gel",
 
   "catalog-category-massage-oil": "Massage oil",
   "catalog-category-body-massage-oil": "Oil for body",
@@ -124,6 +126,11 @@
   "catalog-category-oil-aromatherapy-description": "Organic essential oils for aromacology and the preparation of their own essential oil cocktails, as well as for the creation of craft and selective perfumes. Selected varietal oils from well-known manufacturers of high-quality and natural esters.",
   "catalog-category-home-aromatherapy": "For home",
   "catalog-category-home-aromatherapy-description": "Aura and sensorics in balanced essential oil aroma cocktails, diffusers, sprays for rooms and laundry will create a unique handwriting and become a distinctive feature of your salon, as well as fill your home with harmony.",
+  "catalog-category-cream": "Cream",
+  "catalog-category-butter": "Butter",
+  "catalog-category-gel": "Gel",
+  "catalog-category-thermogel": "Thermogel",
+  "catalog-category-cryogel": "Cryogel",
 
   "catalog-brief-massage-body-oil": "massage oil for body",
   "catalog-brief-massage-hair-oil": "massage oil for hair growth and shine",
