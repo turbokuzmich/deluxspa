@@ -132,12 +132,12 @@ export default function Auth() {
             mb: 4,
           }}
         >
-          Авторизация
+          Регистрация
         </Typography>
         {authFormState === AuthFormState.email ? (
           <>
             <Typography>
-              Для авторизации на сайте, пожалуйста, укажите ваш электронный
+              Для регистрации на сайте, пожалуйста, укажите ваш электронный
               адрес
             </Typography>
             <Formik
