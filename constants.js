@@ -1587,6 +1587,6 @@ export const userType = {
   legal: "Юридическое лицо",
 };
 
-export const discountPercentPrice = 2500;
-
+export const minSumForProgressiveDiscount = 350; // TODO cheapest catalog item
 export const maxDiscount = 40;
+export const sumForMaximumDiscount = 50000;

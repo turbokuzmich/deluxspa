@@ -33,6 +33,7 @@ export default function LangSwitcher() {
     <Typography
       sx={{
         mr: 2,
+        textTransform: "uppercase",
       }}
     >
       <Link

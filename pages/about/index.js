@@ -27,12 +27,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { setup } from "../../lib/backend/csrf";
+import { useCallback, useMemo, useRef } from "react";
+import { phoneFormat } from "../../constants";
 import feedbackSlice, {
   getFeedbackFormValues,
   getFeedBackStatus,
 } from "../../store/slices/feedback";
-import { useCallback, useMemo, useRef } from "react";
-import { phoneFormat } from "../../constants";
 
 export default function About() {
   const { t } = useTranslation();
@@ -94,7 +94,14 @@ export default function About() {
             },
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              mb: {
+                xs: 4,
+                md: 0,
+              },
+            }}
+          >
             <Typography
               variant="h3"
               sx={{ textTransform: "uppercase" }}
@@ -209,7 +216,7 @@ export default function About() {
                   Остались вопросы? Свяжитесь с нами!
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <Formik
                   initialValues={formValues}
                   onSubmit={onFeedBackSubmit}
@@ -252,7 +259,7 @@ export default function About() {
                   </Form>
                 </Formik>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <Box
                   sx={{
                     mb: 2,

@@ -21,12 +21,11 @@ import identity from "lodash/identity";
 import { Formik, Form, Field, useField, useFormikContext } from "formik";
 import { TextField as TextInput } from "formik-mui";
 import { PatternFormat } from "react-number-format";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { getItemById, formatCapacity } from "../../lib/helpers/catalog";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { phoneFormat } from "../../constants";
 import { useRouter } from "next/router";
 import { setup } from "../../lib/backend/csrf";
@@ -424,7 +423,9 @@ export default function Cart() {
                 </Button>
                 <Typography variant="h5">
                   {discount > 0
-                    ? `${t("cart-page-subtotal-discount")} ${discount}%`
+                    ? `${t(
+                        "cart-page-subtotal-discount"
+                      )} ${discount.toPrecision(2)}%`
                     : t("cart-page-subtotal")}
                   : <Price sum={subtotal} />
                 </Typography>

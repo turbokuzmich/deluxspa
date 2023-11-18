@@ -93,14 +93,21 @@ export default function Profile() {
         </Typography>
         <Box
           sx={{
-            display: "flex",
-            gap: 10,
-            alignItems: "flex-start",
+            display: {
+              md: "flex",
+            },
+            gap: {
+              md: 8,
+            },
           }}
         >
           <Box
             sx={{
-              width: "100%",
+              flexGrow: 1,
+              mb: {
+                xs: 2,
+                md: 0,
+              },
             }}
           >
             {user ? (
@@ -197,38 +204,40 @@ export default function Profile() {
               </Box>
             )}
           </Box>
-          <Card
+          <Box
             sx={{
               flexShrink: 0,
-              width: 400,
+              width: {
+                md: 400,
+              },
             }}
-            elevation={0}
-            square
           >
-            <CardContent
-              sx={{
-                pt: 3,
-                pl: 4,
-                pr: 4,
-              }}
-            >
-              <Typography variant="h5">Электронный адрес</Typography>
-              <Typography paragraph>{email}</Typography>
-              <Typography variant="h5">Персональная скидка</Typography>
-              <Typography paragraph>{discount}%</Typography>
-              <Button
-                size="large"
-                variant="contained"
-                onClick={onLogout}
-                fullWidth
+            <Card elevation={0} square>
+              <CardContent
                 sx={{
-                  p: 2,
+                  pt: 3,
+                  pl: 4,
+                  pr: 4,
                 }}
               >
-                Выйти
-              </Button>
-            </CardContent>
-          </Card>
+                <Typography variant="h5">Электронный адрес</Typography>
+                <Typography paragraph>{email}</Typography>
+                <Typography variant="h5">Персональная скидка</Typography>
+                <Typography paragraph>{discount}%</Typography>
+                <Button
+                  size="large"
+                  variant="contained"
+                  onClick={onLogout}
+                  fullWidth
+                  sx={{
+                    p: 2,
+                  }}
+                >
+                  Выйти
+                </Button>
+              </CardContent>
+            </Card>
+          </Box>
         </Box>
       </Box>
     </Container>
@@ -276,7 +285,7 @@ export const getServerSideProps = setup(async function (props) {
         return {
           props: {
             ...translations,
-            titleKey: "page-title-personal",
+            titleKey: "page-title-profile",
           },
         };
       },

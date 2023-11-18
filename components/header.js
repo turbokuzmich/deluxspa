@@ -99,6 +99,7 @@ export default function Header() {
         <Box
           sx={{
             display: {
+              alignItems: "center",
               xs: "flex",
               md: "none",
               gap: 10,
