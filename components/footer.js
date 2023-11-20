@@ -6,10 +6,25 @@ import Link from "next/link";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import Playmarket from "./playmarket";
+import { LogoEn, LogoRu } from "./madeinmoscow";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
+
+function MadeInMoscowLogo({ sx = {} }) {
+  const { locale } = useRouter();
+
+  return locale === "ru" ? <LogoRu sx={sx} /> : <LogoEn sx={sx} />;
+}
 
 export default function Footer() {
   const { t } = useTranslation();
+
+  const shouldShowMadeInMoscowLogo = useMemo(
+    () =>
+      Boolean(parseInt(process.env.NEXT_PUBLIC_SHOW_MADE_IN_MOSCOW_LOGO, 10)),
+    []
+  );
 
   return (
     <Box
@@ -64,7 +79,23 @@ export default function Footer() {
           >
             {t("footer-text-top")}
           </Typography>
-          <Typography>{t("footer-text-bottom")}</Typography>
+          {shouldShowMadeInMoscowLogo ? (
+            <>
+              <Typography paragraph>{t("footer-text-bottom")}</Typography>
+              <Typography paragraph>
+                <PlaymarketLink
+                  sx={{
+                    justifyContent: {
+                      xs: "center",
+                      md: "initial",
+                    },
+                  }}
+                />
+              </Typography>
+            </>
+          ) : (
+            <Typography>{t("footer-text-bottom")}</Typography>
+          )}
         </Box>
         <Box
           sx={{
@@ -77,19 +108,27 @@ export default function Footer() {
             gap: 2,
           }}
         >
-          <Typography>
-            <Link href="/promo" passHref>
-              <A data-variant="footer">{t("menu-promo")}</A>
-            </Link>
-          </Typography>
-          <Typography>
-            <Link href="/cooperation" passHref>
-              <A data-variant="footer">{t("menu-cooperation")}</A>
-            </Link>
-          </Typography>
-          <Typography>
-            <PlaymarketLink />
-          </Typography>
+          {shouldShowMadeInMoscowLogo ? (
+            <Typography paragraph>
+              <MadeInMoscowLogo sx={{ width: 80 }} />
+            </Typography>
+          ) : (
+            <>
+              <Typography>
+                <Link href="/promo" passHref>
+                  <A data-variant="footer">{t("menu-promo")}</A>
+                </Link>
+              </Typography>
+              <Typography>
+                <Link href="/cooperation" passHref>
+                  <A data-variant="footer">{t("menu-cooperation")}</A>
+                </Link>
+              </Typography>
+              <Typography>
+                <PlaymarketLink />
+              </Typography>
+            </>
+          )}
         </Box>
         <Box
           sx={{
@@ -102,19 +141,29 @@ export default function Footer() {
             flexGrow: 0,
           }}
         >
-          <Typography paragraph>
-            <Link href="/promo" passHref>
-              <A data-variant="footer">{t("menu-promo")}</A>
-            </Link>
-          </Typography>
-          <Typography paragraph>
-            <Link href="/cooperation" passHref>
-              <A data-variant="footer">{t("menu-cooperation")}</A>
-            </Link>
-          </Typography>
-          <Typography paragraph>
-            <PlaymarketLink />
-          </Typography>
+          {shouldShowMadeInMoscowLogo ? (
+            <Typography>
+              <A href="https://сделановмоскве.рф" target="_blank">
+                <MadeInMoscowLogo sx={{ width: 100 }} />
+              </A>
+            </Typography>
+          ) : (
+            <>
+              <Typography paragraph>
+                <Link href="/promo" passHref>
+                  <A data-variant="footer">{t("menu-promo")}</A>
+                </Link>
+              </Typography>
+              <Typography paragraph>
+                <Link href="/cooperation" passHref>
+                  <A data-variant="footer">{t("menu-cooperation")}</A>
+                </Link>
+              </Typography>
+              <Typography paragraph>
+                <PlaymarketLink />
+              </Typography>
+            </>
+          )}
         </Box>
         <Box
           sx={{
@@ -187,7 +236,7 @@ export default function Footer() {
   );
 }
 
-function PlaymarketLink() {
+function PlaymarketLink({ sx = {} }) {
   const { t } = useTranslation();
 
   return (
@@ -202,6 +251,7 @@ function PlaymarketLink() {
           gap: 1,
           display: "flex",
           whiteSpace: "nowrap",
+          ...sx,
         }}
       >
         <Playmarket />
