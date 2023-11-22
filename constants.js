@@ -1173,6 +1173,8 @@ const creams = [
     unit: "g",
     description: [
       "Обладает хорошими органолептическими свойствами, замечательно увлажняет, питает и&nbsp;насыщает кожу ценными маслами и&nbsp;ненасыщенными жирными кислотами. Восстанавливает гидролипидный барьер кожи, дезодорирует и&nbsp;смягчает кожу. Обладает антивозрастным действием. Экстракт зленого чая является мощным антиоксидантом.",
+      "Состав: Water, Glyceryl Stearate, Butyrospermum Parkii (Shea) Butter, Ceto Stearyl Alcohol, Astrocaryum Murumuru Seed Butter Oil (масло Муру Муру) , Glycine Soja Oil, Hydroxyethyl urea, Caprylic/Capric Triglyceride, Cocos Nucifera (Coconut) Oil, Ethylhexyl Stearate, Actosome Ino Сeramide (Deoxyphytantriyl Palmitamide MEA, Hydrogenated Lecithin, Ceramide&nbsp;3, Cholesterol), Hydrogenated Farnesene( Семисквалан), Benzyl Alcohol, Glycerine, Citrus Reticulata Fruit Extract, Citrus Aurantium Amara Fruit Extract, Citrus Sinensis Peel Extract, Butylene glycol, Tocopheryl Acetate, Citric acid, Lactic acid, Xantan gum, Sodium Phytate, Allantoin, Fragrance",
+      "PH&nbsp;4.8-5.0",
     ],
     variants: {
       list: ["250"],
@@ -1194,6 +1196,8 @@ const creams = [
     unit: "g",
     description: [
       "Превосходные органолептические свойства, увлажнение и&nbsp;питание кожи. Стимулирует регенерацию, обновляет и&nbsp;восстанавливает гидролипидный барьер кожи. Нежный аромат листьев табака и&nbsp;ванили помогают получить истинное удовольствие и&nbsp;успокаивают нервную систему. Натуральные растительные экстракты оказывают антиоксидантные действия и&nbsp;борются с&nbsp;возрастными изменениями. Великолепная структура баттера позволяет наносить крем даже перед выходом на&nbsp;улицу и&nbsp;использовать данное средство для завершения любых СПА процедур и&nbsp;в&nbsp;уходе за&nbsp;телом.",
+      "Состав: Water, Glyceryl Stearate, Butyrospermum Parkii (Shea) Butter, Ceto Stearyl Alcohol, Astrocaryum Murumuru Seed Butter Oil (масло Муру Муру) , Glycine Soja Oil, Hydroxyethyl urea, Caprylic/Capric Triglyceride, Cocos Nucifera (Coconut) Oil, Ethylhexyl Stearate, Actosome Ino Сeramide (Deoxyphytantriyl Palmitamide MEA, Hydrogenated Lecithin, Ceramide&nbsp;3, Cholesterol), Hydrogenated Farnesene( Семисквалан), Benzyl Alcohol, Glycerine, Citrus Reticulata Fruit Extract, Citrus Aurantium Amara Fruit Extract, Citrus Sinensis Peel Extract, Butylene glycol, Tocopheryl Acetate, Citric acid, Lactic acid, Xantan gum, Sodium Phytate, Allantoin, Fragrance",
+      "PH&nbsp;4.8-5.0",
     ],
     variants: {
       list: ["250"],
@@ -1215,6 +1219,8 @@ const creams = [
     unit: "g",
     description: [
       "Прекрасная текстура питает и&nbsp;насыщает кожу полиненасыщенными и&nbsp;насыщенными жирными кислотами. Восстанавливает гидролипидный барьер, способствует регенерации эпидермиса. Входящие в&nbsp;состав питательные масла&nbsp;Ши и&nbsp;манго насыщают кожу витаминами, стимулируют её&nbsp;упругость и&nbsp;гладкость.",
+      "Состав: Water, Glyceryl Stearate, Butyrospermum Parkii (Shea) Butter, Ceto Stearyl Alcohol, Astrocaryum Murumuru Seed Butter Oil (масло Муру Муру) , Glycine Soja Oil, Hydroxyethyl urea, Caprylic/Capric Triglyceride, Cocos Nucifera (Coconut) Oil, Ethylhexyl Stearate, Actosome Ino Сeramide (Deoxyphytantriyl Palmitamide MEA, Hydrogenated Lecithin, Ceramide&nbsp;3, Cholesterol), Hydrogenated Farnesene( Семисквалан), Benzyl Alcohol, Glycerine, Citrus Reticulata Fruit Extract, Citrus Aurantium Amara Fruit Extract, Citrus Sinensis Peel Extract, Butylene glycol, Tocopheryl Acetate, Citric acid, Lactic acid, Xantan gum, Sodium Phytate, Allantoin, Fragrance",
+      "PH&nbsp;4.8-5.0",
     ],
     variants: {
       list: ["250"],
