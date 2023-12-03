@@ -98,7 +98,10 @@ export default createSlice({
       state.items = items;
       state.state = CartState.fetched;
     },
-    changeItem(state, { payload: { id, variant, qty = 1, append = false } }) {
+    changeItem(
+      state,
+      { payload: { id, variant, qty = 1, append = false, notify = false } }
+    ) {
       state.changingItems[id] = true;
 
       const index = state.items.findIndex(

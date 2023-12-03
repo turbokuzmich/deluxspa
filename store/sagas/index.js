@@ -57,13 +57,22 @@ export function* getItemsSaga() {
 
 export function* changeItemSaga({ payload }) {
   const { id } = payload;
+  const { notify, ...data } = payload;
 
   try {
     const {
       data: { items },
-    } = yield call([api, api.post], "/cart", payload);
+    } = yield call([api, api.post], "/cart", data);
 
     yield put(cartSlice.actions.changeItemComplete({ id, items }));
+
+    if (notify) {
+      yield put(
+        showSuccessNotification("Товар добавлен", 6000, {
+          type: "cart",
+        })
+      );
+    }
   } catch (_) {
     yield put(showErrorNotification("Не удалось изменить количество товара"));
   }
