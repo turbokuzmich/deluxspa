@@ -10,8 +10,11 @@ export const auxColors = [
   "#d7f2c9",
   "#c9d7f2",
   "#e4c9f2",
-  "#06a5ff5c",
+  "#a5ff5c",
   "#f9bab9",
+  "#c6e3e9",
+  "#ffcdb5",
+  "#e4c9f2",
 ];
 
 export const mainMenu = [
