@@ -10,7 +10,7 @@ export const auxColors = [
   "#d7f2c9",
   "#c9d7f2",
   "#e4c9f2",
-  "#fff7b1",
+  "#06a5ff5c",
   "#f9bab9",
 ];
 
@@ -231,13 +231,13 @@ const oils = [
       list: ["120", "700"],
       byId: {
         120: {
-          price: 590,
+          price: 490,
           volume: 120,
           weight: 130,
           image: "/images/items/white_tea_120.jpg",
         },
         700: {
-          price: 2500,
+          price: 1990,
           volume: 700,
           weight: 800,
           image: "/images/items/white_tea_1000.jpg",
@@ -271,13 +271,13 @@ const oils = [
       list: ["120", "700"],
       byId: {
         120: {
-          price: 590,
+          price: 490,
           volume: 120,
           weight: 130,
           image: "/images/items/tobacco_vanilla_120.jpg",
         },
         700: {
-          price: 2500,
+          price: 1990,
           volume: 700,
           weight: 800,
           image: "/images/items/tobacco_vanilla_1000.jpg",
@@ -316,7 +316,7 @@ const oils = [
           image: "/images/items/blue_daisy_120.jpg",
         },
         700: {
-          price: 2500,
+          price: 2490,
           volume: 700,
           weight: 800,
           image: "/images/items/blue_daisy_1000.jpg",
@@ -340,13 +340,18 @@ const oils = [
       "Собранный профессиональными аромакологами сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. Масло высокого качества, не&nbsp;комедогенно и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120", "1000", "3000"],
+      list: ["120", "700", "1000", "3000"],
       byId: {
         120: {
           price: 350,
           volume: 120,
           weight: 130,
           image: "/images/items/mint_breeze_120.jpg",
+        },
+        700: {
+          price: 790,
+          volume: 700,
+          weight: 800,
         },
         1000: {
           price: 990,
@@ -380,13 +385,18 @@ const oils = [
       "Сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. Жирнокислотный состав дополнительно обогащён комплексом антиоксидантов.",
     ],
     variants: {
-      list: ["120", "1000", "3000"],
+      list: ["120", "700", "1000", "3000"],
       byId: {
         120: {
           price: 350,
           volume: 120,
           weight: 130,
           image: "/images/items/bio_120.jpg",
+        },
+        700: {
+          price: 790,
+          volume: 700,
+          weight: 800,
         },
         1000: {
           price: 990,
@@ -420,13 +430,18 @@ const oils = [
       "Собранный профессиональными аромакологами сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. Масло высокого качества, не&nbsp;комедогенно и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120", "1000", "3000"],
+      list: ["120", "700", "1000", "3000"],
       byId: {
         120: {
           price: 350,
           volume: 120,
           weight: 130,
           image: "/images/items/lemongrass_120.jpg",
+        },
+        700: {
+          price: 790,
+          volume: 700,
+          weight: 800,
         },
         1000: {
           price: 990,
@@ -459,7 +474,7 @@ const oils = [
       "Сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. Масло не&nbsp;комедогенно и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120", "1000", "3000"],
+      list: ["120", "700", "1000", "3000"],
       byId: {
         120: {
           price: 490,
@@ -467,8 +482,13 @@ const oils = [
           weight: 130,
           image: "/images/items/bubble_gum_120.jpg",
         },
+        700: {
+          price: 1990,
+          volume: 700,
+          weight: 800,
+        },
         1000: {
-          price: 1690,
+          price: 2490,
           volume: 1000,
           weight: 1100,
           image: "/images/items/bubble_gum_1000.jpg",
@@ -507,7 +527,7 @@ const oils = [
       "Сбалансированный состав ухаживает и&nbsp;питает кожу, делая её&nbsp;шелковистой и&nbsp;ухоженной, и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120", "1000"],
+      list: ["120", "700", "1000"],
       byId: {
         120: {
           price: 550,
@@ -515,8 +535,13 @@ const oils = [
           weight: 130,
           image: "/images/items/extra_slim_120.jpg",
         },
+        700: {
+          price: 2190,
+          volume: 700,
+          weight: 800,
+        },
         1000: {
-          price: 1990,
+          price: 2890,
           volume: 1000,
           weight: 1100,
           image: "/images/items/extra_slim_1000.jpg",
@@ -540,7 +565,7 @@ const oils = [
       "Сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. Масло высокого качества, не&nbsp;комедогенно и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120", "1000"],
+      list: ["120", "700", "1000", "3000"],
       byId: {
         120: {
           price: 490,
@@ -548,11 +573,21 @@ const oils = [
           weight: 130,
           image: "/images/items/lemon_cake_120.jpg",
         },
+        700: {
+          price: 1990,
+          volume: 700,
+          weight: 800,
+        },
         1000: {
-          price: 1690,
+          price: 2490,
           volume: 1000,
           weight: 1100,
           image: "/images/items/lemon_cake_1000.jpg",
+        },
+        3000: {
+          price: 4590,
+          volume: 3000,
+          weight: 3100,
         },
       },
     },
@@ -612,7 +647,7 @@ const oils = [
       "Насыщенный жирнокислотный состав содержит комплекс антиоскидантов, питает и&nbsp;омолаживает кожу.",
     ],
     variants: {
-      list: ["120", "3000"],
+      list: ["120", "700", "1000", "3000"],
       byId: {
         120: {
           price: 450,
@@ -620,8 +655,18 @@ const oils = [
           weight: 130,
           image: "/images/items/solar_orange_120.jpg",
         },
+        700: {
+          price: 1890,
+          volume: 700,
+          weight: 800,
+        },
+        1000: {
+          price: 2090,
+          volume: 1000,
+          weight: 1100,
+        },
         3000: {
-          price: 3490,
+          price: 4390,
           volume: 3000,
           weight: 3100,
           image: "/images/items/solar_orange_3000.jpg",
@@ -643,13 +688,23 @@ const oils = [
       "Сбалансированный состав ухаживает и&nbsp;питает кожу, делая её&nbsp;шелковистой и&nbsp;ухоженной.&nbsp;и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["120"],
+      list: ["120", "700", "1000"],
       byId: {
         120: {
           price: 690,
           volume: 120,
           weight: 130,
           image: "/images/items/kenyan_coffee_120.jpg",
+        },
+        700: {
+          price: 2590,
+          volume: 700,
+          weight: 800,
+        },
+        1000: {
+          price: 2890,
+          volume: 1000,
+          weight: 1100,
         },
       },
     },
@@ -668,13 +723,23 @@ const oils = [
       "Премиальный состав содержит комплекс антиоскидантов, питает и&nbsp;омолаживает кожу.",
     ],
     variants: {
-      list: ["120"],
+      list: ["120", "700"],
       byId: {
         120: {
           price: 890,
           volume: 120,
           weight: 130,
           image: "/images/items/mantra_120.jpg",
+        },
+        700: {
+          price: 3190,
+          volume: 700,
+          weight: 800,
+        },
+        1000: {
+          price: 3490,
+          volume: 1000,
+          weight: 1100,
         },
       },
     },
@@ -691,7 +756,7 @@ const oils = [
       "Насыщенный жирнокислотный состав содержит комплекс антиоскидантов, питает и&nbsp;омолаживает кожу.",
     ],
     variants: {
-      list: ["120", "1000"],
+      list: ["120", "700", "1000"],
       byId: {
         120: {
           price: 550,
@@ -699,8 +764,13 @@ const oils = [
           weight: 130,
           image: "/images/items/citrus_freshness_120.jpg",
         },
+        700: {
+          price: 2190,
+          volume: 700,
+          weight: 800,
+        },
         1000: {
-          price: 2000,
+          price: 2490,
           volume: 1000,
           weight: 1100,
           image: "/images/items/citrus_freshness_1000.jpg",
@@ -720,13 +790,23 @@ const oils = [
       "Насыщенный жирнокислотный состав содержит комплекс антиоскидантов, питает и&nbsp;омолаживает кожу.",
     ],
     variants: {
-      list: ["120"],
+      list: ["120", "700", "1000"],
       byId: {
         120: {
           price: 590,
           volume: 120,
           weight: 130,
           image: "/images/items/orange_cinnamon_120.jpg",
+        },
+        700: {
+          price: 2490,
+          volume: 700,
+          weight: 800,
+        },
+        1000: {
+          price: 2790,
+          volume: 1000,
+          weight: 1100,
         },
       },
     },
@@ -759,8 +839,13 @@ const oils = [
           weight: 130,
           image: "/images/items/extra_slim_ultimate_120.jpg",
         },
+        700: {
+          price: 2590,
+          volume: 700,
+          weight: 800,
+        },
         1000: {
-          price: 2190,
+          price: 2990,
           volume: 1000,
           weight: 1100,
           image: "/images/items/extra_slim_ultimate_1000.jpg",
@@ -896,13 +981,12 @@ const oils = [
       "Собранный профессиональными аромакологами сбалансированный состав бережно ухаживает за&nbsp;кожей, питает и&nbsp;насыщает ненасыщенными кислотами, делая её&nbsp;шелковистой и&nbsp;ухоженной. Масло высокого качества, не&nbsp;комедогенно и&nbsp;содержит комплекс антиоксидантов.",
     ],
     variants: {
-      list: ["1000"],
+      list: ["700"],
       byId: {
-        1000: {
-          price: 2500,
-          volume: 1000,
-          weight: 1100,
-          image: "/images/items/lime_cinnamon_1000.jpg",
+        700: {
+          price: 1990,
+          volume: 700,
+          weight: 800,
         },
       },
     },
