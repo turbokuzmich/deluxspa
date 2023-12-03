@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { setup } from "../../../lib/backend/csrf";
 import cartSlice from "../../../store/slices/cart";
 import TCBLoader from "../../../components/tcbloader";
+// import ReactSlider from "react-slider";
 import {
   getItemById,
   formatCapacity,
@@ -107,6 +108,7 @@ export default function Item({ id, auxiliaryIds }) {
                 qty: qtys[variant],
                 variant,
                 append: true,
+                notify: true,
               })
             );
           },
@@ -252,6 +254,18 @@ export default function Item({ id, auxiliaryIds }) {
               </TableBody>
             </Table>
           </Typography>
+          {/* <ReactSlider
+            className="horizontal-slider"
+            marks
+            markClassName="example-mark"
+            min={0}
+            max={50}
+            thumbClassName="example-thumb"
+            trackClassName="example-track"
+            renderThumb={(props, state) => (
+              <div {...props}>{state.valueNow}</div>
+            )}
+          /> */}
           <Categories categories={categories} />
           <Consumption item={item} />
           <Composition item={item} />
