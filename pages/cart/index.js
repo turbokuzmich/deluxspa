@@ -503,6 +503,19 @@ export default function Cart() {
                   <Form>
                     <Box
                       sx={{
+                        mb: 2,
+                      }}
+                    >
+                      <Field
+                        component={TextInput}
+                        label="Как к вам обращаться?"
+                        autoComplete="off"
+                        name="fio"
+                        fullWidth
+                      />
+                    </Box>
+                    <Box
+                      sx={{
                         display: "flex",
                         gap: 2,
                         mb: 2,
@@ -511,6 +524,7 @@ export default function Cart() {
                       {/* <PhoneInput inputRef={phoneFieldRef} /> */}
                       <Field
                         component={TextInput}
+                        placeholder="+7..."
                         label={t("cart-page-phone")}
                         autoComplete="off"
                         name="phone"

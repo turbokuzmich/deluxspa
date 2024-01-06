@@ -18,6 +18,7 @@ import sequelize, {
 
 const getOrderValidators = memoize(() => {
   return yup.object().shape({
+    fio: yup.string().trim(),
     phone: yup
       .string()
       .trim()
@@ -80,8 +81,6 @@ async function doCheckout(req, res) {
         await session.getCartTotalWithDiscount(),
         await session.getDiscount(),
       ]);
-
-    console.log(subtotal, discount, subtotalWithDiscount);
 
     const order = await Order.create({
       ...orderData,

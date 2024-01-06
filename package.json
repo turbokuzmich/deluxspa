@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap",
-    "sitemap": "next-sitemap"
+    "sitemap": "next-sitemap",
+    "up": "./lib/backend/migrations/index.js up"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",

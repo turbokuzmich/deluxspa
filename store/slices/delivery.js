@@ -1,8 +1,9 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import fromPairs from "lodash/fromPairs";
 import property from "lodash/property";
-import auth, {
+import {
   getAuthState,
+  getAuthUserName,
   getAuthUserPhone,
   getAuthUserCountry,
   getAuthUserEmail,
@@ -16,26 +17,51 @@ export const GeoCodingStatus = fromPairs(
 
 export const getDelivery = (state) => state.delivery;
 
+export const getDeliveryFio = createSelector(
+  getDelivery,
+  getAuthState,
+  getAuthUserName,
+  (delivery, auth, fio) => {
+    if (delivery.fio) {
+      return delivery.fio;
+    }
+    if (auth === AuthState.authorized && fio) {
+      return fio;
+    }
+
+    return "";
+  }
+);
 export const getDeliveryPhone = createSelector(
   getDelivery,
   getAuthState,
   getAuthUserPhone,
   getAuthUserCountry,
-  (delivery, auth, phone, country) =>
-    delivery.phone ||
-    (auth === AuthState.authorized && phone && country
-      ? `+${country}${phone}`
-      : ``) ||
-    ""
+  (delivery, auth, phone, country) => {
+    if (delivery.phone) {
+      return delivery.phone;
+    }
+    if (auth === AuthState.authorized && phone && country) {
+      return `+${country}${phone}`;
+    }
+
+    return "";
+  }
 );
 export const getDeliveryEmail = createSelector(
   getDelivery,
   getAuthState,
   getAuthUserEmail,
-  (delivery, auth, email) =>
-    delivery.email ||
-    (auth === AuthState.authorized && email ? email : "") ||
-    ""
+  (delivery, auth, email) => {
+    if (delivery.email) {
+      return delivery.email;
+    }
+    if (auth === AuthState.authorized && email) {
+      return email;
+    }
+
+    return "";
+  }
 );
 export const getDeliveryLat = createSelector(getDelivery, property("lat"));
 export const getDeliveryLng = createSelector(getDelivery, property("lng"));
@@ -100,13 +126,15 @@ export const getDeliveryCitySuggestions = createSelector(
 );
 
 export const getDeliveryFormValues = createSelector(
+  getDeliveryFio,
   getDeliveryPhone,
   getDeliveryEmail,
   getDeliveryComment,
-  (phone, email, comment) => ({ phone, email, comment })
+  (fio, phone, email, comment) => ({ fio, phone, email, comment })
 );
 
 export const getDeliveryInfo = createSelector(
+  getDeliveryFio,
   getDeliveryPhone,
   getDeliveryEmail,
   getDeliveryComment,
@@ -116,7 +144,19 @@ export const getDeliveryInfo = createSelector(
   getDeliveryPointAddress,
   getDeliveryPointLatitude,
   getDeliveryPointLongitude,
-  (phone, email, comment, code, city, name, address, latitude, longitude) => ({
+  (
+    fio,
+    phone,
+    email,
+    comment,
+    code,
+    city,
+    name,
+    address,
+    latitude,
+    longitude
+  ) => ({
+    fio,
     phone,
     email,
     comment,
@@ -133,6 +173,7 @@ export default createSlice({
   name: "delivery",
 
   initialState: {
+    fio: "",
     phone: "",
     email: "",
     comment: "",
@@ -174,8 +215,9 @@ export default createSlice({
     },
     setContactInfo(
       state,
-      { payload: { phone = "", email = "", comment = "" } }
+      { payload: { fio = "", phone = "", email = "", comment = "" } }
     ) {
+      state.fio = fio;
       state.phone = phone;
       state.email = email;
       state.comment = comment;
