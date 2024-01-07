@@ -432,6 +432,20 @@ export default function Order({ id }) {
                     component="th"
                     sx={{ borderBottomColor: "transparent", pl: 0 }}
                   >
+                    <Typography fontWeight="bold">ФИО</Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ borderBottomColor: "transparent", pr: 0 }}
+                  >
+                    <Typography>{order.fio ? order.fio : "—"}</Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    component="th"
+                    sx={{ borderBottomColor: "transparent", pl: 0 }}
+                  >
                     <Typography fontWeight="bold">Статус</Typography>
                   </TableCell>
                   <TableCell
@@ -439,6 +453,20 @@ export default function Order({ id }) {
                     sx={{ borderBottomColor: "transparent", pr: 0 }}
                   >
                     <Typography>{getHumanStatus(order.status)}</Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    component="th"
+                    sx={{ borderBottomColor: "transparent", pl: 0 }}
+                  >
+                    <Typography fontWeight="bold">Скидка</Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ borderBottomColor: "transparent", pr: 0 }}
+                  >
+                    <Typography>{order.discount.toFixed(2)}%</Typography>
                   </TableCell>
                 </TableRow>
                 <TableRow>
