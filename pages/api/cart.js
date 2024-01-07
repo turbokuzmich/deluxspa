@@ -21,6 +21,7 @@ const handlers = {
     const chatIds = await getChatIds();
 
     const id = get(input, ["order", "id"]);
+    const fio = get(input, ["order", "fio"]);
     const phone = get(input, ["order", "phone"]);
     const email = get(input, ["order", "email"]);
     const total = get(input, ["order", "total"]);
@@ -28,6 +29,8 @@ const handlers = {
     const text = createFormatter()
       .bold(`На Neon Beard новый заказ №${id}`)
       .paragraph()
+      .italic(`ФИО: ${fio}`)
+      .newline()
       .italic(`Сумма: ${format(total)}₽`)
       .newline()
       .italic(`Телефон: ${phone}`);
