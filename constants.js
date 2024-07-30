@@ -357,13 +357,13 @@ const oils = [
           weight: 800,
         },
         1000: {
-          price: 990,
+          price: 1090,
           volume: 1000,
           weight: 1100,
           image: "/images/items/mint_breeze_1000.jpg",
         },
         3000: {
-          price: 2590,
+          price: 2790,
           volume: 3000,
           weight: 3100,
           image: "/images/items/mint_breeze_3000.jpg",
@@ -447,13 +447,13 @@ const oils = [
           weight: 800,
         },
         1000: {
-          price: 990,
+          price: 1090,
           volume: 1000,
           weight: 1100,
           image: "/images/items/lemongrass_1000.jpg",
         },
         3000: {
-          price: 2590,
+          price: 2790,
           volume: 3000,
           weight: 3100,
           image: "/images/items/lemongrass_3000.jpg",
