@@ -46,8 +46,8 @@ export async function getServerSideProps({ locale, params: { id } }) {
   return {
     props: {
       id,
-      titleKey: category.title,
-      descriptionKey: category.description ? category.description : null,
+      titleKey: category ? category.title : '',
+      descriptionKey: category && category.description ? category.description : null,
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };
