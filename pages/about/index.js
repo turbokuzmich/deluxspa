@@ -157,19 +157,19 @@ export default function About() {
                     <TableCell component="th" scope="row">
                       {t("payment-account")}
                     </TableCell>
-                    <TableCell align="right">40702810200000000401</TableCell>
+                    <TableCell align="right">40702810570010248314</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell component="th" scope="row">
                       {t("correspondent-account")}
                     </TableCell>
-                    <TableCell align="right">30101810200000000700</TableCell>
+                    <TableCell align="right">30101810645250000092</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell component="th" scope="row">
                       {t("bik")}
                     </TableCell>
-                    <TableCell align="right">044525700</TableCell>
+                    <TableCell align="right">044525092</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell component="th" scope="row">
